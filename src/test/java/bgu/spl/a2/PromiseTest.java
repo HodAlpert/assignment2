@@ -1,13 +1,16 @@
 package bgu.spl.a2;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import static org.junit.Assert.*;
 
 public class PromiseTest {
-
+/**
+ * INV: isResolved()==false;
+ * */
+    @BeforeClass
+    public void setUpClass() throws Exception {
+    }
     @Before
     public void setUp() throws Exception {
     }
@@ -15,19 +18,40 @@ public class PromiseTest {
     @After
     public void tearDown() throws Exception {
     }
-
+    @AfterClass
+    public void afterClass() throws Exception {
+    }
     @Test
+    /**
+     * pre: if (@isResolved()!=false)
+     *      throw {@link IllegalStateException}
+     * if resulved- should return value;
+     * */
     public void get() {
     }
 
     @Test
+    /**should return false after initiation
+     * should return true after {@link #resolve(java.lang.Object)} is called.
+     * */
     public void isResolved() {
     }
 
+    /**
+     * pre: if (@isResolved()!=false)
+     *      throw {@link IllegalStateException}
+     *  value != null;
+     *  post @get()==value;
+     *  post @isResolved()==true;
+     *  <callbacks> should be empty
+     *  * */
     @Test
     public void resolve() {
     }
-
+    /** callback !=null;
+     *if (@isResolved())
+     *     callback should be called immidietly
+     * */
     @Test
     public void subscribe() {
     }
