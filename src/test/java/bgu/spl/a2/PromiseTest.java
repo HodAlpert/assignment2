@@ -8,18 +8,12 @@ public class PromiseTest {
 /**
  * INV: isResolved()==false;
  * */
-    @BeforeClass
-    public void setUpClass() throws Exception {
-    }
     @Before
     public void setUp() throws Exception {
     }
 
     @After
     public void tearDown() throws Exception {
-    }
-    @AfterClass
-    public void afterClass() throws Exception {
     }
     @Test
     /**
