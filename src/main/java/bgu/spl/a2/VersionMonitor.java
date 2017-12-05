@@ -20,21 +20,26 @@ import java.util.concurrent.locks.ReentrantLock;
  * methods
  */
 public class VersionMonitor {
-    private AtomicInteger version;
-
+    private int versionNumber;
+    final private Object lock=new Object();
     public int getVersion() {
-        //TODO: replace method body with real implementation
-        throw new UnsupportedOperationException("Not Implemented Yet.");
+        return versionNumber;
     }
 
     public void inc() {
-        //TODO: replace method body with real implementation
-        throw new UnsupportedOperationException("Not Implemented Yet.");
-
+        synchronized (lock){
+        versionNumber ++;
+            lock.notifyAll();
+        }
     }
 
     public void await(int version) throws InterruptedException {
-        //TODO: replace method body with real implementation
-        throw new UnsupportedOperationException("Not Implemented Yet.");
+        if (version<=this.versionNumber){
+            synchronized (lock) {
+                lock.wait();
+            }
+        }
+
+
     }
 }
