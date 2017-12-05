@@ -1,5 +1,7 @@
 package bgu.spl.a2;
 
+import java.util.List;
+
 /**
  * this class represents a deferred result i.e., an object that eventually will
  * be resolved to hold a result of some operation, the class allows for getting
@@ -16,7 +18,9 @@ package bgu.spl.a2;
  *            the result type, <boolean> resolved - initialized ;
  */
 public class Promise<T>{
-
+	private List<callback> callbacks;
+	private T result;
+	private boolean resolved;
 	/**
 	 *
 	 * @return the resolved value if such exists (i.e., if this object has been
