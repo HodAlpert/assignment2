@@ -1,7 +1,7 @@
 package bgu.spl.a2;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * represents an actor thread pool - to understand what this class does please
@@ -14,7 +14,6 @@ import java.util.concurrent.Executors;
  * methods
  */
 public class ActorThreadPool {
-	private VersionMonitor monitor;
 
 	/**
 	 * creates a {@link ActorThreadPool} which has nthreads. Note, threads
@@ -28,13 +27,42 @@ public class ActorThreadPool {
 	 *            the number of threads that should be started by this thread
 	 *            pool
 	 */
-	public ActorThreadPool(int nthreads) {
-		//ExecutorService e = Executors.newFixedThreadPool(nthreads);
 
-		// TODO: replace method body with real implementation
-		throw new UnsupportedOperationException("Not Implemented Yet.");
+	private HashMap<String,PrivateState> privateStates;
+	private HashMap<String,ActionQueue> queues;
+	private List<Thread> threads;
+	private VersionMonitor monitor;
+
+	public ActorThreadPool(int nthreads) {
+		privateStates = new HashMap<>();
+		queues = new HashMap<>();
+		monitor = new VersionMonitor();
+		initializeThreads(nthreads);
 	}
 
+	private void initializeThreads(int nthreads){
+		for(int i=0;i<nthreads;i++){
+			int finalI = i;
+			threads.add(new Thread(() -> {
+				Thread currThread = threads.get(finalI);
+				while (!currThread.isInterrupted()){
+					try {
+						assignTask();
+					}catch (InterruptedException e){
+						try {
+							monitor.wait();
+						} catch (InterruptedException e1) {
+							e1.printStackTrace();
+						}
+					}
+				}
+			}));
+		}
+	}
+
+	private void assignTask() throws InterruptedException{
+		// TODO: replace method body with real implementation
+	}
 	/**
 	 * submits an action into an actor to be executed by a thread belongs to
 	 * this thread pool
@@ -47,8 +75,16 @@ public class ActorThreadPool {
 	 *            actor's private state (actor's information)
 	 */
 	public void submit(Action<?> action, String actorId, PrivateState actorState) {
-		// TODO: replace method body with real implementation
-		throw new UnsupportedOperationException("Not Implemented Yet.");
+		if(action==null | actorState==null | actorId.equals(""))
+			throw new NullPointerException("Input is null, submission failed.");
+		if(!queues.containsKey(actorId)){
+			queues.put(actorId,new ActionQueue());
+			queues.get(actorId).enqueue(action);
+			privateStates.put(actorId,actorState);
+		}
+		else{
+			queues.get(actorId).enqueue(action);
+		}
 	}
 
 	/**
