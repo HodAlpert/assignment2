@@ -1,5 +1,6 @@
 package bgu.spl.a2;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -19,9 +20,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *            the result type, <boolean> resolved - initialized ;
  */
 public class Promise<T>{
-	private List<callback> callbacks;
+	private List<callback> callbacks=new ArrayList<>();
 	private T result;
 	private AtomicBoolean resolved= new AtomicBoolean(false);
+
 	/**
 	 *
 	 * @return the resolved value if such exists (i.e., if this object has been
@@ -31,8 +33,9 @@ public class Promise<T>{
 	 *             not yet resolved
 	 */
 	public T get() {
-		//TODO: replace method body with real implementation
-		throw new UnsupportedOperationException("Not Implemented Yet.");
+		if (!resolved.get())
+			throw new IllegalStateException("promise was not resolved yet");
+		return result;
 	}
 
 	/**
@@ -42,8 +45,7 @@ public class Promise<T>{
 	 *         before.
 	 */
 	public boolean isResolved() {
-		//TODO: replace method body with real implementation
-		throw new UnsupportedOperationException("Not Implemented Yet.");
+		return resolved.get();
 	}
 
 
@@ -61,8 +63,16 @@ public class Promise<T>{
 	 *            - the value to resolve this promise object with
 	 */
 	public void resolve(T value){
-		//TODO: replace method body with real implementation
-		throw new UnsupportedOperationException("Not Implemented Yet.");
+		if(resolved.get())
+			throw new IllegalStateException("cannot resolve a promise more then once");
+		if (value==null)
+			throw new NullPointerException();
+		result=value;
+		resolved.set(true);
+		for(callback call: callbacks){
+			call.call();
+		}
+		callbacks=new ArrayList<>();
 	}
 
 	/**
@@ -79,7 +89,11 @@ public class Promise<T>{
 	 *            the callback to be called when the promise object is resolved
 	 */
 	public void subscribe(callback callback) {
-		//TODO: replace method body with real implementation
-		throw new UnsupportedOperationException("Not Implemented Yet.");
+		if (callback==null)
+			throw new NullPointerException("cannot subscribe a null callback");
+		if(resolved.get())
+			callback.call();
+		else
+			callbacks.add(callback);
 	}
 }

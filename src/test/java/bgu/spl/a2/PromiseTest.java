@@ -10,15 +10,7 @@ public class PromiseTest {
  * */
     private boolean beforeResolving;
     private boolean afterResolving;
-    @Before
-    public void setUp() throws Exception {
-        Promise<Integer> promise=new Promise<Integer>();
-        assertFalse("isResolved should be false",promise.isResolved());
-    }
 
-    @After
-    public void tearDown() throws Exception {
-    }
     @Test
     /**
      * pre: if (@isResolved()!=false)
@@ -33,14 +25,12 @@ public class PromiseTest {
         }
         catch (IllegalStateException ex){
             promise.resolve(5);
-            assertEquals("returnd value is incorrect",5, java.util.Optional.ofNullable(promise.get()));
+            assertEquals("returnd value is incorrect",5, (int)(promise.get()));
         }
         catch(Exception ex){
             Assert.fail(ex.getMessage());
         }
-
     }
-
     @Test
     /**should return false after initiation
      * should return true after {@link #resolve(java.lang.Object)} is called.
@@ -97,20 +87,20 @@ public class PromiseTest {
             Assert.fail("cannot subscribe a null callback");
         }
         catch (NullPointerException ex){
-            Assert.fail(ex.getMessage());
+            this.beforeResolving=false;
+            promise.subscribe(()->{
+                this.beforeResolving=true;
+            });
+            assertFalse("callback should be executed onlt after promise is resolved",beforeResolving);
+            promise.resolve(5);
+            assertTrue("callback should be resolved after promise is resolved",beforeResolving);
+            this.afterResolving=false;
+            promise.subscribe(()->{
+                this.afterResolving=true;
+            });
+            assertTrue("callback should be resolved after promise is resolved",afterResolving);
         }
-        this.beforeResolving=false;
-        promise.subscribe(()->{
-            this.beforeResolving=true;
-        });
-        assertFalse("callback should be executed onlt after promise is resolved",beforeResolving);
-        promise.resolve(5);
-        assertTrue("callback should be resolved after promise is resolved",beforeResolving);
-        this.afterResolving=false;
-        promise.subscribe(()->{
-            this.afterResolving=true;
-        });
-        assertTrue("callback should be resolved after promise is resolved",afterResolving);
+
 
 
     }
