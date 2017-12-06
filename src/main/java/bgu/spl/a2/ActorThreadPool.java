@@ -14,7 +14,6 @@ import java.util.concurrent.Executors;
  * methods
  */
 public class ActorThreadPool {
-	private VersionMonitor monitor;
 
 	/**
 	 * creates a {@link ActorThreadPool} which has nthreads. Note, threads
