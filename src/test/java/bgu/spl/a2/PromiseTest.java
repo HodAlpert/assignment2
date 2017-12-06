@@ -5,12 +5,16 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 public class PromiseTest {
+    Promise<Integer> promise;
 /**
  * INV: isResolved()==false;
  * */
     private boolean beforeResolving;
     private boolean afterResolving;
-
+    @Before
+    public void setup(){
+        promise=new Promise<Integer>();
+    }
     @Test
     /**
      * pre: if (@isResolved()!=false)
@@ -18,7 +22,6 @@ public class PromiseTest {
      * if resolved- should return value;
      * */
     public void get() {
-        Promise<Integer> promise=new Promise<Integer>();
         try{
             promise.get();
             Assert.fail("should throw IllegalStateException if 'get' is called before 'resolve'");
@@ -36,7 +39,6 @@ public class PromiseTest {
      * should return true after {@link #resolve(java.lang.Object)} is called.
      * */
     public void isResolved() {
-        Promise<Integer> promise = new Promise<Integer>();
         assertFalse("isResolved should be false on initiation",promise.isResolved());
         promise.resolve(5);
         assertTrue("isResolved should be true after #resolve is called",promise.isResolved());
@@ -54,7 +56,6 @@ public class PromiseTest {
     @Test
     public void resolve() {
         try {
-            Promise<Integer> promise = new Promise<Integer>();
             promise.resolve(5);
             try {
                 promise.resolve(6);
@@ -81,7 +82,6 @@ public class PromiseTest {
      * */
     @Test
     public void subscribe() {
-        Promise<Integer> promise = new Promise<Integer>();
         try {
             promise.subscribe(null);
             Assert.fail("cannot subscribe a null callback");
