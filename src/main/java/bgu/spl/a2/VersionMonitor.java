@@ -20,21 +20,21 @@ import java.util.concurrent.locks.ReentrantLock;
  * methods
  */
 public class VersionMonitor {
-    private int versionNumber;
+    private AtomicInteger versionNumber=new AtomicInteger(0);
     final private Object lock=new Object();
     public int getVersion() {
-        return versionNumber;
+        return versionNumber.get();
     }
 
     public void inc() {
+        versionNumber.getAndIncrement();
         synchronized (lock){
-        versionNumber ++;
             lock.notifyAll();
         }
     }
 
     public void await(int version) throws InterruptedException {
-        if (version<=this.versionNumber){
+        if (version==this.versionNumber.get()){
             synchronized (lock) {
                 lock.wait();
             }
