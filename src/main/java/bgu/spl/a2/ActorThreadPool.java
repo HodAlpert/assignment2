@@ -44,25 +44,30 @@ public class ActorThreadPool {
 		for(int i=0;i<nthreads;i++){
 			int finalI = i;
 			threads.add(new Thread(() -> {
-				Thread currThread = threads.get(finalI);
-				while (!currThread.isInterrupted()){
+
+				while (!Thread.currentThread().isInterrupted()){
+						int version = monitor.getVersion();
 				        for(ActionQueue currQueue : queues.values()){
-				            if(currQueue.getLock().tryLock()){
-				                if(!currQueue.isEmpty()) {
-                                    try {
-                                        currQueue.dequeue().handle(this,currQueue.getActorId(),privateStates.get(currQueue.getActorId()));
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
-
-                        }
-
+				        	if(!currQueue.isEmpty()) {
+								if (currQueue.getLock().tryLock()) {
+									try {
+										if (!currQueue.isEmpty()) {
+											currQueue.dequeue().handle(this, currQueue.getActorId(), privateStates.get(currQueue.getActorId()));
+										}
+									}
+									catch (InterruptedException e) {
+											break;
+									}
+									finally{
+										currQueue.getLock().unlock();
+									}
+									}
+								}
+							}
                     try {
-                        monitor.await(monitor.getVersion());
+                        monitor.await(version);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        break;
                     }
 
                 }
@@ -85,6 +90,7 @@ public class ActorThreadPool {
 	public void submit(Action<?> action, String actorId, PrivateState actorState) {
 		if(action==null | actorState==null | actorId.equals(""))
 			throw new NullPointerException("Input is null, submission failed.");
+
 		if(!queues.containsKey(actorId)){
 			queues.put(actorId,new ActionQueue(actorId));
 			queues.get(actorId).enqueue(action);
@@ -110,23 +116,25 @@ public class ActorThreadPool {
 		    throw new InterruptedException("current thread is interrupted, shutdown failed");
 
         System.out.println("Shutting down pool");
+
         for(Thread thread: this.threads)
-            thread.interrupt();
+        	if(thread!=Thread.currentThread())
+            	thread.interrupt();
 
         System.out.println("Waiting for all threads to stop");
         boolean alive = true;
         while(alive){
             for(Thread thread: this.threads)
-                if(thread.isAlive()){
+                if(thread.isAlive() && thread!=Thread.currentThread()){
                     Thread.currentThread().sleep(1000);
                     break;
                 }
                 else
                     alive=false;
         }
+
         System.out.println("Shutdown complete");
-        if(this.threads.contains(Thread.currentThread())) //TODO does a thread from the pool initiate shutdown() ?
-            Thread.currentThread().interrupt();
+
 	}
 
 	/**
