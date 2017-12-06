@@ -14,7 +14,7 @@ import java.util.Collection;
  * @param <R> the action result type
  */
 public abstract class Action<R> {
-
+    private Promise<R> promise;
     /**
      * start handling the action - note that this method is protected, a thread
      * cannot call it directly.

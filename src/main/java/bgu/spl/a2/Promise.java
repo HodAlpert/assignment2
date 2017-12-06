@@ -1,6 +1,7 @@
 package bgu.spl.a2;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * this class represents a deferred result i.e., an object that eventually will
@@ -20,7 +21,7 @@ import java.util.List;
 public class Promise<T>{
 	private List<callback> callbacks;
 	private T result;
-	private boolean resolved;
+	private AtomicBoolean resolved= new AtomicBoolean(false);
 	/**
 	 *
 	 * @return the resolved value if such exists (i.e., if this object has been
