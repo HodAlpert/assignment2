@@ -46,23 +46,31 @@ public class ActorThreadPool {
 			threads.add(new Thread(() -> {
 				Thread currThread = threads.get(finalI);
 				while (!currThread.isInterrupted()){
-					try {
-						assignTask();
-					}catch (InterruptedException e){
-						try {
-							monitor.wait();
-						} catch (InterruptedException e1) {
-							e1.printStackTrace();
-						}
-					}
-				}
+				        for(ActionQueue currQueue : queues.values()){
+				            if(currQueue.getLock().tryLock()){
+				                if(!currQueue.isEmpty()) {
+                                    try {
+                                        currQueue.dequeue().handle(this,currQueue.getActorId(),privateStates.get(currQueue.getActorId()));
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+
+                        }
+
+                    try {
+                        monitor.await(monitor.getVersion());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
 			}));
 		}
 	}
 
-	private void assignTask() throws InterruptedException{
-		// TODO: replace method body with real implementation
-	}
+
 	/**
 	 * submits an action into an actor to be executed by a thread belongs to
 	 * this thread pool
@@ -78,7 +86,7 @@ public class ActorThreadPool {
 		if(action==null | actorState==null | actorId.equals(""))
 			throw new NullPointerException("Input is null, submission failed.");
 		if(!queues.containsKey(actorId)){
-			queues.put(actorId,new ActionQueue());
+			queues.put(actorId,new ActionQueue(actorId));
 			queues.get(actorId).enqueue(action);
 			privateStates.put(actorId,actorState);
 		}
@@ -98,16 +106,35 @@ public class ActorThreadPool {
 	 *             if the thread that shut down the threads is interrupted
 	 */
 	public void shutdown() throws InterruptedException {
-		// TODO: replace method body with real implementation
-		throw new UnsupportedOperationException("Not Implemented Yet.");
+		if(Thread.currentThread().isInterrupted())
+		    throw new InterruptedException("current thread is interrupted, shutdown failed");
+
+        System.out.println("Shutting down pool");
+        for(Thread thread: this.threads)
+            thread.interrupt();
+
+        System.out.println("Waiting for all threads to stop");
+        boolean alive = true;
+        while(alive){
+            for(Thread thread: this.threads)
+                if(thread.isAlive()){
+                    Thread.currentThread().sleep(1000);
+                    break;
+                }
+                else
+                    alive=false;
+        }
+        System.out.println("Shutdown complete");
+        if(this.threads.contains(Thread.currentThread())) //TODO does a thread from the pool initiate shutdown() ?
+            Thread.currentThread().interrupt();
 	}
 
 	/**
 	 * start the threads belongs to this thread pool
 	 */
 	public void start() {
-		// TODO: replace method body with real implementation
-		throw new UnsupportedOperationException("Not Implemented Yet.");
+		for(Thread thread: this.threads)
+		    thread.start();
 	}
 
 }
