@@ -19,4 +19,5 @@ public class Confirmation extends Action<Boolean> {
     protected void start() {
 
     }
+
 }
