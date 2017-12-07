@@ -2,6 +2,7 @@ package bgu.spl.a2;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * represents an actor thread pool - to understand what this class does please
@@ -35,17 +36,24 @@ public class ActorThreadPool {
 	 * @param threads
 	 *            A list of all threads in the pool,
 	 *            the threads are defined by @initializeThreads method
+	 * @param latch
+	 *            A {@link CountDownLatch} that count down from @nthreads
+	 *            and @countDown every time a thread from the pool has terminated.
+	 *            used in @shutdown to make sure all threads are terminated before
+	 *            the method returns.
 	 */
 
 	private HashMap<String,PrivateState> privateStates;
 	private HashMap<String,ActionQueue> queues;
 	protected List<Thread> threads;
+	private CountDownLatch latch;
 	private VersionMonitor monitor;
 
 	public ActorThreadPool(int nthreads) {
 		privateStates = new HashMap<>();
 		queues = new HashMap<>();
 		monitor = new VersionMonitor();
+		latch = new CountDownLatch(nthreads);
 		initializeThreads(nthreads);
 	}
 
@@ -89,6 +97,7 @@ public class ActorThreadPool {
                     }
 
                 }//while
+				latch.countDown();
 			}));
 		}
 	}
@@ -141,19 +150,8 @@ public class ActorThreadPool {
         	thread.interrupt();
 
         System.out.println("Waiting for all threads to stop");
-        boolean alive = true;
-        while(alive){
-            for(Thread thread: this.threads)
-                if(thread.isAlive()){
-                    Thread.currentThread().sleep(1000);
-                    break;
-                }
-                else
-                    alive=false;
-        }
-
+        latch.await();
         System.out.println("Shutdown complete");
-
 	}
 
 	/**
