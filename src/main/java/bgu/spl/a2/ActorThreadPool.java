@@ -26,6 +26,15 @@ public class ActorThreadPool {
 	 * @param nthreads
 	 *            the number of threads that should be started by this thread
 	 *            pool
+	 * @param privateStates
+	 *            A map of all the actors' private state, when @actorId is the key.
+	 * @param queues
+	 *            A map of all the actors' queues, when @actorId is the key.
+	 *            each queue is of type @{@link ActionQueue} and contains @{@link Action}
+	 *            to be executed by the threads
+	 * @param threads
+	 *            A list of all threads in the pool,
+	 *            the threads are defined by @initializeThreads method
 	 */
 
 	private HashMap<String,PrivateState> privateStates;
@@ -40,6 +49,13 @@ public class ActorThreadPool {
 		initializeThreads(nthreads);
 	}
 
+	/**
+	 * fills @threads with new threads and defines their run() method
+	 * so they'll dynamically take actions from the pool until interrupted
+	 *
+	 * @param nthreads
+	 *            the number of threads that are generated
+	 */
 	private void initializeThreads(int nthreads){
 		for(int i=0;i<nthreads;i++){
 			int finalI = i;
@@ -51,26 +67,28 @@ public class ActorThreadPool {
 				        	if(!currQueue.isEmpty()) {
 								if (currQueue.getLock().tryLock()) {
 									try {
-										if (!currQueue.isEmpty()) {
+										if (!currQueue.isEmpty()) { // get an Action from @currQueue if not empty
 											currQueue.dequeue().handle(this, currQueue.getActorId(), privateStates.get(currQueue.getActorId()));
-										}
-									}
+											if(!currQueue.isEmpty())
+												monitor.inc();
+										}//if
+									}//try
 									catch (InterruptedException e) {
 											break;
 									}
 									finally{
 										currQueue.getLock().unlock();
 									}
-									}
+									}//if
 								}
-							}
+							}//for
                     try {
                         monitor.await(version);
                     } catch (InterruptedException e) {
                         break;
                     }
 
-                }
+                }//while
 			}));
 		}
 	}
@@ -88,16 +106,18 @@ public class ActorThreadPool {
 	 *            actor's private state (actor's information)
 	 */
 	public void submit(Action<?> action, String actorId, PrivateState actorState) {
-		if(action==null | actorState==null | actorId.equals(""))
-			throw new NullPointerException("Input is null, submission failed.");
-
-		if(!queues.containsKey(actorId)){
-			queues.put(actorId,new ActionQueue(actorId));
-			queues.get(actorId).enqueue(action);
-			privateStates.put(actorId,actorState);
+		try {
+			if (!queues.containsKey(actorId)) {
+				queues.put(actorId, new ActionQueue(actorId));
+				queues.get(actorId).enqueue(action);
+				privateStates.put(actorId, actorState);
+			} else {
+				queues.get(actorId).enqueue(action);
+			}
+			monitor.inc();
 		}
-		else{
-			queues.get(actorId).enqueue(action);
+		catch (NullPointerException e){
+			System.out.println("Input cannot be null, submission failed!");
 		}
 	}
 
