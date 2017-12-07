@@ -33,6 +33,11 @@ public class ActorThreadPoolTest {
     public void start() {
         int activeThreads = Thread.activeCount();
         tester.start();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         assertEquals("All or part of the Threads were not activated",activeThreads+3,Thread.activeCount());
     }
 

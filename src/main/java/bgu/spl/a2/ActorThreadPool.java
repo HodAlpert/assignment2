@@ -30,7 +30,7 @@ public class ActorThreadPool {
 
 	private HashMap<String,PrivateState> privateStates;
 	private HashMap<String,ActionQueue> queues;
-	private List<Thread> threads;
+	protected List<Thread> threads;
 	private VersionMonitor monitor;
 
 	public ActorThreadPool(int nthreads) {
@@ -118,14 +118,13 @@ public class ActorThreadPool {
         System.out.println("Shutting down pool");
 
         for(Thread thread: this.threads)
-        	if(thread!=Thread.currentThread())
-            	thread.interrupt();
+        	thread.interrupt();
 
         System.out.println("Waiting for all threads to stop");
         boolean alive = true;
         while(alive){
             for(Thread thread: this.threads)
-                if(thread.isAlive() && thread!=Thread.currentThread()){
+                if(thread.isAlive()){
                     Thread.currentThread().sleep(1000);
                     break;
                 }
