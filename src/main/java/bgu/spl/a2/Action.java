@@ -1,6 +1,9 @@
 package bgu.spl.a2;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * an abstract class that represents an action that may be executed using the
@@ -15,6 +18,17 @@ import java.util.Collection;
  */
 public abstract class Action<R> {
     private Promise<R> promise;
+    private boolean hasBeenStartedBefore;
+    private List<Action<R>> actions;
+    private AtomicInteger actionsCompletedCounter;
+    private AtomicBoolean isResolved;
+    private R result;
+    private ActorThreadPool pool;
+
+    public Action(){
+        //TODO: replace method body with real implementation
+        throw new UnsupportedOperationException("Not Implemented Yet.");
+    }
     /**
      * start handling the action - note that this method is protected, a thread
      * cannot call it directly.
@@ -90,5 +104,4 @@ public abstract class Action<R> {
         //TODO: replace method body with real implementation
         throw new UnsupportedOperationException("Not Implemented Yet.");
     }
-
 }
