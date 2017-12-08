@@ -25,6 +25,8 @@ public abstract class Action<R> {
     private R result;
     private ActorThreadPool pool;
     private PrivateState state;
+    private callback continuation;
+    private String actorid;
 /**
  * initializing the fiels.
  * */
@@ -53,6 +55,12 @@ public abstract class Action<R> {
      * the same package can access it - you should *not* change it to
      * public/private/protected
      *
+     * @param pool saving as field for future submit
+     * @param actorId saving as field for future submit
+     * @param actorState saving as field for future "sendMessage".
+     * if has not been started before- calls start
+     * else- calls the continuation.
+     *
      */
     /*package*/ final void handle(ActorThreadPool pool, String actorId, PrivateState actorState) {
         if (!promise.isResolved()){
@@ -60,11 +68,11 @@ public abstract class Action<R> {
                 hasBeenStartedBefore.set(true);
                 this.pool=pool;
                 this.state=actorState;
+                this.actorid=actorId;
                 start();
             }//if not been started before
             else {
-                computeResult();
-                complete(result);
+                continuation.call();
             }//else
         }//if not resolved
     }//handle
@@ -77,15 +85,22 @@ public abstract class Action<R> {
      * Implementors note: make sure that the callback is running only once when
      * all the given actions completed.
      *
-     * @param actions
-     * @param callback the callback to execute once all the results are resolved
+     * @param actions that we wait for them to be completed
+     * @param callback the callback to execute once all the results are resolved- saving it as a field and
+     * {@link #handle(ActorThreadPool, String, PrivateState)} will see that it executes next time it will come out of the qeueu.
+     *      using internal counter to make sure @param actions were completed
      */
     protected final void then(Collection<? extends Action<?>> actions, callback callback) {
+        continuation=callback;
+        actionsCompletedCounter.set(0);
         for (Action action: actions){
-            action.getResult().subscribe(callback);
-        }
-
-    }
+            action.getResult().subscribe(()->{
+                actionsCompletedCounter.getAndIncrement();
+                if(actions.size()==actionsCompletedCounter.get())//if all actions in actions list are completed
+                    pool.submit(this,actorid,state);//reenqeueu this
+            });
+        }//for
+    }//then
 
     /**
      * resolve the internal result - should be called by the action derivative
@@ -95,7 +110,6 @@ public abstract class Action<R> {
      */
     protected final void complete(R result) {
         getResult().resolve(result);
-
     }
 
     /**
@@ -121,7 +135,6 @@ public abstract class Action<R> {
         pool.submit(action,actorId,actorState);
         return action.getResult();
     }
-
     /**
      * compute the result of the action
      */

@@ -28,15 +28,16 @@ public class VersionMonitor {
 
     public void inc() {
         versionNumber.getAndIncrement();
-        synchronized (lock){
-            lock.notifyAll();
+        synchronized (this){
+            this.notifyAll();
+
         }
     }
 
     public void await(int version) throws InterruptedException {
-        synchronized (lock) {
+        synchronized (this) {
             while (version==this.versionNumber.get()){
-                lock.wait();
+                this.wait();
             }//while
         }//synchronized
     }//await

@@ -76,10 +76,10 @@ public class ActorThreadPoolTest {
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
-        for(int i=0;i<1000;i++) {
+        for(int i=0;i<40;i++) {
             System.out.println(i);
             latch = new CountDownLatch(6);
-            tester = new ActorThreadPool(2);
+            tester = new ActorThreadPool(4);
             tester.start();
             naiveAction action3 = new naiveAction();
             naiveAction action4 = new naiveAction();
