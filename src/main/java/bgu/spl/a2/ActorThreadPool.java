@@ -1,5 +1,6 @@
 package bgu.spl.a2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -151,8 +152,8 @@ public class ActorThreadPool {
 
         System.out.println("Shutting down pool");
 
-        for(Thread thread: this.threads) {
-				thread.interrupt();
+        for(Thread thread: this.threads)
+        	thread.interrupt();
 
 		}
 

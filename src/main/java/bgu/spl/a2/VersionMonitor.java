@@ -28,15 +28,21 @@ public class VersionMonitor {
 
     public void inc() {
         versionNumber.getAndIncrement();
-        synchronized (lock){
-            lock.notifyAll();
+        synchronized (this){
+            this.notifyAll();
+            System.out.println("Thread" +Thread.currentThread().getName()+": notifyAll");
+
         }
     }
 
     public void await(int version) throws InterruptedException {
-        synchronized (lock) {
+        synchronized (this) {
             while (version==this.versionNumber.get()){
-                lock.wait();
+                System.out.println("Thread" +Thread.currentThread().getName()+": waiting");
+
+                this.wait();
+                System.out.println("Thread" +Thread.currentThread().getName()+": waking up");
+
             }//while
         }//synchronized
     }//await
