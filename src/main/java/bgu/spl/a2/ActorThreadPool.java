@@ -37,9 +37,9 @@ public class ActorThreadPool {
 	 *            A list of all threads in the pool,
 	 *            the threads are defined by @initializeThreads method
 	 * @param latch
-	 *            A {@link CountDownLatch} that count down from @nthreads
-	 *            and @countDown every time a thread from the pool has terminated.
-	 *            used in @shutdown to make sure all threads are terminated before
+	 *            A {@link CountDownLatch} that is initialized with @nthreads
+	 *            and use @countDown every time a thread from the pool has terminated.
+	 *            latch is used in @shutdown to make sure all threads are terminated before
 	 *            the method returns.
 	 */
 
@@ -50,8 +50,8 @@ public class ActorThreadPool {
 	private VersionMonitor monitor;
 
 	public ActorThreadPool(int nthreads) {
-		privateStates = new HashMap<>();
-		queues = new HashMap<>();
+		privateStates = new HashMap<String,PrivateState>();
+		queues = new HashMap<String,ActionQueue>();
 		monitor = new VersionMonitor();
 		latch = new CountDownLatch(nthreads);
 		initializeThreads(nthreads);
@@ -72,8 +72,7 @@ public class ActorThreadPool {
 				while (!Thread.currentThread().isInterrupted()){
 						int version = monitor.getVersion();
 				        for(ActionQueue currQueue : queues.values()){
-				        	if(!currQueue.isEmpty()) {
-								if (currQueue.getLock().tryLock()) {
+								if (!currQueue.isEmpty() && currQueue.getLock().tryLock()) {
 									try {
 										if (!currQueue.isEmpty()) { // get an Action from @currQueue if not empty
 											currQueue.dequeue().handle(this, currQueue.getActorId(), privateStates.get(currQueue.getActorId()));
@@ -82,18 +81,17 @@ public class ActorThreadPool {
 										}//if
 									}//try
 									catch (InterruptedException e) {
-											break;
+										Thread.currentThread().interrupt(); // if thread is blocked
 									}
 									finally{
 										currQueue.getLock().unlock();
 									}
-									}//if
-								}
+								}//if
 							}//for
                     try {
                         monitor.await(version);
                     } catch (InterruptedException e) {
-                        break;
+						Thread.currentThread().interrupt(); // if thread is blocked
                     }
 
                 }//while
@@ -146,10 +144,12 @@ public class ActorThreadPool {
 
         System.out.println("Shutting down pool");
 
-        for(Thread thread: this.threads)
-        	thread.interrupt();
+        for(Thread thread: this.threads) {
+				thread.interrupt();
 
-        System.out.println("Waiting for all threads to stop");
+		}
+
+        System.out.println("Waiting for all threads to terminate");
         latch.await();
         System.out.println("Shutdown complete");
 	}
