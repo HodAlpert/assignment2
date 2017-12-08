@@ -1,7 +1,9 @@
 package bgu.spl.a2;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -41,19 +43,24 @@ public class ActorThreadPool {
 	 *            and use @countDown every time a thread from the pool has terminated.
 	 *            latch is used in @shutdown to make sure all threads are terminated before
 	 *            the method returns.
+     * @param startedCount
+     *            Count each thread that has started.
+     *            used in @start
 	 */
 
 	private HashMap<String,PrivateState> privateStates;
-	private HashMap<String,ActionQueue> queues;
+	 ConcurrentHashMap<String,ActionQueue> queues;
 	protected List<Thread> threads;
 	private CountDownLatch latch;
 	private VersionMonitor monitor;
+	private int startedCount=0;
 
 	public ActorThreadPool(int nthreads) {
 		privateStates = new HashMap<String,PrivateState>();
-		queues = new HashMap<String,ActionQueue>();
+		queues = new ConcurrentHashMap<String,ActionQueue>();
 		monitor = new VersionMonitor();
 		latch = new CountDownLatch(nthreads);
+		threads = new LinkedList<Thread>();
 		initializeThreads(nthreads);
 	}
 
@@ -68,7 +75,7 @@ public class ActorThreadPool {
 		for(int i=0;i<nthreads;i++){
 			int finalI = i;
 			threads.add(new Thread(() -> {
-
+                startedCount++;
 				while (!Thread.currentThread().isInterrupted()){
 						int version = monitor.getVersion();
 				        for(ActionQueue currQueue : queues.values()){
@@ -160,6 +167,13 @@ public class ActorThreadPool {
 	public void start() {
 		for(Thread thread: this.threads)
 		    thread.start();
+		while(startedCount!=threads.size()) { // wait for all threads to start
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 	}
 
 }
