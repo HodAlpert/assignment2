@@ -34,12 +34,10 @@ public class VersionMonitor {
     }
 
     public void await(int version) throws InterruptedException {
-        if (version==this.versionNumber.get()){
-            synchronized (lock) {
+        synchronized (lock) {
+            while (version==this.versionNumber.get()){
                 lock.wait();
-            }
-        }
-
-
-    }
+            }//while
+        }//synchronized
+    }//await
 }

@@ -1,5 +1,6 @@
 package bgu.spl.a2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -44,7 +45,7 @@ public class ActorThreadPool {
 	 */
 
 	private HashMap<String,PrivateState> privateStates;
-	private HashMap<String,ActionQueue> queues;
+	HashMap<String,ActionQueue> queues;
 	protected List<Thread> threads;
 	private CountDownLatch latch;
 	private VersionMonitor monitor;
@@ -54,6 +55,7 @@ public class ActorThreadPool {
 		queues = new HashMap<>();
 		monitor = new VersionMonitor();
 		latch = new CountDownLatch(nthreads);
+		threads=new ArrayList<Thread>();
 		initializeThreads(nthreads);
 	}
 
@@ -71,29 +73,30 @@ public class ActorThreadPool {
 
 				while (!Thread.currentThread().isInterrupted()){
 						int version = monitor.getVersion();
-				        for(ActionQueue currQueue : queues.values()){
-				        	if(!currQueue.isEmpty()) {
-								if (currQueue.getLock().tryLock()) {
-									try {
-										if (!currQueue.isEmpty()) { // get an Action from @currQueue if not empty
-											currQueue.dequeue().handle(this, currQueue.getActorId(), privateStates.get(currQueue.getActorId()));
-											if(!currQueue.isEmpty())
-												monitor.inc();
-										}//if
-									}//try
-									catch (InterruptedException e) {
+							for (ActionQueue currQueue : queues.values()) {
+								if (!currQueue.isEmpty()) {
+									if (currQueue.getLock().tryLock()) {
+										try {
+											if (!currQueue.isEmpty()) { // get an Action from @currQueue if not empty
+												currQueue.dequeue().handle(this, currQueue.getActorId(), privateStates.get(currQueue.getActorId()));
+												if (!currQueue.isEmpty())
+													monitor.inc();
+											}//if
+										}//try
+										catch (InterruptedException e) {
 											break;
-									}
-									finally{
-										currQueue.getLock().unlock();
-									}
+										} finally {
+											currQueue.getLock().unlock();
+										}
 									}//if
 								}
 							}//for
+
                     try {
                         monitor.await(version);
                     } catch (InterruptedException e) {
-                        break;
+						Thread.currentThread().interrupt();
+						break;
                     }
 
                 }//while

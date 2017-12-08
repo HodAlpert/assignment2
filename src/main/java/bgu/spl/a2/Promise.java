@@ -65,13 +65,15 @@ public class Promise<T>{
 	public void resolve(T value){
 		if(resolved.get())
 			throw new IllegalStateException("cannot resolve a promise more then once");
-		if (value==null)
-			throw new NullPointerException();
 		result=value;
 		resolved.set(true);
 		for(callback call: callbacks){
-			call.call();
-		}
+			try {
+				call.call();
+			}
+			catch(NullPointerException ex){
+				System.out.println(ex.getMessage());
+			}		}
 		callbacks=new ArrayList<>();
 	}
 
@@ -89,10 +91,13 @@ public class Promise<T>{
 	 *            the callback to be called when the promise object is resolved
 	 */
 	public void subscribe(callback callback) {
-		if (callback==null)
-			throw new NullPointerException("cannot subscribe a null callback");
 		if(resolved.get())
-			callback.call();
+			try {
+				callback.call();
+			}
+			catch(NullPointerException ex){
+			System.out.println(ex.getMessage());
+			}
 		else
 			callbacks.add(callback);
 	}

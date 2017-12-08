@@ -1,5 +1,6 @@
 package bgu.spl.a2;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -17,17 +18,22 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @param <R> the action result type
  */
 public abstract class Action<R> {
-    private Promise<R> promise;
-    private boolean hasBeenStartedBefore;
-    private List<Action<R>> actions;
+    protected Promise<R> promise;
+    private AtomicBoolean hasBeenStartedBefore;
+    protected List<Promise<R>> promises;
     private AtomicInteger actionsCompletedCounter;
-    private AtomicBoolean isResolved;
     private R result;
     private ActorThreadPool pool;
-
+    private PrivateState state;
+/**
+ * initializing the fiels.
+ * */
     public Action(){
-        //TODO: replace method body with real implementation
-        throw new UnsupportedOperationException("Not Implemented Yet.");
+        promises=new ArrayList<Promise<R>>();
+        hasBeenStartedBefore = new AtomicBoolean(false);
+        actionsCompletedCounter = new AtomicInteger(0);
+        promise=new Promise<R>();
+
     }
     /**
      * start handling the action - note that this method is protected, a thread
@@ -49,7 +55,19 @@ public abstract class Action<R> {
      *
      */
     /*package*/ final void handle(ActorThreadPool pool, String actorId, PrivateState actorState) {
-    }
+        if (!promise.isResolved()){
+            if (!hasBeenStartedBefore.get()){
+                hasBeenStartedBefore.set(true);
+                this.pool=pool;
+                this.state=actorState;
+                start();
+            }//if not been started before
+            else {
+                computeResult();
+                complete(result);
+            }//else
+        }//if not resolved
+    }//handle
 
 
     /**
@@ -63,8 +81,9 @@ public abstract class Action<R> {
      * @param callback the callback to execute once all the results are resolved
      */
     protected final void then(Collection<? extends Action<?>> actions, callback callback) {
-        //TODO: replace method body with real implementation
-        throw new UnsupportedOperationException("Not Implemented Yet.");
+        for (Action action: actions){
+            action.getResult().subscribe(callback);
+        }
 
     }
 
@@ -75,8 +94,7 @@ public abstract class Action<R> {
      * @param result - the action calculated result
      */
     protected final void complete(R result) {
-        //TODO: replace method body with real implementation
-        throw new UnsupportedOperationException("Not Implemented Yet.");
+        getResult().resolve(result);
 
     }
 
@@ -84,8 +102,7 @@ public abstract class Action<R> {
      * @return action's promise (result)
      */
     public final Promise<R> getResult() {
-        //TODO: replace method body with real implementation
-        throw new UnsupportedOperationException("Not Implemented Yet.");
+        return promise;
     }
 
     /**
@@ -101,7 +118,12 @@ public abstract class Action<R> {
      * @return promise that will hold the result of the sent action
      */
     public Promise<?> sendMessage(Action<?> action, String actorId, PrivateState actorState){
-        //TODO: replace method body with real implementation
-        throw new UnsupportedOperationException("Not Implemented Yet.");
+        pool.submit(action,actorId,actorState);
+        return action.getResult();
     }
+
+    /**
+     * compute the result of the action
+     */
+    protected abstract void computeResult();
 }

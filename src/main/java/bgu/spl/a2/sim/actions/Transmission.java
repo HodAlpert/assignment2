@@ -40,4 +40,10 @@ public class Transmission extends Action<String> {
         });
     }
 
+    @Override
+    protected void computeResult() {
+        //TODO: replace method body with real implementation
+        throw new UnsupportedOperationException("Not Implemented Yet.");
+    }
+
 }
