@@ -36,50 +36,50 @@ public class ActorThreadPoolTest {
     @Test
 
     public void submit() { //TODO write private states first.
-            tester.start();
-            naiveAction action = new naiveAction();
-            action.getResult().subscribe(() -> {
-                this.counter.getAndIncrement();
-                latch.countDown();
-            });
-            try {
-                sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            isWaitingAndAlive();
-            tester.submit(action, "something", new CoursePrivateState());
-            try {
-                sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            isWaitingAndAlive();
-            assertTrue("action not completed", counter.get() == 1 & action.getResult().isResolved());
-            naiveAction action2 = new naiveAction();
-            action2.getResult().subscribe(() -> {
-                this.counter.getAndIncrement();
-                latch.countDown();
-            });
-            isWaitingAndAlive();
-            tester.submit(action2, "something", new CoursePrivateState());
-            try {
-                sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            isWaitingAndAlive();
-            assertTrue("action not completed", latch.getCount() == 6 & action2.getResult().isResolved());
-            assertTrue("should not create actor again", tester.queues.size() == 1);
-        try {
-            tester.shutdown();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        for(int i=0;i<100;i++) {
+//            tester.start();
+//            naiveAction action = new naiveAction();
+//            action.getResult().subscribe(() -> {
+//                this.counter.getAndIncrement();
+//                latch.countDown();
+//            });
+//            try {
+//                sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            isWaitingAndAlive();
+//            tester.submit(action, "something", new CoursePrivateState());
+//            try {
+//                sleep(2000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            isWaitingAndAlive();
+//            assertTrue("action not completed", counter.get() == 1 & action.getResult().isResolved());
+//            naiveAction action2 = new naiveAction();
+//            action2.getResult().subscribe(() -> {
+//                this.counter.getAndIncrement();
+//                latch.countDown();
+//            });
+//            isWaitingAndAlive();
+//            tester.submit(action2, "something", new CoursePrivateState());
+//            try {
+//                sleep(2000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            isWaitingAndAlive();
+//            assertTrue("action not completed", latch.getCount() == 6 & action2.getResult().isResolved());
+//            assertTrue("should not create actor again", tester.queues.size() == 1);
+//        try {
+//            tester.shutdown();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        for(int i=0;i<1000;i++) {
             System.out.println(i);
-            latch = new CountDownLatch(8);
-            tester = new ActorThreadPool(3);
+            latch = new CountDownLatch(6);
+            tester = new ActorThreadPool(2);
             tester.start();
             naiveAction action3 = new naiveAction();
             naiveAction action4 = new naiveAction();
@@ -93,12 +93,12 @@ public class ActorThreadPoolTest {
             action6.getResult().subscribe(() -> this.latch.countDown());
             action7.getResult().subscribe(() -> this.latch.countDown());
             action8.getResult().subscribe(() -> this.latch.countDown());
-            tester.submit(action3, "something", new CoursePrivateState());
-            tester.submit(action4, "something", new CoursePrivateState());
-            tester.submit(action5, "something", new CoursePrivateState());
-            tester.submit(action6, "somethinsEntirelyElse", new CoursePrivateState());
-            tester.submit(action7, "somethinsEntirelyElse", new CoursePrivateState());
-            tester.submit(action8, "somethingElse", new CoursePrivateState());
+            tester.submit(action3, "1", new CoursePrivateState());
+            tester.submit(action4, "1", new CoursePrivateState());
+            tester.submit(action5, "1", new CoursePrivateState());
+            tester.submit(action6, "2", new CoursePrivateState());
+            tester.submit(action7, "2", new CoursePrivateState());
+            tester.submit(action8, "3", new CoursePrivateState());
             try {
                 latch.await();
             } catch (InterruptedException e) {
