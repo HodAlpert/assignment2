@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * represents an actor thread pool - to understand what this class does please
@@ -54,7 +55,7 @@ public class ActorThreadPool {
 	protected List<Thread> threads;
 	private CountDownLatch latch;
 	private VersionMonitor monitor;
-	private int startedCount=0;
+	private AtomicInteger startedCount=new AtomicInteger(0);
 
 	public ActorThreadPool(int nthreads) {
 		privateStates = new HashMap<String,PrivateState>();
@@ -76,7 +77,7 @@ public class ActorThreadPool {
 		for(int i=0;i<nthreads;i++){
 			int finalI = i;
 			threads.add(new Thread(() -> {
-                startedCount++;
+                startedCount.getAndIncrement();
 				while (!Thread.currentThread().isInterrupted()){
 						int version = monitor.getVersion();
 				        for(ActionQueue currQueue : queues.values()){
@@ -154,13 +155,11 @@ public class ActorThreadPool {
 
         for(Thread thread: this.threads)
         	thread.interrupt();
-
-		}
-
         System.out.println("Waiting for all threads to terminate");
         latch.await();
         System.out.println("Shutdown complete");
 	}
+
 
 	/**
 	 * start the threads belongs to this thread pool
@@ -168,7 +167,7 @@ public class ActorThreadPool {
 	public void start() {
 		for(Thread thread: this.threads)
 		    thread.start();
-		while(startedCount!=threads.size()) { // wait for all threads to start
+		while(startedCount.get()!=threads.size()) { // wait for all threads to start
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
