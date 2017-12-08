@@ -30,36 +30,38 @@ public class ActorThreadPool {
 	 *            the number of threads that should be started by this thread
 	 *            pool
 	 * @param privateStates
-	 *            A map of all the actors' private state, when @actorId is the key.
+	 *            A map of all the actors' private state, @actorId is the key.
 	 * @param queues
-	 *            A map of all the actors' queues, when @actorId is the key.
+	 *            A map of all the actors' queues, @actorId is the key.
 	 *            each queue is of type @{@link ActionQueue} and contains @{@link Action}
 	 *            to be executed by the threads
 	 * @param threads
 	 *            A list of all threads in the pool,
 	 *            the threads are defined by @initializeThreads method
-	 * @param latch
+	 * @param ShutDownLatch
 	 *            A {@link CountDownLatch} that is initialized with @nthreads
 	 *            and use @countDown every time a thread from the pool has terminated.
-	 *            latch is used in @shutdown to make sure all threads are terminated before
+	 *            ShutDownLatch is used in @shutdown to make sure all threads are terminated before
 	 *            the method returns.
-     * @param startedCount
-     *            Count each thread that has started.
-     *            used in @start
+	 * @param startLatch
+	 *            A {@link CountDownLatch} that is initialized with @nthreads
+	 *            and use @countDown every time a thread from the pool has started.
+	 *            startLatch is used in @start to make sure all threads have started before
+	 *            the method returns.
 	 */
 
 	private HashMap<String,PrivateState> privateStates;
-	 ConcurrentHashMap<String,ActionQueue> queues;
+	ConcurrentHashMap<String,ActionQueue> queues;
 	protected List<Thread> threads;
-	private CountDownLatch latch;
+	private CountDownLatch startLatch, ShutDownLatch;
 	private VersionMonitor monitor;
-	private int startedCount=0;
 
 	public ActorThreadPool(int nthreads) {
 		privateStates = new HashMap<String,PrivateState>();
 		queues = new ConcurrentHashMap<String,ActionQueue>();
 		monitor = new VersionMonitor();
-		latch = new CountDownLatch(nthreads);
+		startLatch = new CountDownLatch(nthreads);
+		ShutDownLatch = new CountDownLatch(nthreads);
 		threads = new LinkedList<Thread>();
 		initializeThreads(nthreads);
 	}
@@ -73,9 +75,8 @@ public class ActorThreadPool {
 	 */
 	private void initializeThreads(int nthreads){
 		for(int i=0;i<nthreads;i++){
-			int finalI = i;
 			threads.add(new Thread(() -> {
-                startedCount++;
+                startLatch.countDown();
 				while (!Thread.currentThread().isInterrupted()){
 						int version = monitor.getVersion();
 				        for(ActionQueue currQueue : queues.values()){
@@ -102,7 +103,7 @@ public class ActorThreadPool {
                     }
 
                 }//while
-				latch.countDown();
+				ShutDownLatch.countDown();
 			}));
 		}
 	}
@@ -157,7 +158,7 @@ public class ActorThreadPool {
 		}
 
         System.out.println("Waiting for all threads to terminate");
-        latch.await();
+		ShutDownLatch.await();
         System.out.println("Shutdown complete");
 	}
 
@@ -167,13 +168,12 @@ public class ActorThreadPool {
 	public void start() {
 		for(Thread thread: this.threads)
 		    thread.start();
-		while(startedCount!=threads.size()) { // wait for all threads to start
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+		try {
+			startLatch.await();
+			System.out.println("All Threads started");
+		} catch (InterruptedException e) {
+			System.out.println("Error while starting threads, start failed");
+		}
 	}
 
 }
