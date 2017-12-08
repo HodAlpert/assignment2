@@ -6,7 +6,6 @@ import bgu.spl.a2.ActorThreadPool;
 public class naiveAction extends Action<Boolean> {
     @Override
     protected void start() {
-        System.out.println("starting naive action");
         complete(true);
     }
 

@@ -95,7 +95,7 @@ public class ActorThreadPool {
                     try {
                         monitor.await(version);
                     } catch (InterruptedException e) {
-						Thread.currentThread().interrupt();
+						Thread.currentThread().interrupt();//to make sure it will be interupted again
 						break;
                     }
 
