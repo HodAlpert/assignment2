@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
 /**
  * an abstract class that represents an action that may be executed using the
  * {@link ActorThreadPool}
@@ -20,18 +21,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class Action<R> {
     protected Promise<R> promise;
     private AtomicBoolean hasBeenStartedBefore;
-    protected List<Promise<R>> promises;
     private AtomicInteger actionsCompletedCounter;
-    private R result;
     private ActorThreadPool pool;
     private PrivateState state;
     private callback continuation;
     private String actorid;
+    private String actionName;
 /**
  * initializing the fiels.
  * */
     public Action(){
-        promises=new ArrayList<Promise<R>>();
         hasBeenStartedBefore = new AtomicBoolean(false);
         actionsCompletedCounter = new AtomicInteger(0);
         promise=new Promise<R>();
@@ -138,5 +137,18 @@ public abstract class Action<R> {
     /**
      * compute the result of the action
      */
-    protected abstract void computeResult();
+    /**
+     * set action's name
+     * @param actionName
+     */
+    public void setActionName(String actionName){
+        this.actionName=actionName;
+    }
+
+    /**
+     * @return action's name
+     */
+    public String getActionName(){
+        return this.actionName;
+    }
 }
