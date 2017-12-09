@@ -37,16 +37,16 @@ public class ActorThreadPool {
 	 *            to be executed by the threads
 	 * @param threads
 	 *            A list of all threads in the pool,
-	 *            the threads are defined by @initializeThreads method
+	 *            the threads are defined by {@link #initializeThreads(int)} method
 	 * @param ShutDownLatch
 	 *            A {@link CountDownLatch} that is initialized with @nthreads
 	 *            and use @countDown every time a thread from the pool has terminated.
-	 *            ShutDownLatch is used in @shutdown to make sure all threads are terminated before
+	 *            ShutDownLatch is used in {@link #shutdown()} to make sure all threads are terminated before
 	 *            the method returns.
 	 * @param startLatch
 	 *            A {@link CountDownLatch} that is initialized with @nthreads
 	 *            and use @countDown every time a thread from the pool has started.
-	 *            startLatch is used in @start to make sure all threads have started before
+	 *            startLatch is used in {@link #start()} to make sure all threads have started before
 	 *            the method returns.
 	 */
 
@@ -170,7 +170,7 @@ public class ActorThreadPool {
 		    thread.start();
 		try {
 			startLatch.await();
-			System.out.println("All Threads started");
+			System.out.println("All Threads have started");
 		} catch (InterruptedException e) {
 			System.out.println("Error while starting threads, start failed");
 		}

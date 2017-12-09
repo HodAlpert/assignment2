@@ -20,10 +20,6 @@ public class Confirmation extends Action<Boolean> {
 
     }
 
-    @Override
-    protected void computeResult() {
-        //TODO: replace method body with real implementation
-        throw new UnsupportedOperationException("Not Implemented Yet.");
-    }
+
 
 }

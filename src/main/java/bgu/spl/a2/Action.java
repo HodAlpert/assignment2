@@ -135,8 +135,5 @@ public abstract class Action<R> {
         pool.submit(action,actorId,actorState);
         return action.getResult();
     }
-    /**
-     * compute the result of the action
-     */
-    protected abstract void computeResult();
+
 }
