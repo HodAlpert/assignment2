@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @param <R> the action result type
  */
 public abstract class Action<R> {
-    protected Promise<R> promise;
+    private Promise<R> promise;
     private AtomicBoolean hasBeenStartedBefore;
     private AtomicInteger actionsCompletedCounter;
     private ActorThreadPool pool;

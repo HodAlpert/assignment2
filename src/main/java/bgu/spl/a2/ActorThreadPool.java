@@ -3,6 +3,7 @@ package bgu.spl.a2;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
@@ -67,45 +68,22 @@ public class ActorThreadPool {
 	}
 
 	/**
-	 * fills @threads with new threads and defines their run() method
-	 * so they'll dynamically take actions from the pool until interrupted
-	 *
-	 * @param nthreads
-	 *            the number of threads that are generated
+	 * getter for actors
+	 * @return actors
 	 */
-	private void initializeThreads(int nthreads){
-		for(int i=0;i<nthreads;i++){
-			threads.add(new Thread(() -> {
-                startLatch.countDown();
-				while (!Thread.currentThread().isInterrupted()){
-						int version = monitor.getVersion();
-				        for(ActionQueue currQueue : queues.values()){
-								if (!currQueue.isEmpty() && currQueue.getLock().tryLock()) {
-									try {
-										if (!currQueue.isEmpty()) { // get an Action from @currQueue if not empty
-											currQueue.dequeue().handle(this, currQueue.getActorId(), privateStates.get(currQueue.getActorId()));
-											if(!currQueue.isEmpty())
-												monitor.inc();
-										}//if
-									}//try
-									catch (InterruptedException e) {
-										Thread.currentThread().interrupt(); // if thread is blocked
-									}
-									finally{
-										currQueue.getLock().unlock();
-									}
-								}//if
-							}//for
-                    try {
-                        monitor.await(version);
-                    } catch (InterruptedException e) {
-						Thread.currentThread().interrupt(); // if thread is blocked
-                    }
+	public Map<String, PrivateState> getActors(){
+		// TODO: replace method body with real implementation
+		throw new UnsupportedOperationException("Not Implemented Yet.");
+	}
 
-                }//while
-				ShutDownLatch.countDown();
-			}));
-		}
+	/**
+	 * getter for actor's private state
+	 * @param actorId actor's id
+	 * @return actor's private state
+	 */
+	public PrivateState getPrivaetState(String actorId){
+		// TODO: replace method body with real implementation
+		throw new UnsupportedOperationException("Not Implemented Yet.");
 	}
 
 
@@ -148,18 +126,18 @@ public class ActorThreadPool {
 	 */
 	public void shutdown() throws InterruptedException {
 		if(Thread.currentThread().isInterrupted())
-		    throw new InterruptedException("current thread is interrupted, shutdown failed");
+			throw new InterruptedException("current thread is interrupted, shutdown failed");
 
-        System.out.println("Shutting down pool");
+		System.out.println("Shutting down pool");
 
-        for(Thread thread: this.threads) {
-				thread.interrupt();
+		for(Thread thread: this.threads) {
+			thread.interrupt();
 
 		}
 
-        System.out.println("Waiting for all threads to terminate");
+		System.out.println("Waiting for all threads to terminate");
 		ShutDownLatch.await();
-        System.out.println("Shutdown complete");
+		System.out.println("Shutdown complete");
 	}
 
 	/**
@@ -167,7 +145,7 @@ public class ActorThreadPool {
 	 */
 	public void start() {
 		for(Thread thread: this.threads)
-		    thread.start();
+			thread.start();
 		try {
 			startLatch.await();
 			System.out.println("All Threads have started");
@@ -175,5 +153,40 @@ public class ActorThreadPool {
 			System.out.println("Error while starting threads, start failed");
 		}
 	}
+	private void initializeThreads(int nthreads){
+		for(int i=0;i<nthreads;i++){
+			threads.add(new Thread(() -> {
+				startLatch.countDown();
+				while (!Thread.currentThread().isInterrupted()){
+					int version = monitor.getVersion();
+					for(ActionQueue currQueue : queues.values()){
+						if (!currQueue.isEmpty() && currQueue.getLock().tryLock()) {
+							try {
+								if (!currQueue.isEmpty()) { // get an Action from @currQueue if not empty
+									currQueue.dequeue().handle(this, currQueue.getActorId(), privateStates.get(currQueue.getActorId()));
+									if(!currQueue.isEmpty())
+										monitor.inc();
+								}//if
+							}//try
+							catch (InterruptedException e) {
+								Thread.currentThread().interrupt(); // if thread is blocked
+							}
+							finally{
+								currQueue.getLock().unlock();
+							}
+						}//if
+					}//for
+					try {
+						monitor.await(version);
+					} catch (InterruptedException e) {
+						Thread.currentThread().interrupt(); // if thread is blocked
+					}
+
+				}//while
+				ShutDownLatch.countDown();
+			}));
+		}
+	}
+
 
 }
