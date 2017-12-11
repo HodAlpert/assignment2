@@ -22,11 +22,11 @@ public abstract class Action<R> {
     private Promise<R> promise;
     private AtomicBoolean hasBeenStartedBefore;
     private AtomicInteger actionsCompletedCounter;
+    protected String Action;
     private ActorThreadPool pool;
     private PrivateState state;
-    private callback continuation;
+    protected callback continuation;
     private String actorid;
-    private String actionName;
 /**
  * initializing the fiels.
  * */
@@ -109,7 +109,7 @@ public abstract class Action<R> {
      */
     protected final void complete(R result) {
         getResult().resolve(result);
-        state.addRecord(actionName);
+        state.addRecord(Action);
     }
 
     /**
@@ -143,13 +143,14 @@ public abstract class Action<R> {
      * @param actionName
      */
     public void setActionName(String actionName){
-        this.actionName=actionName;
+        this.Action=actionName;
     }
 
     /**
      * @return action's name
      */
     public String getActionName(){
-        return this.actionName;
+        return this.Action;
     }
+    protected PrivateState getState(){return this.state;}
 }
