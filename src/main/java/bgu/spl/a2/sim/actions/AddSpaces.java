@@ -18,6 +18,7 @@ public class AddSpaces extends Action<Boolean> {
     }
     @Override
     protected void start() {
+        //TODO implement flag to show if registration close was called
         CoursePrivateState state = (CoursePrivateState) getState();
         if (state.getAvailableSpots()==-1)
             complete(false);
