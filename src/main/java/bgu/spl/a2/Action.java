@@ -1,6 +1,8 @@
 package bgu.spl.a2;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -20,11 +22,11 @@ public abstract class Action<R> {
     private Promise<R> promise;
     private AtomicBoolean hasBeenStartedBefore;
     private AtomicInteger actionsCompletedCounter;
+    protected String Action;
     private ActorThreadPool pool;
     protected PrivateState state; //TODO change back to private
     protected callback continuation; //TODO change back to private
     private String actorid;
-    private String actionName;
 /**
  * initializing the fiels.
  * */
@@ -107,7 +109,7 @@ public abstract class Action<R> {
      */
     protected final void complete(R result) {
         getResult().resolve(result);
-        state.addRecord(actionName);
+        state.addRecord(Action);
     }
 
     /**
@@ -141,13 +143,14 @@ public abstract class Action<R> {
      * @param actionName
      */
     public void setActionName(String actionName){
-        this.actionName=actionName;
+        this.Action=actionName;
     }
 
     /**
      * @return action's name
      */
     public String getActionName(){
-        return this.actionName;
+        return this.Action;
     }
+    protected PrivateState getState(){return this.state;}
 }
