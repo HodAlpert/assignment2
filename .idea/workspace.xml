@@ -4,10 +4,7 @@
     <list default="true" id="946b2e8d-2c48-41a2-a23f-e7054edd20d4" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/src/main/java/bgu/spl/a2/Action.java" afterPath="$PROJECT_DIR$/src/main/java/bgu/spl/a2/Action.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bgu/spl/a2/ActorThreadPool.java" afterPath="$PROJECT_DIR$/src/main/java/bgu/spl/a2/ActorThreadPool.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Confirmation.java" afterPath="$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Confirmation.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Transmission.java" afterPath="$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Transmission.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/naiveAction.java" afterPath="$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/naiveAction.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/bgu/spl/a2/PrivateState.java" afterPath="$PROJECT_DIR$/src/main/java/bgu/spl/a2/PrivateState.java" />
       <change beforePath="$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActionTest.java" afterPath="$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActionTest.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -18,6 +15,9 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/a2$ActorThreadPoolTest.coverage" NAME="ActorThreadPoolTest Coverage Results" MODIFIED="1512713822192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
@@ -45,8 +45,8 @@
       <file leaf-file-name="Action.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/Action.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="93" column="16" lean-forward="true" selection-start-line="93" selection-start-column="16" selection-end-line="93" selection-end-column="16" />
+            <state relative-caret-position="-970">
+              <caret line="62" column="26" lean-forward="true" selection-start-line="62" selection-start-column="26" selection-end-line="62" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -54,21 +54,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Promise.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/Promise.java">
+      <file leaf-file-name="Confirmation.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Confirmation.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="954">
-              <caret line="69" column="34" lean-forward="false" selection-start-line="69" selection-start-column="34" selection-end-line="69" selection-end-column="34" />
+            <state relative-caret-position="162">
+              <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VersionMonitor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/VersionMonitor.java">
+      <file leaf-file-name="Transmission.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Transmission.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-232">
-              <caret line="0" column="19" lean-forward="true" selection-start-line="0" selection-start-column="19" selection-end-line="0" selection-end-column="19" />
+            <state relative-caret-position="648">
+              <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Promise.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/Promise.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1170">
+              <caret line="69" column="34" lean-forward="false" selection-start-line="69" selection-start-column="34" selection-end-line="69" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -77,19 +87,21 @@
       <file leaf-file-name="ActionTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActionTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="32" column="23" lean-forward="false" selection-start-line="32" selection-start-column="23" selection-end-line="32" selection-end-column="23" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PromiseTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/bgu/spl/a2/PromiseTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1782">
-              <caret line="103" column="0" lean-forward="false" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="2304">
+              <caret line="137" column="39" lean-forward="false" selection-start-line="137" selection-start-column="39" selection-end-line="137" selection-end-column="39" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#578#579#0" expanded="true" />
+                <element signature="e#618#619#0" expanded="true" />
+                <element signature="e#724#725#0" expanded="true" />
+                <element signature="e#782#783#0" expanded="true" />
+                <element signature="e#5335#5336#0" expanded="true" />
+                <element signature="e#5424#5425#0" expanded="true" />
+                <element signature="e#5678#5679#0" expanded="true" />
+                <element signature="e#5717#5718#0" expanded="true" />
+                <element signature="e#5748#5749#0" expanded="true" />
+                <element signature="e#5787#5788#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -97,7 +109,7 @@
       <file leaf-file-name="ActorThreadPoolTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActorThreadPoolTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1206">
+            <state relative-caret-position="1422">
               <caret line="90" column="32" lean-forward="false" selection-start-line="90" selection-start-column="32" selection-end-line="90" selection-end-column="32" />
               <folding />
             </state>
@@ -107,9 +119,13 @@
       <file leaf-file-name="PrivateState.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/PrivateState.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="16" lean-forward="false" selection-start-line="0" selection-start-column="16" selection-end-line="0" selection-end-column="16" />
-              <folding />
+            <state relative-caret-position="90">
+              <caret line="6" column="30" lean-forward="false" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#565#566#0" expanded="true" />
+                <element signature="e#595#596#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -117,8 +133,8 @@
       <file leaf-file-name="ActorThreadPool.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/ActorThreadPool.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="24">
-              <caret line="87" column="59" lean-forward="true" selection-start-line="87" selection-start-column="59" selection-end-line="87" selection-end-column="59" />
+            <state relative-caret-position="1494">
+              <caret line="87" column="59" lean-forward="false" selection-start-line="87" selection-start-column="59" selection-end-line="87" selection-end-column="59" />
               <folding />
             </state>
           </provider>
@@ -153,6 +169,14 @@
       <find>param</find>
       <find>Null</find>
       <find>then</find>
+      <find>clients</find>
+      <find>state</find>
+      <find>client</find>
+      <find>Test</find>
+      <find>@Test</find>
+      <find>BankState</find>
+      <find>getActionName</find>
+      <find>privateState</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -183,12 +207,13 @@
         <option value="$PROJECT_DIR$/src/main/java/bgu/spl/a2/ActionQueue.java" />
         <option value="$PROJECT_DIR$/src/main/java/bgu/spl/a2/ActionQueue.java" />
         <option value="$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActorThreadPoolTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bgu/spl/a2/Action.java" />
-        <option value="$PROJECT_DIR$/src/main/java/bgu/spl/a2/Action.java" />
         <option value="$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Confirmation.java" />
         <option value="$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Transmission.java" />
         <option value="$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/naiveAction.java" />
         <option value="$PROJECT_DIR$/src/main/java/bgu/spl/a2/ActorThreadPool.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bgu/spl/a2/Action.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bgu/spl/a2/Action.java" />
+        <option value="$PROJECT_DIR$/src/main/java/bgu/spl/a2/PrivateState.java" />
         <option value="$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActionTest.java" />
       </list>
     </option>
@@ -283,10 +308,10 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="AndroidView" />
-      <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -367,7 +392,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="settings.github" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="project.structure.last.edited" value="Libraries" />
@@ -629,7 +654,12 @@
       <workItem from="1512742911748" duration="193000" />
       <workItem from="1512745265983" duration="125000" />
       <workItem from="1512811188234" duration="2545000" />
-      <workItem from="1512830504083" duration="8143000" />
+      <workItem from="1512830504083" duration="8824000" />
+      <workItem from="1512845163684" duration="45000" />
+      <workItem from="1512916394469" duration="2405000" />
+      <workItem from="1512933598330" duration="6699000" />
+      <workItem from="1512993665445" duration="464000" />
+      <workItem from="1512994908353" duration="1574000" />
     </task>
     <task id="LOCAL-00001" summary="first push">
       <created>1512375285752</created>
@@ -799,29 +829,36 @@
       <option name="project" value="LOCAL" />
       <updated>1512726642957</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Action test&#10;updated pool">
+      <created>1512840866549</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1512840866550</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="ActionTest - 2017.12.09 at 17h 21m 02s.xml">
+    <history-entry file="ActionTest - 2017.12.11 at 10h 18m 49s.xml">
       <configuration name="ActionTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ActionTest - 2017.12.09 at 18h 54m 15s.xml">
+    <history-entry file="ActionTest - 2017.12.11 at 10h 25m 05s.xml">
       <configuration name="ActionTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ActionTest - 2017.12.09 at 19h 08m 36s.xml">
+    <history-entry file="ActionTest - 2017.12.11 at 10h 38m 18s.xml">
       <configuration name="ActionTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ActionTest - 2017.12.09 at 19h 12m 58s.xml">
+    <history-entry file="ActionTest - 2017.12.11 at 10h 39m 08s.xml">
       <configuration name="ActionTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ActionTest - 2017.12.09 at 19h 25m 37s.xml">
+    <history-entry file="ActionTest - 2017.12.11 at 10h 39m 33s.xml">
       <configuration name="ActionTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ActionTest - 2017.12.09 at 19h 27m 17s.xml">
+    <history-entry file="ActionTest - 2017.12.11 at 11h 17m 49s.xml">
       <configuration name="ActionTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ActionTest - 2017.12.09 at 19h 28m 15s.xml">
+    <history-entry file="ActionTest - 2017.12.11 at 14h 47m 07s.xml">
       <configuration name="ActionTest" configurationId="JUnit" />
     </history-entry>
     <history-entry file="ActorThreadPoolTest - 2017.12.09 at 11h 22m 05s.xml">
@@ -835,7 +872,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="107591000" />
+    <option name="totallyTimeSpent" value="119459000" />
   </component>
   <component name="TodoView" selected-index="2">
     <todo-panel id="selected-file">
@@ -858,8 +895,8 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4097561" sideWeight="0.50524735" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329429" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33633634" sideWeight="0.49707174" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22672673" sideWeight="0.7079063" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33633634" sideWeight="0.49707174" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -869,8 +906,8 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4088748" sideWeight="0.49475262" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -936,14 +973,15 @@
     <MESSAGE value="update and doc for ActorThreadPool" />
     <MESSAGE value="added CountDownLatch to ActorThreadPool" />
     <MESSAGE value="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/bgu/spl/a2/ActorThreadPool.java" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/bgu/spl/a2/ActorThreadPool.java" />
+    <MESSAGE value="Action test&#10;updated pool" />
+    <option name="LAST_COMMIT_MESSAGE" value="Action test&#10;updated pool" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="21" />
+      <option name="time" value="22" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1032,7 +1070,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1240,34 +1277,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Confirmation.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/callback.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Transmission.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/PrivateState.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="16" lean-forward="false" selection-start-line="0" selection-start-column="16" selection-end-line="0" selection-end-column="16" />
-          <folding />
+        <state relative-caret-position="54">
+          <caret line="3" column="17" lean-forward="false" selection-start-line="3" selection-start-column="17" selection-end-line="3" selection-end-column="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/VersionMonitor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-232">
-          <caret line="0" column="19" lean-forward="true" selection-start-line="0" selection-start-column="19" selection-end-line="0" selection-end-column="19" />
+        <state relative-caret-position="0">
+          <caret line="0" column="19" lean-forward="false" selection-start-line="0" selection-start-column="19" selection-end-line="0" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActorThreadPoolTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1422">
+          <caret line="90" column="32" lean-forward="false" selection-start-line="90" selection-start-column="32" selection-end-line="90" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/ActorThreadPool.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1494">
+          <caret line="87" column="59" lean-forward="false" selection-start-line="87" selection-start-column="59" selection-end-line="87" selection-end-column="59" />
           <folding />
         </state>
       </provider>
@@ -1282,48 +1318,52 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/bgu/spl/a2/PromiseTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1782">
+        <state relative-caret-position="578">
           <caret line="103" column="0" lean-forward="false" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/ActorThreadPool.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/PrivateState.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="24">
-          <caret line="87" column="59" lean-forward="true" selection-start-line="87" selection-start-column="59" selection-end-line="87" selection-end-column="59" />
-          <folding />
+        <state relative-caret-position="90">
+          <caret line="6" column="30" lean-forward="false" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#565#566#0" expanded="true" />
+            <element signature="e#595#596#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActorThreadPoolTest.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Transmission.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1206">
-          <caret line="90" column="32" lean-forward="false" selection-start-line="90" selection-start-column="32" selection-end-line="90" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/callback.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="3" column="17" lean-forward="false" selection-start-line="3" selection-start-column="17" selection-end-line="3" selection-end-column="17" />
+        <state relative-caret-position="648">
+          <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/Promise.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="954">
+        <state relative-caret-position="1170">
           <caret line="69" column="34" lean-forward="false" selection-start-line="69" selection-start-column="34" selection-end-line="69" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Confirmation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/Action.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="93" column="16" lean-forward="true" selection-start-line="93" selection-start-column="16" selection-end-line="93" selection-end-column="16" />
+        <state relative-caret-position="-970">
+          <caret line="62" column="26" lean-forward="true" selection-start-line="62" selection-start-column="26" selection-end-line="62" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1332,9 +1372,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActionTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="32" column="23" lean-forward="false" selection-start-line="32" selection-start-column="23" selection-end-line="32" selection-end-column="23" />
-          <folding />
+        <state relative-caret-position="2304">
+          <caret line="137" column="39" lean-forward="false" selection-start-line="137" selection-start-column="39" selection-end-line="137" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#578#579#0" expanded="true" />
+            <element signature="e#618#619#0" expanded="true" />
+            <element signature="e#724#725#0" expanded="true" />
+            <element signature="e#782#783#0" expanded="true" />
+            <element signature="e#5335#5336#0" expanded="true" />
+            <element signature="e#5424#5425#0" expanded="true" />
+            <element signature="e#5678#5679#0" expanded="true" />
+            <element signature="e#5717#5718#0" expanded="true" />
+            <element signature="e#5748#5749#0" expanded="true" />
+            <element signature="e#5787#5788#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

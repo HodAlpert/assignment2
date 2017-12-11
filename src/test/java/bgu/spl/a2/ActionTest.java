@@ -1,103 +1,177 @@
 package bgu.spl.a2;
 
-import bgu.spl.a2.sim.actions.naiveAction;
-import bgu.spl.a2.sim.privateStates.CoursePrivateState;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
-import java.awt.*;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
-import static org.junit.Assert.*;
-
+@RunWith(Parameterized.class)
 public class ActionTest {
 
-    private Action tester;
-    private ActorThreadPool pool;
+    @Parameterized.Parameters
+    public static Collection parameters() {
+        Object[][] params = new Object[1000][];
+        for (int i = 0; i < params.length; i++) {
+            params[i] = new Object[]{i % 10 + 1};
+        }
+        return Arrays.asList(params);
+    }
 
-    @BeforeClass
-    public static void BeforeClass() throws Exception {
-        System.out.println("Start testing Action class");
+    public ActionTest(int nThreads) {
+        this.nThreads = nThreads;
     }
-    @AfterClass
-    public static void AfterClass() throws Exception {
-        System.out.println("Finish testing Action class");
-    }
+
+    private int nThreads;
+    private ActorThreadPool threadPool;
 
     @Before
-    public void setUp() throws Exception {
-        tester = new naiveAction();
-        pool = new ActorThreadPool(3);
+    public void setUp() {
+        threadPool = new ActorThreadPool(nThreads);
     }
-
 
     @Test
-    public void then() {
-        CountDownLatch latch = new CountDownLatch(5);
-
-        Action a1 = new naiveAction();
-        Action a2 = new naiveAction();
-        Action a3 = new naiveAction();
-        Action a4 = new naiveAction();
-        Action a5 = new naiveAction();
-
-        Collection<Action> actions = new LinkedList<>();
-        actions.add(a2);
-        actions.add(a3);
-        actions.add(a4);
-        actions.add(a5);
-        for (int i = 0; i < 20; i++) {
-            int finalI = i;
-            a1.then(actions, () -> {
-                System.out.println("callback" + finalI);
+    public void transactionTest() {
+        Transaction transaction = new Transaction(100, "A", "B", "Bank2");
+        threadPool.start();
+        threadPool.submit(new AddClient("A", 100, "Bank1"), "Bank1", new BankState());
+        threadPool.submit(new AddClient("B", 0, "Bank2"), "Bank2", new BankState());
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        threadPool.submit(transaction, "Bank1", new BankState());
+        try {
+            CountDownLatch latch = new CountDownLatch(1);
+            transaction.getResult().subscribe(() -> {
+                System.out.println("callback");
                 latch.countDown();
             });
-        }
-        a2.getResult().resolve(new Object());
-        a3.getResult().resolve(new Object());
-        a4.getResult().resolve(new Object());
-        a5.getResult().resolve(new Object());
-
-        pool.start();
-        pool.submit(a1,"1",new CoursePrivateState());
-        pool.submit(a2,"1",new CoursePrivateState());
-        pool.submit(a3,"1",new CoursePrivateState());
-        pool.submit(a4,"1",new CoursePrivateState());
-        pool.submit(a5,"1",new CoursePrivateState());
-
-        try {
             latch.await();
+            threadPool.shutdown();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        try {
-            pool.shutdown();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
     }
 
-//    @Test
-//    public void handle() {
-//    }
-//
-//    @Test
-//    public void complete() {
-//    }
-//
-//    @Test
-//    public void getResult() {
-//    }
-//
-//    @Test
-//    public void sendMessage() {
-//    }
+    private class AddClient extends Action<Boolean> {
+        private String name;
+        private int amount;
+        private String bank;
+
+        public AddClient(String name, int amount, String bank) {
+            this.name = name;
+            this.amount = amount;
+            this.bank = bank;
+            setActionName("AddClient " + name);
+        }
+
+        @Override
+        protected void start() {
+            System.out.println("#### " + getActionName() + ": start()");
+            ((BankState) state).clients.add(new Pair<>(name, amount));
+            System.out.println("added client " + name + " to bank " + bank);
+            complete(true);
+        }
+    }
+
+    private class Transaction extends Action<String> {
+        int amount;
+        String sender;
+        String receiver;
+        String receiverBank;
+
+        public Transaction(int amount, String sender, String receiver, String receiverBank) {
+            this.amount = amount;
+            this.sender = sender;
+            this.receiver = receiver;
+            this.receiverBank = receiverBank;
+            setActionName("Transaction");
+        }
+
+        @Override
+        protected void start() {
+            System.out.println("#### " + getActionName() + ": start()");
+            Action<Boolean> confAction = new Confirmation(amount, sender, receiver, receiverBank, new BankState());
+            Collection<Action<?>> requiredActions = new LinkedList<>();
+            requiredActions.add(confAction);
+            then(requiredActions,() ->{
+                Boolean result = (Boolean) ((LinkedList<Action<?>>)requiredActions).get(0).getResult().get();
+                if (result) {
+                    System.out.println("Transaction Succeeded");
+                    Pair<String, Integer> client = ((BankState) state).clients.remove(0);
+                    ((BankState) state).clients.add(new Pair<>(client.getKey(), client.getValue() - amount));
+                    complete("Transaction Succeeded");
+                } else {
+                    System.out.println("Transaction Failed");
+                    complete("Transaction Failed");
+                }
+            });
+            sendMessage(confAction, receiverBank, new BankState());
+
+        }
+    }
+
+    private class Confirmation extends Action<Boolean> {
+        int amount;
+        String sender;
+        String receiver;
+        String receiverBank;
+
+        public Confirmation(int amount, String sender, String receiver, String receiverBank, PrivateState privateState) {
+            this.amount = amount;
+            this.sender = sender;
+            this.receiver = receiver;
+            this.receiverBank = receiverBank;
+            this.setActionName("Confirmation");
+            privateState.addRecord(getActionName());
+        }
+
+        @Override
+        protected void start() {
+            System.out.println("#### " + getActionName() + ": start()");
+            if (Math.random() < 0.5) {
+                Pair<String, Integer> client = ((BankState) state).clients.remove(0);
+                ((BankState) state).clients.add(new Pair<>(client.getKey(), client.getValue() + amount));
+                System.out.println(receiverBank + " confirmed transaction from: " + sender + " to " + receiver);
+                complete(true);
+            } else {
+                System.out.println(receiverBank + " unconfirmed transaction from: " + sender + " to " + receiver);
+                complete(false);
+            }
+        }
+    }
+
+    private class BankState extends PrivateState {
+        List<Pair<String, Integer>> clients = new ArrayList<>();
+
+        @Override
+        public String toString() {
+            return clients.get(0).getKey() + ": " + clients.get(0).getValue();
+        }
+    }
+
+    private class Pair<K, V> {
+
+        final K element0;
+        final V element1;
+
+
+        public Pair(K element0, V element1) {
+            this.element0 = element0;
+            this.element1 = element1;
+        }
+
+        public K getKey() {
+            return element0;
+        }
+
+        public V getValue() {
+            return element1;
+        }
+
+    }
 }

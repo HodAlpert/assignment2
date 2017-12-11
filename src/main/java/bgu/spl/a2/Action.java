@@ -1,8 +1,6 @@
 package bgu.spl.a2;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -23,8 +21,8 @@ public abstract class Action<R> {
     private AtomicBoolean hasBeenStartedBefore;
     private AtomicInteger actionsCompletedCounter;
     private ActorThreadPool pool;
-    private PrivateState state;
-    private callback continuation;
+    protected PrivateState state; //TODO change back to private
+    protected callback continuation; //TODO change back to private
     private String actorid;
     private String actionName;
 /**
