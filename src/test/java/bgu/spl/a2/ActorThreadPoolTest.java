@@ -1,10 +1,6 @@
 package bgu.spl.a2;
 
-import bgu.spl.a2.sim.Computer;
-import bgu.spl.a2.sim.actions.Confirmation;
-import bgu.spl.a2.sim.actions.naiveAction;
 import bgu.spl.a2.sim.privateStates.CoursePrivateState;
-import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 import org.junit.*;
 
 import java.util.concurrent.CountDownLatch;
@@ -76,42 +72,42 @@ public class ActorThreadPoolTest {
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
-        for(int i=0;i<40;i++) {
-            System.out.println(i);
-            latch = new CountDownLatch(6);
-            tester = new ActorThreadPool(4);
-            tester.start();
-            naiveAction action3 = new naiveAction();
-            naiveAction action4 = new naiveAction();
-            naiveAction action5 = new naiveAction();
-            naiveAction action6 = new naiveAction();
-            naiveAction action7 = new naiveAction();
-            naiveAction action8 = new naiveAction();
-            action3.getResult().subscribe(() -> this.latch.countDown());
-            action4.getResult().subscribe(() -> this.latch.countDown());
-            action5.getResult().subscribe(() -> this.latch.countDown());
-            action6.getResult().subscribe(() -> this.latch.countDown());
-            action7.getResult().subscribe(() -> this.latch.countDown());
-            action8.getResult().subscribe(() -> this.latch.countDown());
-            tester.submit(action3, "1", new CoursePrivateState());
-            tester.submit(action4, "1", new CoursePrivateState());
-            tester.submit(action5, "1", new CoursePrivateState());
-            tester.submit(action6, "2", new CoursePrivateState());
-            tester.submit(action7, "2", new CoursePrivateState());
-            tester.submit(action8, "3", new CoursePrivateState());
-            try {
-                latch.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            assertTrue("action Counter is incorrect", latch.getCount() == 0);
-            assertTrue("should have 3 qeueus", tester.queues.size() == 3);
-            try {
-                tester.shutdown();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+//        for(int i=0;i<40;i++) {
+//            System.out.println(i);
+//            latch = new CountDownLatch(6);
+//            tester = new ActorThreadPool(4);
+//            tester.start();
+//            naiveAction action3 = new naiveAction();
+//            naiveAction action4 = new naiveAction();
+//            naiveAction action5 = new naiveAction();
+//            naiveAction action6 = new naiveAction();
+//            naiveAction action7 = new naiveAction();
+//            naiveAction action8 = new naiveAction();
+//            action3.getResult().subscribe(() -> this.latch.countDown());
+//            action4.getResult().subscribe(() -> this.latch.countDown());
+//            action5.getResult().subscribe(() -> this.latch.countDown());
+//            action6.getResult().subscribe(() -> this.latch.countDown());
+//            action7.getResult().subscribe(() -> this.latch.countDown());
+//            action8.getResult().subscribe(() -> this.latch.countDown());
+//            tester.submit(action3, "1", new CoursePrivateState());
+//            tester.submit(action4, "1", new CoursePrivateState());
+//            tester.submit(action5, "1", new CoursePrivateState());
+//            tester.submit(action6, "2", new CoursePrivateState());
+//            tester.submit(action7, "2", new CoursePrivateState());
+//            tester.submit(action8, "3", new CoursePrivateState());
+//            try {
+//                latch.await();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            assertTrue("action Counter is incorrect", latch.getCount() == 0);
+//            assertTrue("should have 3 qeueus", tester.queues.size() == 3);
+//            try {
+//                tester.shutdown();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
 
 

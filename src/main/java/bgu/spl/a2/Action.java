@@ -109,6 +109,7 @@ public abstract class Action<R> {
      */
     protected final void complete(R result) {
         getResult().resolve(result);
+        state.addRecord(actionName);
     }
 
     /**
