@@ -10,14 +10,14 @@ import java.util.List;
 public class SelfCloseCourse extends Action<Boolean> {
     String Course;
     public SelfCloseCourse(String Course){
-        setActionName("SelfUnregisterStudent");
+        setActionName("Self Close Course");
         this.Course=Course;
     }
 
     @Override
     protected void start() {
         CoursePrivateState state = (CoursePrivateState) getState();
-        state.setavailableSpots(-1);//rejecting future registration requests
+        state.setAvailableSpots(-1);//rejecting future registration requests
         List<Action<Boolean>> actions = new ArrayList<>();
         for (String student: state.getRegStudents()){//asking all students to remove themselfs from course
             Action<Boolean> action = new SelfUnregisterStudent(Course);//asking student to remove self from course
@@ -25,7 +25,7 @@ public class SelfCloseCourse extends Action<Boolean> {
             actions.add(action);
         }//for
         state.setRegStudents(new ArrayList<String>());//erasing registered students
-        state.setPrequisites(new ArrayList<String>());//erasing prerequisites
+        state.setPrerequisites(new ArrayList<String>());//erasing prerequisites
         then(actions,()->{
             complete(true);
         });

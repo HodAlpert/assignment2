@@ -3,7 +3,6 @@ package bgu.spl.a2.sim.actions;
 import bgu.spl.a2.Action;
 import bgu.spl.a2.sim.privateStates.CoursePrivateState;
 import bgu.spl.a2.sim.privateStates.StudentPrivateState;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class Unregister extends Action<Boolean> {
         CoursePrivateState state = (CoursePrivateState) getState();
         //TODO implement flag to reject if close registration was called
         if (state.getRegStudents().contains(Student)){//if student is registered to course
-            state.setavailableSpots(state.getAvailableSpots()+1);//inc AvailableSpots
+            state.setAvailableSpots(state.getAvailableSpots()+1);//inc AvailableSpots
             List<Action<Boolean>> actions = new ArrayList<>();
             Action<Boolean> action = new SelfUnregisterStudent(Course);//asking student to remove self from course
             sendMessage(action,Student,new StudentPrivateState());//sending the action to the pool

@@ -2,7 +2,6 @@ package bgu.spl.a2.sim.actions;
 
 import bgu.spl.a2.Action;
 import bgu.spl.a2.sim.privateStates.StudentPrivateState;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 public class SelfUnregisterStudent extends Action<Boolean> {
     private String Course;

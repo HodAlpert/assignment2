@@ -28,7 +28,7 @@ public class CloseCourse extends Action<Boolean> {
             Action<Boolean> action = new SelfCloseCourse(Course);
             List<Action<Boolean>> actions = new ArrayList<>();
             actions.add(action);
-            sendMessage(action,Course,new CoursePrivateState());
+            sendMessage(action,Course,new CoursePrivateState()); //TODO should send to existing course
             then(actions, ()->{
                 complete(true);
             });

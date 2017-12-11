@@ -23,7 +23,7 @@ public class AddSpaces extends Action<Boolean> {
         if (state.getAvailableSpots()==-1)
             complete(false);
         else{
-            state.setavailableSpots(state.getAvailableSpots()+Number);
+            state.setAvailableSpots(state.getAvailableSpots()+Number);
             complete(true);
         }//else
     }//start
