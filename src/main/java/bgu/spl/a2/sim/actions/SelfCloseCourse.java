@@ -24,6 +24,8 @@ public class SelfCloseCourse extends Action<Boolean> {
             sendMessage(action,student,new StudentPrivateState());//sending the action to the pool
             actions.add(action);
         }//for
+        state.setRegStudents(new ArrayList<String>());//erasing registered students
+        state.setPrequisites(new ArrayList<String>());//erasing prerequisites
         then(actions,()->{
             complete(true);
         });
