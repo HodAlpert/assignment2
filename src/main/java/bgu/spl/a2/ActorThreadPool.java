@@ -1,6 +1,5 @@
 package bgu.spl.a2;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -51,14 +50,14 @@ public class ActorThreadPool {
 	 *            the method returns.
 	 */
 
-	private HashMap<String,PrivateState> privateStates;
+	private ConcurrentHashMap<String,PrivateState> privateStates;
 	ConcurrentHashMap<String,ActionQueue> queues;
 	protected List<Thread> threads;
 	private CountDownLatch startLatch, ShutDownLatch;
 	private VersionMonitor monitor;
 
 	public ActorThreadPool(int nthreads) {
-		privateStates = new HashMap<String,PrivateState>();
+		privateStates = new ConcurrentHashMap<String,PrivateState>();
 		queues = new ConcurrentHashMap<String,ActionQueue>();
 		monitor = new VersionMonitor();
 		startLatch = new CountDownLatch(nthreads);

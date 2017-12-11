@@ -1,13 +1,12 @@
 package bgu.spl.a2;
 
-import bgu.spl.a2.sim.privateStates.CoursePrivateState;
 import org.junit.*;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Thread.sleep;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class ActorThreadPoolTest {
 
@@ -31,86 +30,7 @@ public class ActorThreadPoolTest {
 
     @Test
 
-    public void submit() { //TODO write private states first.
-//            tester.start();
-//            naiveAction action = new naiveAction();
-//            action.getResult().subscribe(() -> {
-//                this.counter.getAndIncrement();
-//                latch.countDown();
-//            });
-//            try {
-//                sleep(1000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            isWaitingAndAlive();
-//            tester.submit(action, "something", new CoursePrivateState());
-//            try {
-//                sleep(2000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            isWaitingAndAlive();
-//            assertTrue("action not completed", counter.get() == 1 & action.getResult().isResolved());
-//            naiveAction action2 = new naiveAction();
-//            action2.getResult().subscribe(() -> {
-//                this.counter.getAndIncrement();
-//                latch.countDown();
-//            });
-//            isWaitingAndAlive();
-//            tester.submit(action2, "something", new CoursePrivateState());
-//            try {
-//                sleep(2000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            isWaitingAndAlive();
-//            assertTrue("action not completed", latch.getCount() == 6 & action2.getResult().isResolved());
-//            assertTrue("should not create actor again", tester.queues.size() == 1);
-//        try {
-//            tester.shutdown();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        for(int i=0;i<40;i++) {
-//            System.out.println(i);
-//            latch = new CountDownLatch(6);
-//            tester = new ActorThreadPool(4);
-//            tester.start();
-//            naiveAction action3 = new naiveAction();
-//            naiveAction action4 = new naiveAction();
-//            naiveAction action5 = new naiveAction();
-//            naiveAction action6 = new naiveAction();
-//            naiveAction action7 = new naiveAction();
-//            naiveAction action8 = new naiveAction();
-//            action3.getResult().subscribe(() -> this.latch.countDown());
-//            action4.getResult().subscribe(() -> this.latch.countDown());
-//            action5.getResult().subscribe(() -> this.latch.countDown());
-//            action6.getResult().subscribe(() -> this.latch.countDown());
-//            action7.getResult().subscribe(() -> this.latch.countDown());
-//            action8.getResult().subscribe(() -> this.latch.countDown());
-//            tester.submit(action3, "1", new CoursePrivateState());
-//            tester.submit(action4, "1", new CoursePrivateState());
-//            tester.submit(action5, "1", new CoursePrivateState());
-//            tester.submit(action6, "2", new CoursePrivateState());
-//            tester.submit(action7, "2", new CoursePrivateState());
-//            tester.submit(action8, "3", new CoursePrivateState());
-//            try {
-//                latch.await();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            assertTrue("action Counter is incorrect", latch.getCount() == 0);
-//            assertTrue("should have 3 qeueus", tester.queues.size() == 3);
-//            try {
-//                tester.shutdown();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
-
-
+    public void submit() {
 
     }
 

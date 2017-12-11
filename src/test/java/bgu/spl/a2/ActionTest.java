@@ -13,7 +13,7 @@ public class ActionTest {
 
     @Parameterized.Parameters
     public static Collection parameters() {
-        Object[][] params = new Object[1000][];
+        Object[][] params = new Object[100][];
         for (int i = 0; i < params.length; i++) {
             params[i] = new Object[]{i % 10 + 1};
         }
