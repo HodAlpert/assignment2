@@ -20,7 +20,7 @@ public class ActionTest {
 
     @Parameterized.Parameters
     public static Collection parameters() {
-        Object[][] params = new Object[200][];
+        Object[][] params = new Object[1000][];
         for (int i = 0; i < params.length; i++) {
             params[i] = new Object[]{i % 10 + 1};
         }
@@ -40,7 +40,7 @@ public class ActionTest {
     }
 
     @Test
-    public void CourseAction(){
+    public void AllActions(){
         Action openCourse1 = new OpenCourse("dept1","course1","10",new String[]{});
         Action openCourse2 = new OpenCourse("dept1","course2","10",new String[]{});
         Action openCourse3 = new OpenCourse("dept2","course3","10",new String[]{});

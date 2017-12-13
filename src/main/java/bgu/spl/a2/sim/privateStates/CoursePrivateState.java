@@ -24,9 +24,9 @@ public class CoursePrivateState extends PrivateState{
 	 */
 	public CoursePrivateState() {
 		this.course="";
-		registered = 0;
+		this.registered = 0;
 		this.regStudents = new LinkedList<>();
-		prequisites=new ArrayList<String>();
+		this.prequisites=new ArrayList<String>();
 	}
 
 	public String getCourse() { return course; }

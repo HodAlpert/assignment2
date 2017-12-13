@@ -18,8 +18,8 @@ public class StudentPrivateState extends PrivateState{
 	 * this may cause automatic tests to fail..
 	 */
 	public StudentPrivateState() {
+		this.Student="";
 		this.grades = new HashMap<String, Integer>();
-
 	}
 
 	public String getStudent() {

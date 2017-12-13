@@ -28,6 +28,7 @@ public class AddStudent extends Action<Boolean> {
             actions.add(selfAddStudent);
             sendMessage(selfAddStudent,Student,new StudentPrivateState());
             then(actions, ()-> complete(true));
+
         }
         else//if student exist
             complete(false);//should reject the request
