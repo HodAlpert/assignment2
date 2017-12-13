@@ -29,7 +29,7 @@ public class AddStudent extends Action<Boolean> {
             sendMessage(selfAddStudent,Student,new StudentPrivateState());
             then(actions, ()-> complete(true));
         }
-        else
-            complete(true);
+        else//if student exist
+            complete(false);//should reject the request
     }
 }

@@ -34,6 +34,6 @@ public class OpenCourse extends Action<Boolean>{
             then(actions, ()-> complete(true));
         }
         else//if course already exist
-            complete(true);
+            complete(false);//should reject the request
     }
 }
