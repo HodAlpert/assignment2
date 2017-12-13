@@ -9,25 +9,27 @@ import java.util.List;
 
 public class AddStudent extends Action<Boolean> {
 
-    private String department;
-    private String student;
+    private String Department;
+    private String Student;
 
-    public AddStudent(String department, String student) {
-        this.department = department;
-        this.student=student;
+    public AddStudent(String Department, String Student) {
         this.setActionName("Add Student");
+        this.Department = Department;
+        this.Student=Student;
     }
 
     @Override
     protected void start() {
         DepartmentPrivateState state = (DepartmentPrivateState) getState();
-        if (!state.getStudentList().contains(student)){
-            Action<Boolean> selfAddStudent = new SelfAddStudent(student);
+        if (!state.getStudentList().contains(Student)){
+            state.getStudentList().add(Student);//to reject future requests
+            Action<Boolean> selfAddStudent = new SelfAddStudent(Student);
             List<Action<Boolean>> actions = new ArrayList<>();
             actions.add(selfAddStudent);
-            sendMessage(selfAddStudent,student,new StudentPrivateState());
+            sendMessage(selfAddStudent,Student,new StudentPrivateState());
             then(actions, ()-> complete(true));
-            state.getStudentList().add(student);
         }
+        else
+            complete(true);
     }
 }

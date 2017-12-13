@@ -21,8 +21,7 @@ public class AcceptToCourse extends Action<Boolean> {
     protected void start() {
         CoursePrivateState state = (CoursePrivateState) getState();
         if(state.getAvailableSpots()!=-1 && state.getAvailableSpots()!=state.getRegistered() &&
-                state.getPrerequisites().containsAll(grades.keySet())) { // no need to check if grade >=56
-
+            state.getPrequisites().containsAll(grades.keySet())) { // no need to check if grade >=56
             state.setRegistered(state.getRegistered()+1);
             state.getRegStudents().add(student);
             this.complete(true);

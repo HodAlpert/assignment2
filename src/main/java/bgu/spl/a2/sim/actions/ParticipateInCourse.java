@@ -9,14 +9,14 @@ import java.util.List;
 
 public class ParticipateInCourse extends Action<Boolean> {
 
-    private String student; //TODO what should we do with this input?
-    private String course;
-    private String grade;
+    private String Student; //TODO what should we do with this input?
+    private String Course;
+    private String Grade;
 
     public ParticipateInCourse(String student, String course, String grade){
-        this.student=student;
-        this.course=course;
-        this.grade=grade;
+        this.Student=student;
+        this.Course=course;
+        this.Grade=grade;
         this.setActionName("Participate In Course");
     }
 
@@ -26,11 +26,11 @@ public class ParticipateInCourse extends Action<Boolean> {
         Action<Boolean> acceptToCourse = new AcceptToCourse(state.getGrades(),Long.toString(state.getSignature()));
         List<Action<Boolean>> actions = new ArrayList<>();
         actions.add(acceptToCourse);
-        sendMessage(acceptToCourse,course,new CoursePrivateState());
+        sendMessage(acceptToCourse,Course,new CoursePrivateState());
         then(actions, ()-> {
             if(acceptToCourse.getResult().get()){
-                if(!grade.equals("-"))
-                    state.getGrades().put(course,Integer.parseInt(grade));
+                if(!Grade.equals("-"))
+                    state.getGrades().put(Course,Integer.parseInt(Grade));
             }
             complete(true);});
 

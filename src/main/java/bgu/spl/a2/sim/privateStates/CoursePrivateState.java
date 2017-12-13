@@ -2,6 +2,7 @@ package bgu.spl.a2.sim.privateStates;
 
 import bgu.spl.a2.PrivateState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,11 +10,10 @@ import java.util.List;
  */
 public class CoursePrivateState extends PrivateState{
 
-	private String course;
 	private Integer availableSpots;
 	private Integer registered;
 	private List<String> regStudents;
-	private List<String> prerequisites;
+	private List<String> prequisites;
 	
 	/**
  	 * Implementors note: you may not add other constructors to this class nor
@@ -21,12 +21,9 @@ public class CoursePrivateState extends PrivateState{
 	 * this may cause automatic tests to fail..
 	 */
 	public CoursePrivateState() {
-		//TODO
+		regStudents=new ArrayList<String>();
+		prequisites=new ArrayList<String>();
 	}
-
-	public String getCourse() { return course; }
-
-	public void setCourse(String course) { this.course = course; }
 
 	public Integer getAvailableSpots() {
 		return availableSpots;
@@ -40,12 +37,12 @@ public class CoursePrivateState extends PrivateState{
 		return regStudents;
 	}
 
-	public List<String> getPrerequisites() {
-		return prerequisites;
+	public List<String> getPrequisites() {
+		return prequisites;
 	}
 
 	public void setPrerequisites(List<String> prerequisites){
-		this.prerequisites = prerequisites;
+		this.prequisites = prerequisites;
 	}
 	public void setRegStudents(List<String> regStudents){
 		this.regStudents=regStudents;
