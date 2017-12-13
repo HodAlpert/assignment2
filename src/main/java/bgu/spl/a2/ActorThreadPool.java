@@ -104,8 +104,9 @@ public class ActorThreadPool {
 			} else {
 				queues.get(actorId).enqueue(action);
 			}
-			monitor.inc();
 		}
+			monitor.inc();
+
 	}
 
 	/**

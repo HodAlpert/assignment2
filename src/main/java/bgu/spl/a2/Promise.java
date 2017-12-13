@@ -1,7 +1,6 @@
 package bgu.spl.a2;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -20,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *            the result type, <boolean> resolved - initialized ;
  */
 public class Promise<T>{
-	private List<callback> callbacks=new ArrayList<>();
+	private ConcurrentLinkedQueue<callback> callbacks=new ConcurrentLinkedQueue<>();
 	private T result;
 	private AtomicBoolean resolved= new AtomicBoolean(false);
 
@@ -74,7 +73,7 @@ public class Promise<T>{
 			catch(NullPointerException ex){
 				System.out.println(ex.getMessage());
 			}		}
-		callbacks=new ArrayList<>();
+		callbacks=new ConcurrentLinkedQueue<>();
 	}
 
 	/**

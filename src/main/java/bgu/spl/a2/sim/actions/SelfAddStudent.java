@@ -15,6 +15,7 @@ public class SelfAddStudent extends Action<Boolean> {
     @Override
     protected void start() {
         StudentPrivateState state = (StudentPrivateState) getState();
+        System.out.println("STATE in SelfAddStudent: "+state);
         state.setStudent(this.student);
         complete(true);
     }
