@@ -3,15 +3,15 @@ package bgu.spl.a2.sim.actions;
 import bgu.spl.a2.Action;
 import bgu.spl.a2.sim.privateStates.CoursePrivateState;
 
-import java.util.List;
+import java.util.Arrays;
 
 public class SelfOpenCourse extends Action<Boolean> {
 
     private String course;
     private Integer availableSpots;
-    private List<String> prerequisites;
+    private String[] prerequisites;
 
-    public SelfOpenCourse(String course,Integer availableSpots, List<String> prerequisites){
+    public SelfOpenCourse(String course,Integer availableSpots, String[] prerequisites){
         this.course=course;
         this.availableSpots=availableSpots;
         this.prerequisites=prerequisites;
@@ -22,7 +22,7 @@ public class SelfOpenCourse extends Action<Boolean> {
     protected void start() {
         CoursePrivateState state = (CoursePrivateState) getState();
         state.setAvailableSpots(this.availableSpots);
-        state.setPrerequisites(this.prerequisites);
+        state.setPrerequisites(Arrays.asList(this.prerequisites));
         complete(true);
     }
 }

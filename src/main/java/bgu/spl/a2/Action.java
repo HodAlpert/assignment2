@@ -151,4 +151,8 @@ public abstract class Action<R> {
         return this.Action;
     }
     protected PrivateState getState(){return this.state;}
+
+    public ActorThreadPool getPool() {
+        return pool;
+    }
 }

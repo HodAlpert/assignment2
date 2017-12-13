@@ -3,6 +3,7 @@ package bgu.spl.a2.sim.privateStates;
 import bgu.spl.a2.PrivateState;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -10,6 +11,7 @@ import java.util.List;
  */
 public class CoursePrivateState extends PrivateState{
 
+	private String course;
 	private Integer availableSpots;
 	private Integer registered;
 	private List<String> regStudents;
@@ -21,9 +23,15 @@ public class CoursePrivateState extends PrivateState{
 	 * this may cause automatic tests to fail..
 	 */
 	public CoursePrivateState() {
-		regStudents=new ArrayList<String>();
+		this.course="";
+		registered = 0;
+		this.regStudents = new LinkedList<>();
 		prequisites=new ArrayList<String>();
 	}
+
+	public String getCourse() { return course; }
+
+	public void setCourse(String course) { this.course = course; }
 
 	public Integer getAvailableSpots() {
 		return availableSpots;

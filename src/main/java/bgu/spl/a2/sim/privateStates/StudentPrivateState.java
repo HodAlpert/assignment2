@@ -8,7 +8,7 @@ import java.util.HashMap;
  * this class describe student private state
  */
 public class StudentPrivateState extends PrivateState{
-
+	private String Student;
 	private HashMap<String, Integer> grades;
 	private long signature;
 	
@@ -22,8 +22,16 @@ public class StudentPrivateState extends PrivateState{
 
 	}
 
+	public String getStudent() {
+		return Student;
+	}
+
 	public HashMap<String, Integer> getGrades() {
 		return grades;
+	}
+
+	public void setStudent(String student) {
+		Student = student;
 	}
 
 	public long getSignature() {

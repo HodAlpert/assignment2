@@ -8,11 +8,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class OpenCourseTest {
     ActorThreadPool pool;
@@ -31,13 +30,11 @@ public class OpenCourseTest {
         pool = new ActorThreadPool(4);
         pool.start();
         count=new CountDownLatch(1);
-        List<String> prerequisits=new ArrayList<String>();
-        prerequisits.add("Course1");
-        prerequisits.add("Course2");
+        String[] prerequisits={"Course1","Course2"};
         OpenCourse action=new OpenCourse(
                 "CS",
                 "Data Structore",
-                30,
+                "30",
                 prerequisits
                 );
         action.getResult().subscribe(()->count.countDown());
@@ -59,7 +56,7 @@ public class OpenCourseTest {
         OpenCourse action1=new OpenCourse(
                 "CS",
                 "Data Structore",
-                30,
+                "30",
                 prerequisits
         );
         action1.getResult().subscribe(()->count.countDown());

@@ -11,10 +11,10 @@ public class OpenCourse extends Action<Boolean>{
 
     private String Department;
     private String Course;
-    private Integer Space;
-    private List<String> Prerequisites;
+    private String Space;
+    private String[] Prerequisites;
 
-    public OpenCourse(String department, String Course,Integer availableSpots, List<String> Prerequisites) {
+    public OpenCourse(String Department, String Course,String availableSpots, String[] Prerequisites) {
         this.setActionName("Open Course");
         this.Department = Department;
         this.Course = Course;
@@ -27,7 +27,7 @@ public class OpenCourse extends Action<Boolean>{
         DepartmentPrivateState state = (DepartmentPrivateState) getState();
         if (!state.getCourseList().contains(Course)){
             state.getCourseList().add(Course);//to reject future requests
-            Action<Boolean> selfOpen = new SelfOpenCourse(Course,Space,Prerequisites);
+            Action<Boolean> selfOpen = new SelfOpenCourse(Course,Integer.parseInt(Space),Prerequisites);
             List<Action<Boolean>> actions = new ArrayList<>();
             actions.add(selfOpen);
             sendMessage(selfOpen,Course,new CoursePrivateState());

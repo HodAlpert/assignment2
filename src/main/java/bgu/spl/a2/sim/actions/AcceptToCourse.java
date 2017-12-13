@@ -1,33 +1,33 @@
 package bgu.spl.a2.sim.actions;
 
 import bgu.spl.a2.Action;
-import bgu.spl.a2.sim.privateStates.CoursePrivateState;
+import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 
-import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class AcceptToCourse extends Action<Boolean> {
 
-    private HashMap<String, Integer> grades;
-    private String student;
+    private List<String> prequisites;
+    private String Course;
+    private String Grade;
 
-
-    public AcceptToCourse(HashMap<String, Integer> grades, String student){
-        this.grades=grades;
-        this.student=student;
+    public AcceptToCourse(String Course, String Grade){
+        this.prequisites=new LinkedList<>();
+        this.Course=Course;
+        this.Grade=Grade;
         this.setActionName("Accept To Course");
     }
 
     @Override
     protected void start() {
-        CoursePrivateState state = (CoursePrivateState) getState();
-        if(state.getAvailableSpots()!=-1 && state.getAvailableSpots()!=state.getRegistered() &&
-            state.getPrequisites().containsAll(grades.keySet())) { // no need to check if grade >=56
-            state.setRegistered(state.getRegistered()+1);
-            state.getRegStudents().add(student);
-            this.complete(true);
+        StudentPrivateState state = (StudentPrivateState) getState();
+        if(!state.getGrades().containsKey(Course) && state.getGrades().values().containsAll(prequisites)){
+           if(!Grade.equals("-"))
+              state.getGrades().put(Course,Integer.parseInt(Grade));
+            complete(true);
         }
         else
-            this.complete(false);
+            complete(false);
     }
-
 }

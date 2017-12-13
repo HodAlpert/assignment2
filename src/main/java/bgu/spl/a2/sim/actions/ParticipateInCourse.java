@@ -5,34 +5,41 @@ import bgu.spl.a2.sim.privateStates.CoursePrivateState;
 import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ParticipateInCourse extends Action<Boolean> {
 
-    private String Student; //TODO what should we do with this input?
+    private String[] Grade;
     private String Course;
-    private String Grade;
+    private String Student;
 
-    public ParticipateInCourse(String student, String course, String grade){
-        this.Student=student;
-        this.Course=course;
-        this.Grade=grade;
+
+    public ParticipateInCourse(String Student, String Course, String[] Grade){
+        this.Grade=Grade;
+        this.Student=Student;
+        this.Course=Course;
         this.setActionName("Participate In Course");
     }
 
     @Override
     protected void start() {
-        StudentPrivateState state = (StudentPrivateState) getState();
-        Action<Boolean> acceptToCourse = new AcceptToCourse(state.getGrades(),Long.toString(state.getSignature()));
-        List<Action<Boolean>> actions = new ArrayList<>();
-        actions.add(acceptToCourse);
-        sendMessage(acceptToCourse,Course,new CoursePrivateState());
-        then(actions, ()-> {
-            if(acceptToCourse.getResult().get()){
-                if(!Grade.equals("-"))
-                    state.getGrades().put(Course,Integer.parseInt(Grade));
-            }
-            complete(true);});
+        CoursePrivateState state = (CoursePrivateState) getState();
+        if (state.getAvailableSpots() != -1 && state.getAvailableSpots() < state.getRegistered()) { // no need to check if grade >=56
+            Action<Boolean> acceptToCourse = new AcceptToCourse(this.Course, this.Grade[0]);
+            List<Action<Boolean>> actions = new ArrayList<>();
+            actions.add(acceptToCourse);
+            sendMessage(acceptToCourse, Student, new StudentPrivateState());
+            then(actions, () -> {
+                if (acceptToCourse.getResult().get()) {
+                    state.setRegistered(state.getRegistered() + 1);
+                    state.getRegStudents().add(Student);
+                    this.complete(true);
+                } else
+                    this.complete(false);
+            });
 
+        } else
+            this.complete(false);
     }
 }
