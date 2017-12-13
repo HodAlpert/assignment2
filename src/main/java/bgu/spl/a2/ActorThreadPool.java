@@ -79,7 +79,7 @@ public class ActorThreadPool {
 	 * @param actorId actor's id
 	 * @return actor's private state
 	 */
-	public PrivateState getPrivaetState(String actorId){
+	public PrivateState getPrivateState(String actorId){
 		return privateStates.get(actorId);
 	}
 
@@ -96,7 +96,7 @@ public class ActorThreadPool {
 	 *            actor's private state (actor's information)
 	 */
 	public void submit(Action<?> action, String actorId, PrivateState actorState) {
-		try {
+		synchronized ( this ) {
 			if (!queues.containsKey(actorId)) {
 				queues.put(actorId, new ActionQueue(actorId));
 				queues.get(actorId).enqueue(action);
@@ -105,9 +105,6 @@ public class ActorThreadPool {
 				queues.get(actorId).enqueue(action);
 			}
 			monitor.inc();
-		}
-		catch (NullPointerException e){
-			System.out.println("Input cannot be null, submission failed!");
 		}
 	}
 
@@ -157,6 +154,8 @@ public class ActorThreadPool {
 				while (!Thread.currentThread().isInterrupted()){
 					int version = monitor.getVersion();
 					for(ActionQueue currQueue : queues.values()){
+						if(Thread.currentThread().isInterrupted())
+							break;
 						if (!currQueue.isEmpty() && currQueue.getLock().tryLock()) {
 							try {
 								if (!currQueue.isEmpty()) { // get an Action from @currQueue if not empty

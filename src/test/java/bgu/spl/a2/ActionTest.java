@@ -120,13 +120,13 @@ public class ActionTest {
             threadPool.shutdown();
 
             assertTrue("not all courses are in dept1",
-                    ((DepartmentPrivateState)threadPool.getPrivaetState("dept1")).getCourseList().containsAll(Arrays.asList(new String[]{"course1","course2"})));
+                    ((DepartmentPrivateState)threadPool.getPrivateState("dept1")).getCourseList().containsAll(Arrays.asList(new String[]{"course1","course2"})));
             assertTrue("not all courses are in dept2",
-                    ((DepartmentPrivateState)threadPool.getPrivaetState("dept2")).getCourseList().containsAll(Arrays.asList(new String[]{"course3","course4"})));
+                    ((DepartmentPrivateState)threadPool.getPrivateState("dept2")).getCourseList().containsAll(Arrays.asList(new String[]{"course3","course4"})));
             assertTrue("not all students are in dept1",
-                    ((DepartmentPrivateState)threadPool.getPrivaetState("dept1")).getStudentList().containsAll(Arrays.asList(new String[]{"1","2"})));
+                    ((DepartmentPrivateState)threadPool.getPrivateState("dept1")).getStudentList().containsAll(Arrays.asList(new String[]{"1","2"})));
             assertTrue("not all students are in dept2",
-                    ((DepartmentPrivateState)threadPool.getPrivaetState("dept2")).getStudentList().containsAll(Arrays.asList(new String[]{"3"})));
+                    ((DepartmentPrivateState)threadPool.getPrivateState("dept2")).getStudentList().containsAll(Arrays.asList(new String[]{"3"})));
 
         } catch (InterruptedException e) {
             e.printStackTrace();

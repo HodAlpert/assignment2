@@ -44,10 +44,10 @@ public class OpenCourseTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        PrivateState department=pool.getPrivaetState("CS");
+        PrivateState department=pool.getPrivateState("CS");
         department=(DepartmentPrivateState)department;
         assertTrue("course is not in Department courses list",((DepartmentPrivateState) department).getCourseList().contains("Data Structore"));
-        PrivateState course=pool.getPrivaetState("Data Structore");
+        PrivateState course=pool.getPrivateState("Data Structore");
         course=(CoursePrivateState)course;
         assertTrue("prerequisits dont mach expectations",((CoursePrivateState) course).getPrequisites().contains("Course1"));
         assertTrue("prerequisits dont mach expectations",((CoursePrivateState) course).getPrequisites().contains("Course2"));
