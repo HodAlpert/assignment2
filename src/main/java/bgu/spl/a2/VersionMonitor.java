@@ -30,6 +30,8 @@ public class VersionMonitor {
         versionNumber.getAndIncrement();
         synchronized (this){
             this.notifyAll();
+//            System.out.println( Thread.currentThread().getName()+": wake uppppppppppp!!!!");
+
 
         }
     }
@@ -37,6 +39,7 @@ public class VersionMonitor {
     public void await(int version) throws InterruptedException {
         synchronized (this) {
             while (version==this.versionNumber.get()){
+//                System.out.println( Thread.currentThread().getName()+": going to sleep!!!!");
                 this.wait();
             }//while
         }//synchronized

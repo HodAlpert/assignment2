@@ -24,5 +24,7 @@ public class SelfOpenCourse extends Action<Boolean> {
         state.setAvailableSpots(this.availableSpots);
         state.setPrerequisites(Arrays.asList(this.prerequisites));
         complete(true);
+
+
     }
 }

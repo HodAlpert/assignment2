@@ -26,8 +26,9 @@ public class AddStudent extends Action<Boolean> {
             Action<Boolean> selfAddStudent = new SelfAddStudent(Student);
             List<Action<Boolean>> actions = new ArrayList<>();
             actions.add(selfAddStudent);
-            sendMessage(selfAddStudent,Student,new StudentPrivateState());
             then(actions, ()-> complete(true));
+
+            sendMessage(selfAddStudent,Student,new StudentPrivateState());
 
         }
         else//if student exist

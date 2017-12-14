@@ -20,16 +20,16 @@ public class Unregister extends Action<Boolean> {
     @Override
     protected void start() {
         CoursePrivateState state = (CoursePrivateState) getState();
-        //TODO implement flag to reject if close registration was called
         if (state.getRegStudents().contains(Student)){//if student is registered to course
             state.setAvailableSpots(state.getAvailableSpots()+1);//inc AvailableSpots
             List<Action<Boolean>> actions = new ArrayList<>();
             Action<Boolean> action = new SelfUnregisterStudent(Course);//asking student to remove self from course
-            sendMessage(action,Student,new StudentPrivateState());//sending the action to the pool
             actions.add(action);
             then(actions,()->{//setting the continuation
                 complete(true);
             });
+            sendMessage(action,Student,new StudentPrivateState());//sending the action to the pool
+
         }//if
         else // if student is not registered to Course
             complete(true);

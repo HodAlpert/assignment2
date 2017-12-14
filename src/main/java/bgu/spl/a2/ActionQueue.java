@@ -2,10 +2,11 @@ package bgu.spl.a2;
 
 import sun.misc.Queue;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class ActionQueue extends Queue<Action>{
+public class ActionQueue extends ConcurrentLinkedQueue<Action> {
 
     private Lock lock;
     private String actorId;

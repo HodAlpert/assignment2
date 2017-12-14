@@ -24,7 +24,7 @@ public abstract class Action<R> {
     private ActorThreadPool pool;
     protected PrivateState state; //TODO change back to private
     protected callback continuation; //TODO change back to private
-    private String actorid;
+    protected String actorid;
 /**
  * initializing the fiels.
  * */
@@ -93,11 +93,14 @@ public abstract class Action<R> {
         for (Action action: actions){
             action.getResult().subscribe(()->{
                 actionsCompletedCounter.getAndIncrement();
-                if(actions.size()==actionsCompletedCounter.get())//if all actions in actions list are completed
-                    pool.submit(this,actorid,state);//reenqeueu this
+                if(actions.size()==actionsCompletedCounter.get()) {//if all actions in actions list are completed
+                    pool.submit(this, actorid, state);//reenqeueu this
+                }
             });
         }//for
-    }//then
+        for (Action action: actions) {
+        }
+        }//then
 
     /**
      * resolve the internal result - should be called by the action derivative

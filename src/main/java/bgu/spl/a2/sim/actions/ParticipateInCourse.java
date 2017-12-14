@@ -31,7 +31,6 @@ public class ParticipateInCourse extends Action<Boolean> {
             Action<Boolean> acceptToCourse = new AcceptToCourse(this.Course, this.Grade[0]);
             List<Action<Boolean>> actions = new ArrayList<>();
             actions.add(acceptToCourse);
-            sendMessage(acceptToCourse, Student, new StudentPrivateState());
             then(actions, () -> {
                 if (acceptToCourse.getResult().get())
                     this.complete(true);
@@ -41,6 +40,8 @@ public class ParticipateInCourse extends Action<Boolean> {
                     this.complete(false);
                 }
             });
+            sendMessage(acceptToCourse, Student, new StudentPrivateState());
+
 
         }
         else

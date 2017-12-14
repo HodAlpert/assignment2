@@ -30,8 +30,10 @@ public class OpenCourse extends Action<Boolean>{
             Action<Boolean> selfOpen = new SelfOpenCourse(Course,Integer.parseInt(Space),Prerequisites);
             List<Action<Boolean>> actions = new ArrayList<>();
             actions.add(selfOpen);
+            then(actions, ()-> {complete(true);
+            });
             sendMessage(selfOpen,Course,new CoursePrivateState());
-            then(actions, ()-> complete(true));
+
         }
         else//if course already exist
             complete(false);//should reject the request

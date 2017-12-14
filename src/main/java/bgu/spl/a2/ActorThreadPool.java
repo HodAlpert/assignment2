@@ -96,15 +96,19 @@ public class ActorThreadPool {
 	 *            actor's private state (actor's information)
 	 */
 	public void submit(Action<?> action, String actorId, PrivateState actorState) {
-		synchronized ( this ) {
+        synchronized ( this ) {
 			if (!queues.containsKey(actorId)) {
-				queues.put(actorId, new ActionQueue(actorId));
-				queues.get(actorId).enqueue(action);
-				privateStates.put(actorId, actorState);
-			} else {
-				queues.get(actorId).enqueue(action);
-			}
-		}
+                privateStates.putIfAbsent(actorId, actorState);
+                queues.putIfAbsent(actorId, new ActionQueue(actorId));
+				queues.get(actorId).add(action);
+
+            } else {
+                privateStates.putIfAbsent(actorId, actorState);
+				queues.get(actorId).add(action);
+
+            }
+
+        }
 			monitor.inc();
 
 	}
@@ -160,20 +164,22 @@ public class ActorThreadPool {
 						if (!currQueue.isEmpty() && currQueue.getLock().tryLock()) {
 							try {
 								if (!currQueue.isEmpty()) { // get an Action from @currQueue if not empty
-									currQueue.dequeue().handle(this, currQueue.getActorId(), privateStates.get(currQueue.getActorId()));
+									currQueue.remove().handle(this, currQueue.getActorId(), privateStates.get(currQueue.getActorId()));
 									if(!currQueue.isEmpty())
 										monitor.inc();
 								}//if
 							}//try
-							catch (InterruptedException e) {
-								Thread.currentThread().interrupt(); // if thread is blocked
+							catch (Exception e) {
+							    System.out.println(e.getMessage());
 							}
 							finally{
 								currQueue.getLock().unlock();
+
 							}
 						}//if
 					}//for
 					try {
+						if (monitor.getVersion()==version)
 						monitor.await(version);
 					} catch (InterruptedException e) {
 						Thread.currentThread().interrupt(); // if thread is blocked

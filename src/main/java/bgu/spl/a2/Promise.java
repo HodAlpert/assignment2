@@ -74,6 +74,8 @@ public class Promise<T>{
 				System.out.println(ex.getMessage());
 			}		}
 		callbacks=new ConcurrentLinkedQueue<>();
+
+
 	}
 
 	/**

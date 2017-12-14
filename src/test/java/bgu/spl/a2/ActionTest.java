@@ -51,14 +51,8 @@ public class ActionTest {
         Action Participate1 = new ParticipateInCourse("1","course1",new String[]{"-"});
         Action Participate2 = new ParticipateInCourse("1","course2",new String[]{"100"});
         Action Participate3 = new ParticipateInCourse("2","course2",new String[]{"50"});
+        System.out.println("-------------------------------------finished opening courses--------------------------------------");
 
-
-
-        threadPool.start();
-        threadPool.submit(openCourse1,"dept1",new DepartmentPrivateState());
-        threadPool.submit(openCourse2,"dept1",new DepartmentPrivateState());
-        threadPool.submit(openCourse3,"dept2",new DepartmentPrivateState());
-        threadPool.submit(openCourse4,"dept2",new DepartmentPrivateState());
 
         try {
             CountDownLatch latch = new CountDownLatch(4);
@@ -78,16 +72,22 @@ public class ActionTest {
                 System.out.println("openCourse4 done");
                 latch.countDown();
             });
+            System.out.println("-------------------------------------finished subscribing to open course actions--------------------------------------");
 
-            latch.await();
+        threadPool.start();
+        threadPool.submit(openCourse1,"dept1",new DepartmentPrivateState());
+        threadPool.submit(openCourse2,"dept1",new DepartmentPrivateState());
+        threadPool.submit(openCourse3,"dept2",new DepartmentPrivateState());
+        threadPool.submit(openCourse4,"dept2",new DepartmentPrivateState());
+            System.out.println("-------------------------------------finished submiting open course actions--------------------------------------");
 
-            threadPool.submit(addStudent1,"dept1",new DepartmentPrivateState());
-            threadPool.submit(addStudent2,"dept1",new DepartmentPrivateState());
-            threadPool.submit(addStudent3,"dept2",new DepartmentPrivateState());
-            threadPool.submit(Participate1,"course1",new StudentPrivateState());
-            threadPool.submit(Participate2,"course2",new StudentPrivateState());
-            threadPool.submit(Participate3,"course2",new StudentPrivateState());
 
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("-------------------------------------waking up first time--------------------------------------");
 
             CountDownLatch latch1 = new CountDownLatch(6);
             addStudent1.getResult().subscribe(() -> {
@@ -114,8 +114,19 @@ public class ActionTest {
                 System.out.println("Participate3 done");
                 latch1.countDown();
             });
+            threadPool.submit(addStudent1,"dept1",new DepartmentPrivateState());
+            threadPool.submit(addStudent2,"dept1",new DepartmentPrivateState());
+            threadPool.submit(addStudent3,"dept2",new DepartmentPrivateState());
+            threadPool.submit(Participate1,"course1",new StudentPrivateState());
+            threadPool.submit(Participate2,"course2",new StudentPrivateState());
+            threadPool.submit(Participate3,"course2",new StudentPrivateState());
+            System.out.println("-------------------------------------finished submiting all actions--------------------------------------");
+
+
+
 
             latch1.await();
+            System.out.println("-------------------------------------waking up first time--------------------------------------");
 
             threadPool.shutdown();
 

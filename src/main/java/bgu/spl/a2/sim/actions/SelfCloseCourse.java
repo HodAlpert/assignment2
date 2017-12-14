@@ -21,13 +21,17 @@ public class SelfCloseCourse extends Action<Boolean> {
         List<Action<Boolean>> actions = new ArrayList<>();
         for (String student: state.getRegStudents()){//asking all students to remove themselfs from course
             Action<Boolean> action = new SelfUnregisterStudent(Course);//asking student to remove self from course
-            sendMessage(action,student,new StudentPrivateState());//sending the action to the pool
             actions.add(action);
         }//for
-        state.setRegStudents(new ArrayList<String>());//erasing registered students
-        state.setPrerequisites(new ArrayList<String>());//erasing prerequisites
         then(actions,()->{
             complete(true);
         });
+        state.setRegStudents(new ArrayList<String>());//erasing registered students
+        state.setPrerequisites(new ArrayList<String>());//erasing prerequisites
+        for (String student: state.getRegStudents()){//asking all students to remove themselfs from course
+            for (Action action: actions)
+                sendMessage(action,student,new StudentPrivateState());//sending the action to the pool
+        }//for
     }
 }
+
