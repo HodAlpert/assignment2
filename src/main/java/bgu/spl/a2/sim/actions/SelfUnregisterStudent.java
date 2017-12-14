@@ -20,6 +20,8 @@ public class SelfUnregisterStudent extends Action<Boolean> {
      */
     @Override
     protected void start() {
+        System.out.println("entered self unregister course");
+
         StudentPrivateState state = (StudentPrivateState) getState();
         if(state.getGrades().containsKey(Course))
             state.getGrades().remove(Course);

@@ -17,21 +17,29 @@ public class SelfCloseCourse extends Action<Boolean> {
     @Override
     protected void start() {
         CoursePrivateState state = (CoursePrivateState) getState();
-        state.setAvailableSpots(-1);//rejecting future registration requests
-        List<Action<Boolean>> actions = new ArrayList<>();
-        for (String student: state.getRegStudents()){//asking all students to remove themselfs from course
-            Action<Boolean> action = new SelfUnregisterStudent(Course);//asking student to remove self from course
-            actions.add(action);
-        }//for
-        then(actions,()->{
+        if(state.getRegistered()>0) {
+            state.setAvailableSpots(-1);//rejecting future registration requests
+            state.setRegistered(0);
+            List<Action<Boolean>> actions = new ArrayList<>();
+            for (String student : state.getRegStudents()) {//asking all students to remove themselfs from course
+                Action<Boolean> action = new SelfUnregisterStudent(Course);//asking student to remove self from course
+                actions.add(action);
+            }//for
+            then(actions, () -> {
+                complete(true);
+            });
+            state.setRegStudents(new ArrayList<String>());//erasing registered students
+            state.setPrerequisites(new ArrayList<String>());//erasing prerequisites
+            for (String student : state.getRegStudents()) {//asking all students to remove themselfs from course
+                for (Action action : actions)
+                    sendMessage(action, student, new StudentPrivateState());//sending the action to the pool
+            }//for
+        }
+        else {
+            state.setAvailableSpots(-1);//rejecting future registration requests
             complete(true);
-        });
-        state.setRegStudents(new ArrayList<String>());//erasing registered students
-        state.setPrerequisites(new ArrayList<String>());//erasing prerequisites
-        for (String student: state.getRegStudents()){//asking all students to remove themselfs from course
-            for (Action action: actions)
-                sendMessage(action,student,new StudentPrivateState());//sending the action to the pool
-        }//for
+
+        }
     }
 }
 

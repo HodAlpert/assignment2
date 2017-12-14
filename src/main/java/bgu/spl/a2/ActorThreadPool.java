@@ -174,7 +174,6 @@ public class ActorThreadPool {
 							}
 							finally{
 								currQueue.getLock().unlock();
-
 							}
 						}//if
 					}//for
@@ -184,7 +183,6 @@ public class ActorThreadPool {
 					} catch (InterruptedException e) {
 						Thread.currentThread().interrupt(); // if thread is blocked
 					}
-
 				}//while
 				ShutDownLatch.countDown();
 			}));
