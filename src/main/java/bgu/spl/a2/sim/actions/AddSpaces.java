@@ -3,7 +3,7 @@ package bgu.spl.a2.sim.actions;
 import bgu.spl.a2.Action;
 import bgu.spl.a2.sim.privateStates.CoursePrivateState;
 
-public class AddSpaces extends Action<Boolean> {
+public class AddSpaces extends Action<Integer> {
     private String Course;
     private int Number;
 
@@ -18,13 +18,12 @@ public class AddSpaces extends Action<Boolean> {
     }
     @Override
     protected void start() {
-        //TODO implement flag to show if registration close was called
         CoursePrivateState state = (CoursePrivateState) getState();
         if (state.getAvailableSpots()==-1)
-            complete(false);
+            complete(-1);
         else{
             state.setAvailableSpots(state.getAvailableSpots()+Number);
-            complete(true);
+            complete(state.getAvailableSpots());
         }//else
     }//start
 }//AddSpaces

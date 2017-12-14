@@ -1,8 +1,7 @@
 package bgu.spl.a2;
 
-import bgu.spl.a2.sim.actions.AddStudent;
-import bgu.spl.a2.sim.actions.OpenCourse;
-import bgu.spl.a2.sim.actions.ParticipateInCourse;
+import bgu.spl.a2.sim.actions.*;
+import bgu.spl.a2.sim.privateStates.CoursePrivateState;
 import bgu.spl.a2.sim.privateStates.DepartmentPrivateState;
 import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 import org.junit.Before;
@@ -51,7 +50,18 @@ public class ActionTest {
         Action Participate1 = new ParticipateInCourse("1","course1",new String[]{"-"});
         Action Participate2 = new ParticipateInCourse("1","course2",new String[]{"100"});
         Action Participate3 = new ParticipateInCourse("2","course2",new String[]{"50"});
-        System.out.println("-------------------------------------finished opening courses--------------------------------------");
+        Action addSpace1 = new AddSpaces("course1",1);
+        Action addSpace2 = new AddSpaces("course1",1);
+        Action addSpace3 = new AddSpaces("course1",1);
+        Action addSpace4 = new AddSpaces("course1",1);
+
+        Action unregister1 = new Unregister("1","course1");
+        Action unregister2 = new Unregister("1","course2");
+        Action unregister3 = new Unregister("2","course2");
+        Action closeCourse1 = new CloseCourse("dept1","course1");
+        Action closeCourse2 = new CloseCourse("dept1","course2");
+        Action closeCourse3= new CloseCourse("dept2","course3");
+        Action closeCourse4 = new CloseCourse("dept2","course4");
 
 
         try {
@@ -72,22 +82,18 @@ public class ActionTest {
                 System.out.println("openCourse4 done");
                 latch.countDown();
             });
-            System.out.println("-------------------------------------finished subscribing to open course actions--------------------------------------");
 
         threadPool.start();
         threadPool.submit(openCourse1,"dept1",new DepartmentPrivateState());
         threadPool.submit(openCourse2,"dept1",new DepartmentPrivateState());
         threadPool.submit(openCourse3,"dept2",new DepartmentPrivateState());
         threadPool.submit(openCourse4,"dept2",new DepartmentPrivateState());
-            System.out.println("-------------------------------------finished submiting open course actions--------------------------------------");
-
 
             try {
                 latch.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("-------------------------------------waking up first time--------------------------------------");
 
             CountDownLatch latch1 = new CountDownLatch(6);
             addStudent1.getResult().subscribe(() -> {
@@ -120,15 +126,10 @@ public class ActionTest {
             threadPool.submit(Participate1,"course1",new StudentPrivateState());
             threadPool.submit(Participate2,"course2",new StudentPrivateState());
             threadPool.submit(Participate3,"course2",new StudentPrivateState());
-            System.out.println("-------------------------------------finished submiting all actions--------------------------------------");
-
-
-
 
             latch1.await();
-            System.out.println("-------------------------------------waking up first time--------------------------------------");
 
-            threadPool.shutdown();
+
 
             assertTrue("not all courses are in dept1",
                     ((DepartmentPrivateState)threadPool.getPrivateState("dept1")).getCourseList().containsAll(Arrays.asList(new String[]{"course1","course2"})));
@@ -138,6 +139,64 @@ public class ActionTest {
                     ((DepartmentPrivateState)threadPool.getPrivateState("dept1")).getStudentList().containsAll(Arrays.asList(new String[]{"1","2"})));
             assertTrue("not all students are in dept2",
                     ((DepartmentPrivateState)threadPool.getPrivateState("dept2")).getStudentList().containsAll(Arrays.asList(new String[]{"3"})));
+
+            CountDownLatch latch2 = new CountDownLatch(4);
+            addSpace1.getResult().subscribe(() -> {
+                System.out.println("addSpace done");
+                latch2.countDown();
+            });
+            addSpace2.getResult().subscribe(() -> {
+                System.out.println("addSpace done");
+                latch2.countDown();
+            });
+            addSpace3.getResult().subscribe(() -> {
+                System.out.println("addSpace done");
+                latch2.countDown();
+            });
+            addSpace4.getResult().subscribe(() -> {
+                System.out.println("addSpace done");
+                latch2.countDown();
+            });
+
+            threadPool.submit(addSpace1,"course1",new CoursePrivateState());
+            threadPool.submit(addSpace2,"course1",new CoursePrivateState());
+            threadPool.submit(addSpace3,"course1",new CoursePrivateState());
+            threadPool.submit(addSpace4,"course1",new CoursePrivateState());
+            latch2.await();
+            assertTrue("added "+(((CoursePrivateState)threadPool.getPrivateState("course1")).getAvailableSpots()-10)+ " available spots instead of 4 to course1",
+                    ((CoursePrivateState)threadPool.getPrivateState("course1")).getAvailableSpots()==14);
+
+            CountDownLatch latch3 = new CountDownLatch(3);
+            unregister1.getResult().subscribe(() -> {
+                System.out.println("unregister1 done");
+                latch3.countDown();
+            });
+            unregister2.getResult().subscribe(() -> {
+                System.out.println("unregister2 done");
+                latch3.countDown();
+            });
+            unregister3.getResult().subscribe(() -> {
+                System.out.println("unregister3 done");
+                latch3.countDown();
+            });
+
+            threadPool.submit(unregister1,"course1",new CoursePrivateState());
+            threadPool.submit(unregister2,"course1",new CoursePrivateState());
+            threadPool.submit(unregister3,"course2",new CoursePrivateState());
+            latch3.await();
+            threadPool.shutdown();
+            assertTrue("students were not removed from course1 ",
+                    ((CoursePrivateState)threadPool.getPrivateState("course1")).getRegStudents().isEmpty() &&
+                            ((CoursePrivateState)threadPool.getPrivateState("course1")).getRegistered()==0
+            );
+            assertTrue("students were not removed from course2 ",
+                    ((CoursePrivateState)threadPool.getPrivateState("course2")).getRegStudents().isEmpty() &&
+                            ((CoursePrivateState)threadPool.getPrivateState("course2")).getRegistered()==0
+            );
+            assertTrue("students were not removed from course2 ",
+                    ((StudentPrivateState)threadPool.getPrivateState("1")).getGrades().isEmpty());
+            assertTrue("students were not removed from course2 ",
+                    ((StudentPrivateState)threadPool.getPrivateState("2")).getGrades().isEmpty());
 
         } catch (InterruptedException e) {
             e.printStackTrace();

@@ -60,6 +60,8 @@ public abstract class Action<R> {
      *
      */
     /*package*/ final void handle(ActorThreadPool pool, String actorId, PrivateState actorState) {
+        if(actorState==null)
+            System.out.println(actorId);
         if (!promise.isResolved()){
             if (!hasBeenStartedBefore.get()){
                 hasBeenStartedBefore.set(true);
