@@ -184,7 +184,7 @@ public class ActionTest {
             threadPool.submit(unregister2,"course1",new CoursePrivateState());
             threadPool.submit(unregister3,"course2",new CoursePrivateState());
             latch3.await();
-            threadPool.shutdown();
+
             assertTrue("students were not removed from course1 ",
                     ((CoursePrivateState)threadPool.getPrivateState("course1")).getRegStudents().isEmpty() &&
                             ((CoursePrivateState)threadPool.getPrivateState("course1")).getRegistered()==0
@@ -197,6 +197,47 @@ public class ActionTest {
                     ((StudentPrivateState)threadPool.getPrivateState("1")).getGrades().isEmpty());
             assertTrue("students were not removed from course2 ",
                     ((StudentPrivateState)threadPool.getPrivateState("2")).getGrades().isEmpty());
+
+            CountDownLatch latch4 = new CountDownLatch(4);
+            closeCourse1.getResult().subscribe(() -> {
+                System.out.println("closeCourse1 done");
+                latch4.countDown();
+            });
+            closeCourse2.getResult().subscribe(() -> {
+                System.out.println("closeCourse2 done");
+                latch4.countDown();
+            });
+            closeCourse3.getResult().subscribe(() -> {
+                System.out.println("closeCourse3 done");
+                latch4.countDown();
+            });
+            closeCourse4.getResult().subscribe(() -> {
+                System.out.println("closeCourse4 done");
+                latch4.countDown();
+            });
+
+            threadPool.submit(closeCourse1,"dept1",new DepartmentPrivateState());
+            threadPool.submit(closeCourse2,"dept1",new DepartmentPrivateState());
+            threadPool.submit(closeCourse3,"dept2",new DepartmentPrivateState());
+            threadPool.submit(closeCourse4,"dept2",new DepartmentPrivateState());
+            System.out.println("START CLOSE COURSE");
+            latch4.await();
+            assertTrue("not all courses were removed from dept1 ",
+                    ((DepartmentPrivateState)threadPool.getPrivateState("dept1")).getCourseList().isEmpty());
+            assertTrue("not all courses were removed from dept2 ",
+                    ((DepartmentPrivateState)threadPool.getPrivateState("dept2")).getCourseList().isEmpty());
+            assertTrue("course1 didn't close ",
+                    ((CoursePrivateState)threadPool.getPrivateState("course1")).getAvailableSpots()==-1);
+            assertTrue("course2 didn't close ",
+                    ((CoursePrivateState)threadPool.getPrivateState("course2")).getAvailableSpots()==-1);
+            assertTrue("course3 didn't close ",
+                    ((CoursePrivateState)threadPool.getPrivateState("course3")).getAvailableSpots()==-1);
+            assertTrue("course4 didn't close ",
+                    ((CoursePrivateState)threadPool.getPrivateState("course4")).getAvailableSpots()==-1);
+
+
+            threadPool.shutdown();
+
 
         } catch (InterruptedException e) {
             e.printStackTrace();

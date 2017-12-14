@@ -22,6 +22,8 @@ public class CloseCourse extends Action<Boolean> {
     }
     @Override
     protected void start() {
+        System.out.println("entered close course");
+
         DepartmentPrivateState state = (DepartmentPrivateState) getState();
         if (state.getCourseList().contains(Course)){
             state.getCourseList().remove(Course);
@@ -29,6 +31,7 @@ public class CloseCourse extends Action<Boolean> {
             List<Action<Boolean>> actions = new ArrayList<>();
             actions.add(action);
             then(actions, ()->{
+                System.out.println("entered callback");
                 complete(true);
             });
             sendMessage(action,Course,new CoursePrivateState()); //TODO should send to existing course
