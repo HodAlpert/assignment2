@@ -66,14 +66,8 @@ public class Promise<T>{
 			throw new IllegalStateException("cannot resolve a promise more then once");
 		result=value;
 		resolved.set(true);
-		for(callback call: callbacks){
-			try {
-				call.call();
-			}
-			catch(NullPointerException ex){
-				System.out.println(ex.getMessage());
-			}		}
-		callbacks=new ConcurrentLinkedQueue<>();
+		while(!callbacks.isEmpty())
+			callbacks.poll().call();
 
 
 	}
