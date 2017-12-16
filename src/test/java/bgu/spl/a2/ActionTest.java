@@ -42,14 +42,20 @@ public class ActionTest {
     public void AllActions(){
         Action openCourse1 = new OpenCourse("dept1","course1","10",new String[]{});
         Action openCourse2 = new OpenCourse("dept1","course2","10",new String[]{});
-        Action openCourse3 = new OpenCourse("dept2","course3","10",new String[]{});
-        Action openCourse4 = new OpenCourse("dept2","course4","10",new String[]{});
+        Action openCourse3 = new OpenCourse("dept2","course3","10",new String[]{"course1","course2"});
+        Action openCourse4 = new OpenCourse("dept2","course4","10",new String[]{"course2"});
+
         Action addStudent1 = new AddStudent("dept1","1");
         Action addStudent2 = new AddStudent("dept1","2");
         Action addStudent3 = new AddStudent("dept2","3");
         Action Participate1 = new ParticipateInCourse("1","course1",new String[]{"-"});
         Action Participate2 = new ParticipateInCourse("1","course2",new String[]{"100"});
         Action Participate3 = new ParticipateInCourse("2","course2",new String[]{"50"});
+
+        Action regWithPref1 = new RegisterWithPreferences("1",new String[]{"course3","course4"},new String[]{"90","80"});
+        Action regWithPref2 = new RegisterWithPreferences("2",new String[]{"course3","course4"},new String[]{"90","80"});
+
+
         Action addSpace1 = new AddSpaces("course1",1);
         Action addSpace2 = new AddSpaces("course1",1);
         Action addSpace3 = new AddSpaces("course1",1);
@@ -58,6 +64,7 @@ public class ActionTest {
         Action unregister1 = new Unregister("1","course1");
         Action unregister2 = new Unregister("1","course2");
         Action unregister3 = new Unregister("2","course2");
+
         Action closeCourse1 = new CloseCourse("dept1","course1");
         Action closeCourse2 = new CloseCourse("dept1","course2");
         Action closeCourse3= new CloseCourse("dept2","course3");
@@ -139,6 +146,37 @@ public class ActionTest {
                     ((DepartmentPrivateState)threadPool.getPrivateState("dept1")).getStudentList().containsAll(Arrays.asList(new String[]{"1","2"})));
             assertTrue("not all students are in dept2",
                     ((DepartmentPrivateState)threadPool.getPrivateState("dept2")).getStudentList().containsAll(Arrays.asList(new String[]{"3"})));
+
+            assertTrue("students were not added to course2 ",
+                    ((CoursePrivateState)threadPool.getPrivateState("course1")).getRegStudents().contains("1") &&
+                            ((CoursePrivateState)threadPool.getPrivateState("course1")).getRegistered()==1
+            );
+            assertTrue("students were not added to course2 ",
+                    ((CoursePrivateState)threadPool.getPrivateState("course2")).getRegStudents().containsAll(Arrays.asList(new String[]{"1", "2"})) &&
+                            ((CoursePrivateState)threadPool.getPrivateState("course2")).getRegistered()==2
+            );
+
+            CountDownLatch latch5 = new CountDownLatch(2);
+            regWithPref1.getResult().subscribe(() -> {
+                System.out.println("regWithPref1 done");
+                latch5.countDown();
+            });
+            regWithPref2.getResult().subscribe(() -> {
+                System.out.println("regWithPref2 done");
+                latch5.countDown();
+            });
+            threadPool.submit(regWithPref1,"1",new StudentPrivateState());
+            threadPool.submit(regWithPref2,"2",new StudentPrivateState());
+            latch5.await();
+
+            assertTrue("students were not added to course3 ",
+                    ((CoursePrivateState)threadPool.getPrivateState("course3")).getRegStudents().contains("1") &&
+                            ((CoursePrivateState)threadPool.getPrivateState("course3")).getRegistered()==1
+            );
+            assertTrue("students were not added to course4 ",
+                    ((CoursePrivateState)threadPool.getPrivateState("course4")).getRegStudents().contains("2") &&
+                            ((CoursePrivateState)threadPool.getPrivateState("course4")).getRegistered()==1
+            );
 
             CountDownLatch latch2 = new CountDownLatch(4);
             addSpace1.getResult().subscribe(() -> {

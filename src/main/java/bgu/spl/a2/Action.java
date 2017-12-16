@@ -101,8 +101,7 @@ public abstract class Action<R> {
                 }
             });
         }//for
-        for (Action action: actions) {
-        }
+
         }//then
 
     /**

@@ -3,7 +3,6 @@ package bgu.spl.a2.sim.actions;
 import bgu.spl.a2.Action;
 import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class AcceptToCourse extends Action<Boolean> {
@@ -12,8 +11,8 @@ public class AcceptToCourse extends Action<Boolean> {
     private String Course;
     private String Grade;
 
-    public AcceptToCourse(String Course, String Grade){
-        this.prequisites=new LinkedList<>();
+    public AcceptToCourse(String Course, String Grade, List<String> prequisites){
+        this.prequisites=prequisites;
         this.Course=Course;
         this.Grade=Grade;
         this.setActionName("Accept To Course");
