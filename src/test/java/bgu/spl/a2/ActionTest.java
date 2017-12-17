@@ -55,7 +55,6 @@ public class ActionTest {
         Action regWithPref1 = new RegisterWithPreferences("1",new String[]{"course3","course4"},new String[]{"90","80"});
         Action regWithPref2 = new RegisterWithPreferences("2",new String[]{"course3","course4"},new String[]{"90","80"});
 
-
         Action addSpace1 = new AddSpaces("course1",1);
         Action addSpace2 = new AddSpaces("course1",1);
         Action addSpace3 = new AddSpaces("course1",1);
@@ -201,8 +200,8 @@ public class ActionTest {
             threadPool.submit(addSpace3,"course1",new CoursePrivateState());
             threadPool.submit(addSpace4,"course1",new CoursePrivateState());
             latch2.await();
-            assertTrue("added "+(((CoursePrivateState)threadPool.getPrivateState("course1")).getAvailableSpots()-10)+ " available spots instead of 4 to course1",
-                    ((CoursePrivateState)threadPool.getPrivateState("course1")).getAvailableSpots()==14);
+            assertTrue("added "+(((CoursePrivateState)threadPool.getPrivateState("course1")).getAvailableSpots()-9)+ " available spots instead of 4 to course1",
+                    ((CoursePrivateState)threadPool.getPrivateState("course1")).getAvailableSpots()==13);
 
             CountDownLatch latch3 = new CountDownLatch(3);
             unregister1.getResult().subscribe(() -> {
@@ -219,7 +218,7 @@ public class ActionTest {
             });
 
             threadPool.submit(unregister1,"course1",new CoursePrivateState());
-            threadPool.submit(unregister2,"course1",new CoursePrivateState());
+            threadPool.submit(unregister2,"course2",new CoursePrivateState());
             threadPool.submit(unregister3,"course2",new CoursePrivateState());
             latch3.await();
 
@@ -231,10 +230,10 @@ public class ActionTest {
                     ((CoursePrivateState)threadPool.getPrivateState("course2")).getRegStudents().isEmpty() &&
                             ((CoursePrivateState)threadPool.getPrivateState("course2")).getRegistered()==0
             );
-            assertTrue("students were not removed from course2 ",
-                    ((StudentPrivateState)threadPool.getPrivateState("1")).getGrades().isEmpty());
-            assertTrue("students were not removed from course2 ",
-                    ((StudentPrivateState)threadPool.getPrivateState("2")).getGrades().isEmpty());
+            assertTrue("course was not removed from student 1 ",
+                    ((StudentPrivateState)threadPool.getPrivateState("1")).getGrades().size()==1);
+            assertTrue("course was not removed from student 2 ",
+                    ((StudentPrivateState)threadPool.getPrivateState("2")).getGrades().size()==1);
 
             CountDownLatch latch4 = new CountDownLatch(4);
             closeCourse1.getResult().subscribe(() -> {
@@ -258,7 +257,6 @@ public class ActionTest {
             threadPool.submit(closeCourse2,"dept1",new DepartmentPrivateState());
             threadPool.submit(closeCourse3,"dept2",new DepartmentPrivateState());
             threadPool.submit(closeCourse4,"dept2",new DepartmentPrivateState());
-            System.out.println("START CLOSE COURSE");
             latch4.await();
             assertTrue("not all courses were removed from dept1 ",
                     ((DepartmentPrivateState)threadPool.getPrivateState("dept1")).getCourseList().isEmpty());

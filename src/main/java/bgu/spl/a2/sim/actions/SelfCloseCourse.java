@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelfCloseCourse extends Action<Boolean> {
-    String Course;
+
+    private String Course;
+
     public SelfCloseCourse(String Course){
         setActionName("Self Close Course");
         this.Course=Course;
@@ -21,19 +23,18 @@ public class SelfCloseCourse extends Action<Boolean> {
             state.setAvailableSpots(-1);//rejecting future registration requests
             state.setRegistered(0);
             List<Action<Boolean>> actions = new ArrayList<>();
-            for (String student : state.getRegStudents()) {//asking all students to remove themselfs from course
-                Action<Boolean> action = new SelfUnregisterStudent(Course);//asking student to remove self from course
+            for (String student : state.getRegStudents()) {//asking all students to remove themselves from course
+                Action<Boolean> action = new SelfUnregisterStudent(student);//asking student to remove self from course
                 actions.add(action);
             }//for
-            then(actions, () -> {
-                complete(true);
-            });
-            state.setRegStudents(new ArrayList<String>());//erasing registered students
-            state.setPrerequisites(new ArrayList<String>());//erasing prerequisites
-            for (String student : state.getRegStudents()) {//asking all students to remove themselfs from course
+            then(actions, () -> complete(true));
+
+            for (String student : state.getRegStudents()) {//asking all students to remove themselves from course
                 for (Action action : actions)
                     sendMessage(action, student, new StudentPrivateState());//sending the action to the pool
             }//for
+            state.setRegStudents(new ArrayList<String>());//erasing registered students
+            state.setPrerequisites(new ArrayList<String>());//erasing prerequisites
         }
         else {
             state.setAvailableSpots(-1);//rejecting future registration requests

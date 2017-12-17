@@ -28,14 +28,10 @@ public class CloseCourse extends Action<Boolean> {
             Action<Boolean> action = new SelfCloseCourse(Course);
             List<Action<Boolean>> actions = new ArrayList<>();
             actions.add(action);
-            then(actions, ()->{
-                complete(true);
-            });
+            then(actions, ()-> complete(true));
             sendMessage(action,Course,new CoursePrivateState());
-
-
         }
-
-
+        else
+            complete(true);
     }
 }

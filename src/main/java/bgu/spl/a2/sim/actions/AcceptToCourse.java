@@ -24,7 +24,7 @@ public class AcceptToCourse extends Action<String[]> {
         String[] result={Course,"-"};
         //if all prerequisites are OK
         boolean flag=true;
-        for(int i=0;i<prequisites.size()&flag;i++){//if student meets all prerequisites
+        for(int i=0;i<prequisites.size() & flag;i++){//if student meets all prerequisites
             if (!state.getGrades().containsKey(prequisites.get(i)))
                 flag=false;
         }
