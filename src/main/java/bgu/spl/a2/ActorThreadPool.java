@@ -105,14 +105,10 @@ public class ActorThreadPool {
             } else {
                 privateStates.putIfAbsent(actorId, actorState);
 				queues.get(actorId).add(action);
-
             }
-
         }
 			monitor.inc();
-
 	}
-
 	/**
 	 * closes the thread pool - this method interrupts all the threads and waits
 	 * for them to stop - it is returns *only* when there are no live threads in
@@ -131,9 +127,7 @@ public class ActorThreadPool {
 
 		for(Thread thread: this.threads) {
 			thread.interrupt();
-
 		}
-
 		System.out.println("Waiting for all threads to terminate");
 		ShutDownLatch.await();
 		System.out.println("Shutdown complete");
@@ -170,7 +164,7 @@ public class ActorThreadPool {
 								}//if
 							}//try
 							catch (Exception e) {
-							    System.out.println(e.getMessage());
+								e.printStackTrace();
 							}
 							finally{
 								currQueue.getLock().unlock();

@@ -33,7 +33,6 @@ public class OpenCourse extends Action<Boolean>{
             then(actions, ()-> {complete(true);
             });
             sendMessage(selfOpen,Course,new CoursePrivateState());
-
         }
         else//if course already exist
             complete(false);//should reject the request

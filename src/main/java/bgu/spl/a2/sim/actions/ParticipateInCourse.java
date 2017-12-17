@@ -7,7 +7,7 @@ import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParticipateInCourse extends Action<Boolean> {
+public class ParticipateInCourse extends Action<String[]> {
 
     private String[] Grade;
     private String Course;
@@ -24,25 +24,27 @@ public class ParticipateInCourse extends Action<Boolean> {
     @Override
     protected void start() {
         CoursePrivateState state = (CoursePrivateState) getState();
-        if (state.getAvailableSpots() != -1 && state.getAvailableSpots() > state.getRegistered()
-                && !state.getRegStudents().contains(Student)) { // no need to check if grade >=56
+        String[] result={"-","-"};
+        if (state.getAvailableSpots() >0 && !state.getRegStudents().contains(Student)) { // no need to check if grade >=56
             state.setRegistered(state.getRegistered() + 1);
+            state.setAvailableSpots(state.getAvailableSpots()-1);
             state.getRegStudents().add(Student);
-            Action<Boolean> acceptToCourse = new AcceptToCourse(this.Course, this.Grade[0], state.getPrequisites());
-            List<Action<Boolean>> actions = new ArrayList<>();
+            Action<String[]> acceptToCourse = new AcceptToCourse(this.Course, this.Grade[0], state.getPrequisites());
+            List<Action<String[]>> actions = new ArrayList<>();
             actions.add(acceptToCourse);
             then(actions, () -> {
-                if (acceptToCourse.getResult().get())
-                    this.complete(true);
-                else {
-                    state.setRegistered(state.getRegistered() - 1);
-                    state.getRegStudents().remove(Student);
-                    this.complete(false);
+                if (acceptToCourse.getResult().isResolved()) {
+                    if (acceptToCourse.getResult().get()[0].equals("-")) {
+                        state.setRegistered(state.getRegistered() - 1);
+                        state.setAvailableSpots(state.getAvailableSpots()+1);
+                        state.getRegStudents().remove(Student);
+                    }
                 }
+                this.complete(acceptToCourse.getResult().get());
             });
             sendMessage(acceptToCourse, Student, new StudentPrivateState());
         }
         else
-            this.complete(false);
+            this.complete(result);
     }
 }

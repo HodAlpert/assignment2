@@ -5,7 +5,7 @@ import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 
 import java.util.List;
 
-public class AcceptToCourse extends Action<Boolean> {
+public class AcceptToCourse extends Action<String[]> {
 
     private List<String> prequisites;
     private String Course;
@@ -21,12 +21,23 @@ public class AcceptToCourse extends Action<Boolean> {
     @Override
     protected void start() {
         StudentPrivateState state = (StudentPrivateState) getState();
-        if(!state.getGrades().containsKey(Course) && state.getGrades().values().containsAll(prequisites)){
-           if(!Grade.equals("-"))
-              state.getGrades().put(Course,Integer.parseInt(Grade));
-            complete(true);
+        String[] result={Course,"-"};
+        //if all prerequisites are OK
+        boolean flag=true;
+        for(int i=0;i<prequisites.size()&flag;i++){//if student meets all prerequisites
+            if (!state.getGrades().containsKey(prequisites.get(i)))
+                flag=false;
+        }
+        if(flag){//if all prerequisites are OK
+            result[1]=Grade;
+            if(!Grade.equals("-")) {
+               state.getGrades().put(Course, Integer.parseInt(Grade));
+           }
+           else//if student should have no grade
+               state.getGrades().put(Course, null);
         }
         else
-            complete(false);
+            result[0]="-";
+        complete(result);
     }
 }

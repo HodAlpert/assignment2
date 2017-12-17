@@ -24,19 +24,18 @@ public class RegisterWithPreferences extends Action<String[]> {
         this.Grade = Grade;
         // public void call()
         call = () -> {
-            if (currentRequest.getResult().get()) {//if current Request to register to course is successful
-                String[] result={Preferences[index.get()-1],Grade[index.get()-1]};
-                //it means that registration to course that was sent before index was inced was successful
-                complete(result);//complete result will be the {course,grade}
+            if (currentRequest.getResult().isResolved()&& (!currentRequest.getResult().get()[0].equals("-"))) {//if current Request to register to course is successful
+                complete(currentRequest.getResult().get());//complete result will be the {course,grade}
             }//if
-            else {//if registration to course in index was not successful
+            else if(currentRequest.getResult().get()[0].equals("-")){//if registration to course in index was not successful
                 if(index.get()<Preferences.length) {
                     String[] grade = {Grade[index.get()]};
                     currentRequest = new ParticipateInCourse(Student, Preferences[index.get()], grade);
-                    List<Action<Boolean>> actions1 = new ArrayList<>();
-                    sendMessage(currentRequest, Preferences[index.get()], new CoursePrivateState());
+                    List<Action<String[]>> actions1 = new ArrayList<>();
+                    currentRequest.getResult().subscribe(()->index.getAndIncrement());
+                    actions1.add(currentRequest);
                     then(actions1, call);
-                    index.getAndIncrement();
+                    sendMessage(currentRequest, Preferences[index.get()], new CoursePrivateState());
                 }
                 else{//if there is no more courses to register to
                     String[] result={"-","-"};
@@ -49,14 +48,15 @@ public class RegisterWithPreferences extends Action<String[]> {
 
     @Override
     protected void start() {
-        StudentPrivateState State = (StudentPrivateState) getState(); //TODO not used
-        if (index.get() < Preferences.length) {//if there a course in current index
+//        StudentPrivateState State = (StudentPrivateState) getState(); //TODO not used
+        if (index.get() < Preferences.length) {//if there is a course in current index
             String[] grade = {Grade[index.get()]};
             currentRequest = new ParticipateInCourse(Student, Preferences[index.get()], grade);
-            List<Action<Boolean>> actions = new ArrayList<>();
-            sendMessage(currentRequest, Preferences[index.get()], new CoursePrivateState());
+            List<Action<String[]>> actions = new ArrayList<>();
+            actions.add(currentRequest);
+            currentRequest.getResult().subscribe(()->index.getAndIncrement());
             then(actions, call);
-            index.getAndIncrement();
+            sendMessage(currentRequest, Preferences[index.get()], new CoursePrivateState());
         } else {
             String[] result = {"-", "-"};
             complete(result);//completing with empty String

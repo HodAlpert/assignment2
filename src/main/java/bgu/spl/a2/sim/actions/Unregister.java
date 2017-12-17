@@ -22,6 +22,7 @@ public class Unregister extends Action<Boolean> {
         CoursePrivateState state = (CoursePrivateState) getState();
         if (state.getRegStudents().contains(Student)){//if student is registered to course
             state.setAvailableSpots(state.getAvailableSpots()+1);//inc AvailableSpots
+            state.setRegistered(state.getRegistered()-1);//reduce num of registered students.
             List<Action<Boolean>> actions = new ArrayList<>();
             Action<Boolean> action = new SelfUnregisterStudent(Course);//asking student to remove self from course
             actions.add(action);
