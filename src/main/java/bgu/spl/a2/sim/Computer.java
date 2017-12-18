@@ -9,8 +9,11 @@ public class Computer {
 	long failSig;
 	long successSig;
 	
-	public Computer(String computerType) {
+	public Computer(String computerType, long successSig, long failSig) {
+
 		this.computerType = computerType;
+		this.successSig=successSig;
+		this.failSig=failSig;
 	}
 	
 	/**
