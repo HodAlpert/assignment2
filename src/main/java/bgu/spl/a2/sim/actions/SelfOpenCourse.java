@@ -21,6 +21,7 @@ public class SelfOpenCourse extends Action<Boolean> {
     @Override
     protected void start() {
         CoursePrivateState state = (CoursePrivateState) getState();
+        state.setCourse(course);
         state.setAvailableSpots(this.availableSpots);
         state.setPrerequisites(Arrays.asList(this.prerequisites));
         complete(true);

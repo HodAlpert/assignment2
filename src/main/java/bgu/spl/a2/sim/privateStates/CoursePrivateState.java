@@ -3,7 +3,6 @@ package bgu.spl.a2.sim.privateStates;
 import bgu.spl.a2.PrivateState;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -25,7 +24,7 @@ public class CoursePrivateState extends PrivateState{
 	public CoursePrivateState() {
 		this.course="";
 		this.registered = 0;
-		this.regStudents = new LinkedList<>();
+		this.regStudents = new ArrayList<>();
 		this.prequisites=new ArrayList<String>();
 	}
 
