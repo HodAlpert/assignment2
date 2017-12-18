@@ -9,17 +9,17 @@ import bgu.spl.a2.Action;
 import bgu.spl.a2.ActorThreadPool;
 import bgu.spl.a2.PrivateState;
 import bgu.spl.a2.sim.actions.*;
+import bgu.spl.a2.sim.privateStates.CoursePrivateState;
+import bgu.spl.a2.sim.privateStates.DepartmentPrivateState;
+import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * A class describing the simulator for part 2 of the assignment
@@ -33,7 +33,7 @@ public class Simulator {
 	* Begin the simulation Should not be called before attachActorThreadPool()
 	*/
     public static void start(){
-
+		actorThreadPool.start();
     }
 	
 	/**
@@ -50,8 +50,14 @@ public class Simulator {
 	* returns list of private states
 	*/
 	public static HashMap<String,PrivateState> end(){
-		//TODO: replace method body with real implementation
-		throw new UnsupportedOperationException("Not Implemented Yet.");
+		try {
+			actorThreadPool.shutdown();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		return (HashMap<String, PrivateState>) actorThreadPool.getActors();
+
 	}
 
 
@@ -63,13 +69,26 @@ public class Simulator {
 			Object obj = parser.parse(new FileReader(args[0]));
 
 			JSONObject input = (JSONObject) obj;
+
 			long threads = (long) input.get("threads");
+			attachActorThreadPool(new ActorThreadPool((int) threads));
+
 			JSONArray Computers = (JSONArray) input.get("Computers");
 			JSONArray Phase1 = (JSONArray) input.get("Phase 1");
 			JSONArray Phase2 = (JSONArray) input.get("Phase 2");
 			JSONArray Phase3 = (JSONArray) input.get("Phase 3");
 
 			createComputers(warehouse,Computers);
+
+			actorThreadPool.start();
+			submitPhase(Phase1);
+			submitPhase(Phase2);
+			submitPhase(Phase3);
+
+			HashMap<String,PrivateState> output = end();
+			FileOutputStream out = new FileOutputStream("result.ser");
+			ObjectOutputStream oos = new ObjectOutputStream(out);
+			oos.writeObject(output);
 
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -92,33 +111,57 @@ public class Simulator {
 		}
 	}
 
-	private static List<Action> createPhase(JSONArray Phase){
-		List<Action> output = new LinkedList<>();
+	private static void submitPhase(JSONArray Phase){
+		CountDownLatch latch = new CountDownLatch(Phase.size());
 		for (Object curr : Phase) {
 			JSONObject jsonLineItem = (JSONObject) curr;
-			output.add(getAction(jsonLineItem));
+			Action action = getAction(jsonLineItem);
+			if(action instanceof OpenCourse)
+				actorThreadPool.submit(action,(String)jsonLineItem.get("Department"),new DepartmentPrivateState());
+			else if(action instanceof AddStudent)
+				actorThreadPool.submit(action,(String)jsonLineItem.get("Department"),new DepartmentPrivateState());
+			else if(action instanceof ParticipateInCourse)
+				actorThreadPool.submit(action,(String)jsonLineItem.get("Course"),new CoursePrivateState());
+			else if(action instanceof Unregister)
+				actorThreadPool.submit(action,(String)jsonLineItem.get("Course"),new CoursePrivateState());
+			else if(action instanceof RegisterWithPreferences)
+				actorThreadPool.submit(action,(String)jsonLineItem.get("Student"),new StudentPrivateState());
+			else if(action instanceof CloseCourse)
+				actorThreadPool.submit(action,(String)jsonLineItem.get("Department"),new DepartmentPrivateState());
+			else if(action instanceof AddSpaces)
+				actorThreadPool.submit(action,(String)jsonLineItem.get("Course"),new CoursePrivateState());
+//			else if(action instanceof AdministrativeCheck) TODO Administrative Check
+//				actorThreadPool.submit(action,(String)jsonLineItem.get("Department"),new DepartmentPrivateState());
+			action.getResult().subscribe(() -> latch.countDown());
 		}
-		return output;
+
 	}
 
 	private static Action getAction(JSONObject jsonLineItem){
 		if(jsonLineItem.get("Action").equals("Open Course"))
-			return new OpenCourse((String)jsonLineItem.get("Department"),(String)jsonLineItem.get("Course"),(String)jsonLineItem.get("Space"),(String[])jsonLineItem.get("Prerequisites"));
-		if(jsonLineItem.get("Action").equals("Add Student"))
+			return new OpenCourse((String) jsonLineItem.get("Department"),(String)jsonLineItem.get("Course"),(String)jsonLineItem.get("Space"),toArray((JSONArray)jsonLineItem.get("Prerequisites")));
+		else if(jsonLineItem.get("Action").equals("Add Student"))
 			return new AddStudent((String)jsonLineItem.get("Department"),(String)jsonLineItem.get("Student"));
-		if(jsonLineItem.get("Action").equals("Participate In Course"))
-			return new ParticipateInCourse((String)jsonLineItem.get("Student"),(String)jsonLineItem.get("Course"),(String[])jsonLineItem.get("Grade"));
-		if(jsonLineItem.get("Action").equals("Unregister"))
+		else if(jsonLineItem.get("Action").equals("Participate In Course"))
+			return new ParticipateInCourse((String)jsonLineItem.get("Student"),(String)jsonLineItem.get("Course"),toArray((JSONArray)jsonLineItem.get("Grade")));
+		else if(jsonLineItem.get("Action").equals("Unregister"))
 			return new Unregister((String)jsonLineItem.get("Student"),(String)jsonLineItem.get("Course"));
-		if(jsonLineItem.get("Action").equals("Register With Preferences"))
-			return new RegisterWithPreferences((String)jsonLineItem.get("Student"),(String[])jsonLineItem.get("Preferences"),(String[])jsonLineItem.get("Grade"));
-		if(jsonLineItem.get("Action").equals("Close Course"))
+		else if(jsonLineItem.get("Action").equals("Register With Preferences"))
+			return new RegisterWithPreferences((String)jsonLineItem.get("Student"),toArray((JSONArray)jsonLineItem.get("Preferences")),toArray((JSONArray)jsonLineItem.get("Grade")));
+		else if(jsonLineItem.get("Action").equals("Close Course"))
 			return new CloseCourse((String)jsonLineItem.get("Department"),(String)jsonLineItem.get("Course"));
-		if(jsonLineItem.get("Action").equals("Add Spaces"))
+		else if(jsonLineItem.get("Action").equals("Add Spaces"))
 			return new AddSpaces((String)jsonLineItem.get("Course"),Integer.parseInt((String)jsonLineItem.get("Number")));
-//		if(jsonLineItem.get("Action").equals("Administrative Check")) TODO Administrative Check
-//			return new AdministrativeCheck((String)jsonLineItem.get("Department"),(String[])jsonLineItem.get("Students"),(String)jsonLineItem.get("Computer"),(String[])jsonLineItem.get("Conditions"));
+//		else if(jsonLineItem.get("Action").equals("Administrative Check")) TODO Administrative Check
+//			return new AdministrativeCheck((String)jsonLineItem.get("Department"),toArray((JSONArray)jsonLineItem.get("Students")),(String)jsonLineItem.get("Computer"),toArray((JSONArray)jsonLineItem.get("Conditions")));
 
 		return null; // if input is incorrect
+	}
+
+	private static String[] toArray(JSONArray jsonArray){
+		String[] output = new String[jsonArray.size()];
+		for(int i=0;i<output.length;i++)
+			output[i] = jsonArray.get(i).toString();
+		return output;
 	}
 }

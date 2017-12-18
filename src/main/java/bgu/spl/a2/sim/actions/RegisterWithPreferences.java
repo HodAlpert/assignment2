@@ -3,7 +3,6 @@ package bgu.spl.a2.sim.actions;
 import bgu.spl.a2.Action;
 import bgu.spl.a2.callback;
 import bgu.spl.a2.sim.privateStates.CoursePrivateState;
-import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,6 @@ public class RegisterWithPreferences extends Action<String[]> {
 
     @Override
     protected void start() {
-//        StudentPrivateState State = (StudentPrivateState) getState(); //TODO not used
         if (index.get() < Preferences.length) {//if there is a course in current index
             String[] grade = {Grade[index.get()]};
             currentRequest = new ParticipateInCourse(Student, Preferences[index.get()], grade);
