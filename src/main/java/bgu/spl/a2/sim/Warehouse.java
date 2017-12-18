@@ -1,7 +1,6 @@
 package bgu.spl.a2.sim;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * represents a warehouse that holds a finite amount of computers
@@ -10,14 +9,17 @@ import java.util.List;
  */
 public class Warehouse {
 
-    private List<Computer> computers;
+    private ConcurrentHashMap<String,Computer> computers;
 
     public Warehouse(){
-        this.computers= new LinkedList<>();
+        this.computers= new ConcurrentHashMap<String,Computer>();
     }
 
     public void addComputer(Computer computer){
-        this.computers.add(computer);
+        computers.put(computer.computerType,computer);
+    }
+    public Computer getComputer(String Type){
+        return computers.get(Type);
     }
 
 	

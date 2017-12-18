@@ -8,12 +8,15 @@ public class Computer {
 	String computerType;
 	long failSig;
 	long successSig;
+	private SuspendingMutex mutex;
 	
 	public Computer(String computerType, long successSig, long failSig) {
 
 		this.computerType = computerType;
 		this.successSig=successSig;
 		this.failSig=failSig;
+		this.mutex = new SuspendingMutex(this);
+
 	}
 	
 	/**
@@ -45,5 +48,9 @@ public class Computer {
 
 	public void setSuccessSig(long successSig) {
 		this.successSig = successSig;
+	}
+
+	public SuspendingMutex getMutex() {
+		return mutex;
 	}
 }
