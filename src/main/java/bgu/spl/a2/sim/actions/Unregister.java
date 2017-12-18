@@ -34,7 +34,7 @@ public class Unregister extends Action<Boolean> {
 
         }//if
         else // if student is not registered to Course
-            complete(true);
+            complete(false);
     }
 
 }
