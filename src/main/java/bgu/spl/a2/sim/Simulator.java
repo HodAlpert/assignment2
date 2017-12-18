@@ -18,6 +18,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
@@ -130,8 +131,8 @@ public class Simulator {
 				actorThreadPool.submit(action,(String)jsonLineItem.get("Department"),new DepartmentPrivateState());
 			else if(action instanceof AddSpaces)
 				actorThreadPool.submit(action,(String)jsonLineItem.get("Course"),new CoursePrivateState());
-//			else if(action instanceof AdministrativeCheck) TODO Administrative Check
-//				actorThreadPool.submit(action,(String)jsonLineItem.get("Department"),new DepartmentPrivateState());
+			else if(action instanceof AdministrativeCheck)
+				actorThreadPool.submit(action,(String)jsonLineItem.get("Department"),new DepartmentPrivateState());
 			action.getResult().subscribe(() -> latch.countDown());
 		}
 
@@ -152,8 +153,8 @@ public class Simulator {
 			return new CloseCourse((String)jsonLineItem.get("Department"),(String)jsonLineItem.get("Course"));
 		else if(jsonLineItem.get("Action").equals("Add Spaces"))
 			return new AddSpaces((String)jsonLineItem.get("Course"),Integer.parseInt((String)jsonLineItem.get("Number")));
-//		else if(jsonLineItem.get("Action").equals("Administrative Check")) TODO Administrative Check
-//			return new AdministrativeCheck((String)jsonLineItem.get("Department"),toArray((JSONArray)jsonLineItem.get("Students")),(String)jsonLineItem.get("Computer"),toArray((JSONArray)jsonLineItem.get("Conditions")));
+		else if(jsonLineItem.get("Action").equals("Administrative Check"))
+			return new AdministrativeCheck((String)jsonLineItem.get("Department"),toArray((JSONArray)jsonLineItem.get("Students")),(String)jsonLineItem.get("Computer"),toArrayList((JSONArray)jsonLineItem.get("Conditions")));
 
 		return null; // if input is incorrect
 	}
@@ -162,6 +163,12 @@ public class Simulator {
 		String[] output = new String[jsonArray.size()];
 		for(int i=0;i<output.length;i++)
 			output[i] = jsonArray.get(i).toString();
+		return output;
+	}
+	private static ArrayList<String> toArrayList(JSONArray jsonArray){
+		ArrayList<String> output = new ArrayList<>();
+		for(int i=0;i<jsonArray.size();i++)
+			output.add(jsonArray.get(i).toString());
 		return output;
 	}
 }
