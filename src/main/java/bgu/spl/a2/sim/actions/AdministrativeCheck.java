@@ -5,6 +5,7 @@ import bgu.spl.a2.Promise;
 import bgu.spl.a2.callback;
 import bgu.spl.a2.sim.Computer;
 import bgu.spl.a2.sim.Warehouse;
+import bgu.spl.a2.sim.privateStates.DepartmentPrivateState;
 import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class AdministrativeCheck extends Action<Boolean> {
     private ArrayList<Long> signitures;
     private List<Action<HashMap<String, Integer>>> actions;
     private Promise<Computer> promise;
-    private Warehouse warehouse = new Warehouse();
+    private Warehouse warehouse = Warehouse.getInstance();
 
     private callback ContinuationAfterGettingTheSignitures=()->{//setting the continuation once we have all the signitures
         List<Action<Boolean>> actions1 = new ArrayList<>();
@@ -39,7 +40,8 @@ public class AdministrativeCheck extends Action<Boolean> {
             signitures.add(i,signiture);//adding signature to signature list
         }//for computing signiture
         warehouse.getComputer(Computer).getMutex().up();
-        this.continuation = ContinuationAfterGettingTheSignitures;
+        this.continuation = ContinuationAfterGettingTheSignitures;//setting the continuation for next enqueue
+        getPool().submit(this,Department,new DepartmentPrivateState());//submiting back to the pool
     };
 
     private callback ContinuationAfterGettingTheGradesMaps = ()->{//setting the continuation once we have the grades of the students

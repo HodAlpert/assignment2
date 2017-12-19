@@ -8,10 +8,16 @@ import java.util.concurrent.ConcurrentHashMap;
  * releasing and acquiring should be blocking free.
  */
 public class Warehouse {
+    private static class WarehouseHolder {
+        private static Warehouse instance = new Warehouse();
+    }
+    public static Warehouse getInstance(){
+        return WarehouseHolder.instance;
+    }
 
     private ConcurrentHashMap<String,Computer> computers;
 
-    public Warehouse(){
+    private Warehouse(){
         this.computers= new ConcurrentHashMap<String,Computer>();
     }
 
@@ -24,3 +30,4 @@ public class Warehouse {
 
 	
 }
+
