@@ -63,7 +63,7 @@ public class Simulator {
 
 	public static void main(String [] args){ //TODO return int
 		JSONParser parser = new JSONParser();
-		Warehouse warehouse = new Warehouse();
+		Warehouse warehouse = Warehouse.getInstance();
 
 		try {
 			Object obj = parser.parse(new FileReader(args[0]));

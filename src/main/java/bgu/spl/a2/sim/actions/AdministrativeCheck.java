@@ -20,7 +20,7 @@ public class AdministrativeCheck extends Action<Boolean> {
     private ArrayList<Long> signitures;
     private List<Action<HashMap<String, Integer>>> actions;
     private Promise<Computer> promise;
-    private Warehouse warehouse = new Warehouse();
+    private Warehouse warehouse = Warehouse.getInstance();
 
     private callback ContinuationAfterGettingTheSignitures=()->{//setting the continuation once we have all the signitures
         List<Action<Boolean>> actions1 = new ArrayList<>();

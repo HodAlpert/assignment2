@@ -16,9 +16,7 @@ public class Computer {
 		this.successSig=successSig;
 		this.failSig=failSig;
 		this.mutex = new SuspendingMutex(this);
-
 	}
-	
 	/**
 	 * this method checks if the courses' grades fulfill the conditions
 	 * @param courses

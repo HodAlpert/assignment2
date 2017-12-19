@@ -27,7 +27,7 @@ public class SuspendingMutex {
 	public SuspendingMutex(Computer computer) {
 		this.computer = computer;
 		this.queue = new ConcurrentLinkedQueue<>();
-		this.islocked.set(false);
+		this.islocked= new AtomicBoolean(false);
 	}
 
 	/**
