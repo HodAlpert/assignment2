@@ -23,6 +23,7 @@ public class CoursePrivateState extends PrivateState{
 	 */
 	public CoursePrivateState() {
 		this.course="";
+		this.availableSpots=0;
 		this.registered = 0;
 		this.regStudents = new ArrayList<>();
 		this.prequisites=new ArrayList<String>();

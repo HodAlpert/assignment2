@@ -26,21 +26,21 @@ public class ParticipateInCourse extends Action<String[]> {
         CoursePrivateState state = (CoursePrivateState) getState();
         String[] result={"-","-"};
         if (state.getAvailableSpots() >0 && !state.getRegStudents().contains(Student)) { // no need to check if grade >=56
-            state.setRegistered(state.getRegistered() + 1);
-            state.setAvailableSpots(state.getAvailableSpots()-1);
-            state.getRegStudents().add(Student);
             Action<String[]> acceptToCourse = new AcceptToCourse(this.Course, this.Grade[0], state.getPrequisites());
             List<Action<String[]>> actions = new ArrayList<>();
             actions.add(acceptToCourse);
             then(actions, () -> {
-                if (acceptToCourse.getResult().isResolved()) {
-                    if (acceptToCourse.getResult().get()[0].equals("-")) {
-                        state.setRegistered(state.getRegistered() - 1);
-                        state.setAvailableSpots(state.getAvailableSpots()+1);
-                        state.getRegStudents().remove(Student);
+                    if (!acceptToCourse.getResult().get()[0].equals("-") && state.getAvailableSpots() >0) {
+                        state.setRegistered(state.getRegistered() + 1);
+                        state.setAvailableSpots(state.getAvailableSpots()-1);
+                        state.getRegStudents().add(Student);
+                        this.complete(acceptToCourse.getResult().get());
                     }
-                }
-                this.complete(acceptToCourse.getResult().get());
+                    else if (state.getAvailableSpots() <1)
+                        this.complete(result);
+                    else
+                        this.complete(acceptToCourse.getResult().get());
+
             });
             sendMessage(acceptToCourse, Student, new StudentPrivateState());
         }

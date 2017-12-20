@@ -20,6 +20,7 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -57,7 +58,7 @@ public class Simulator {
 			e.printStackTrace();
 		}
 
-		return (HashMap<String, PrivateState>) actorThreadPool.getActors();
+		return toHashmap((ConcurrentHashMap<String, PrivateState>) actorThreadPool.getActors());
 
 	}
 
@@ -171,4 +172,9 @@ public class Simulator {
 			output.add(jsonArray.get(i).toString());
 		return output;
 	}
+	private static HashMap<String, PrivateState> toHashmap(ConcurrentHashMap<String, PrivateState> actors){
+        HashMap<String, PrivateState> output = new HashMap<>();
+        output.putAll(actors);
+        return output;
+    }
 }
