@@ -63,7 +63,7 @@ public class Simulator {
 	}
 
 
-	public static void main(String [] args){ //TODO return int
+	public static void main(String [] args){
 		JSONParser parser = new JSONParser();
 		Warehouse warehouse = Warehouse.getInstance();
 
@@ -92,11 +92,19 @@ public class Simulator {
 			ObjectOutputStream oos = new ObjectOutputStream(out);
 			oos.writeObject(output);
 
+			FileInputStream fin = new FileInputStream("result.ser");
+			ObjectInputStream ois = new ObjectInputStream(fin);
+			System.out.println("/______________________OUTPUT______________________/");
+			System.out.println(ois.readObject());
+			System.out.println("/______________________OUTPUT______________________/");
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 

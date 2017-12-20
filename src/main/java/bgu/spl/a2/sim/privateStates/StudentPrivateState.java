@@ -19,7 +19,7 @@ public class StudentPrivateState extends PrivateState{
 	 */
 	public StudentPrivateState() {
 		this.Student="";
-		this.grades = new HashMap<String, Integer>();
+		this.grades = new HashMap<>();
 	}
 
 	public String getStudent() {

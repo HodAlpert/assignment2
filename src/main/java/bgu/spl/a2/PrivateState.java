@@ -26,6 +26,9 @@ public abstract class PrivateState implements Serializable {
 	public void addRecord(String actionName){
 		history.add(actionName);
 	}
-	
+
+	public String toString(){
+		return this.getClass().toString().substring(35)+"\n"+history+"\n";
+	}
 	
 }
