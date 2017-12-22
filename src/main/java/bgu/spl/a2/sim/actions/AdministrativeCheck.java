@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AdministrativeCheck extends Action<Boolean> {
+
     private String Department;
     private String[] Students;
     private String Computer;
@@ -40,7 +41,8 @@ public class AdministrativeCheck extends Action<Boolean> {
             signitures.add(i,signiture);//adding signature to signature list
         }//for computing signiture
         warehouse.getComputer(Computer).getMutex().up();
-        this.continuation = ContinuationAfterGettingTheSignitures;//setting the continuation for next enqueue
+        ArrayList<Action<Boolean>> emptyaction = new ArrayList<>();
+        then(emptyaction,ContinuationAfterGettingTheSignitures);
         getPool().submit(this,Department,new DepartmentPrivateState());//submiting back to the pool
     };
 
@@ -57,6 +59,7 @@ public class AdministrativeCheck extends Action<Boolean> {
 
 
     public AdministrativeCheck(String department, String[] Students, String Computer, ArrayList<String> Conditions){
+        setActionName("Administrative Check");
         this.Department = department;
         this.Students = Students;
         this.Computer = Computer;
