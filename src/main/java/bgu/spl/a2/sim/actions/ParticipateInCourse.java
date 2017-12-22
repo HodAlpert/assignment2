@@ -37,17 +37,18 @@ public class ParticipateInCourse extends Action<String[]> {
                         state.setAvailableSpots(state.getAvailableSpots()-1);
                         this.complete(acceptToCourse.getResult().get());
                     }
-                    else if (state.getAvailableSpots() <1&&!acceptToCourse.getResult().get()[0].equals("-")) {
+                    else if (state.getAvailableSpots() <1 && !acceptToCourse.getResult().get()[0].equals("-")) {
                         SelfUnregisterStudent unregister = new SelfUnregisterStudent(Course);
                         List<Action<Boolean>> actions1 = new ArrayList<>();
                         actions1.add(unregister);
-                        then(actions1,()->{
-                            this.complete(result);
-                        });
+                        then(actions1,()-> this.complete(result));
                         sendMessage(unregister,Student,new StudentPrivateState());
+                        state.getRegStudents().remove(Student);
                     }
-                    else
+                    else {
+                        state.getRegStudents().remove(Student);
                         this.complete(acceptToCourse.getResult().get());
+                    }
 
             });
             sendMessage(acceptToCourse, Student, new StudentPrivateState());

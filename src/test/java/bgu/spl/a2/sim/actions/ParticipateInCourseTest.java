@@ -129,7 +129,6 @@ public class ParticipateInCourseTest {
         pool.submit(fail,"course1",new CoursePrivateState());
         try {
             latch3.await();
-            System.out.println(3);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -140,7 +139,6 @@ public class ParticipateInCourseTest {
         try {
             latch4.await();
             //TODO solve issue here
-            System.out.println(4);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -148,7 +146,7 @@ public class ParticipateInCourseTest {
         assertFalse("student1 and student 2 were registered to course1",student1t.getGrades().containsKey("course1") & student2t.getGrades().containsKey("course1"));
         boolean student1registered = course.getRegStudents().contains("student1");
         boolean student2registered = course.getRegStudents().contains("student2");
-        assertTrue("course1 has both students",((student1registered|student2registered)&!(student1registered&student2registered)));
+        assertTrue("course1 has both students",((student1registered|student2registered) &! (student1registered&student2registered)));
         assertTrue("course should have 0 available spots",course.getRegistered()==1&course.getAvailableSpots()==0);
 
 
