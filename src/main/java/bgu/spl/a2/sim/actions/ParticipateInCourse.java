@@ -29,7 +29,7 @@ public class ParticipateInCourse extends Action<String[]> {
             Action<String[]> acceptToCourse = new AcceptToCourse(this.Course, this.Grade[0], state.getPrequisites());
             List<Action<String[]>> actions = new ArrayList<>();
             actions.add(acceptToCourse);
-            state.getRegStudents().add(Student);//TODO- manage deleting student
+            state.getRegStudents().add(Student);
             then(actions, () ->{
                     if (!acceptToCourse.getResult().get()[0].equals("-") && state.getAvailableSpots() >0) {
                         //if student should be registered

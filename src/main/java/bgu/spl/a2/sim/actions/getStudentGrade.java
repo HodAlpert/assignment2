@@ -5,6 +5,10 @@ import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 import java.util.HashMap;
 
 public class getStudentGrade extends Action<HashMap<String, Integer>> {
+
+    public getStudentGrade(){
+        setActionName("get Student Grade");
+    }
     @Override
     //should return it's grade list
     protected void start() {

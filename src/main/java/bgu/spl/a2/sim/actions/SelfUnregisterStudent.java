@@ -10,7 +10,7 @@ public class SelfUnregisterStudent extends Action<Boolean> {
      * @param Course to be remove if exist
      */
     public SelfUnregisterStudent(String Course){
-        setActionName("SelfUnregisterStudent");
+        setActionName("Self Unregister Student");
         this.Course=Course;
     }
 

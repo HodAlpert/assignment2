@@ -22,8 +22,7 @@ public class SimulatorTest  {
     public Timeout globalTimeout = Timeout.seconds(10); // 10 seconds max per method tested
     @Test
     public void main() {
-        //todo change the name of the file in the next line for the name you have
-        Simulator.main(new String[]{"inputExample.json"});
+        Simulator.main(new String[]{"input.json"});
         try ( InputStream fin = new FileInputStream("result.ser");
               ObjectInputStream ois = new ObjectInputStream(fin)){
             HashMap data = (HashMap) ois.readObject();

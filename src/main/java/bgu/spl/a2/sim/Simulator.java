@@ -92,19 +92,11 @@ public class Simulator {
 			ObjectOutputStream oos = new ObjectOutputStream(out);
 			oos.writeObject(output);
 
-			FileInputStream fin = new FileInputStream("result.ser");
-			ObjectInputStream ois = new ObjectInputStream(fin);
-			System.out.println("/______________________OUTPUT______________________");
-			System.out.println(ois.readObject());
-			System.out.println("______________________OUTPUT______________________/");
-
 		} catch (ParseException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 
@@ -143,6 +135,12 @@ public class Simulator {
 			else if(action instanceof AdministrativeCheck)
 				actorThreadPool.submit(action,(String)jsonLineItem.get("Department"),new DepartmentPrivateState());
 			action.getResult().subscribe(() -> latch.countDown());
+
+		}
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 
 	}

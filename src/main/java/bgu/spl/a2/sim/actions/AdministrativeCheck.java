@@ -26,7 +26,7 @@ public class AdministrativeCheck extends Action<Boolean> {
     private callback ContinuationAfterGettingTheSignitures=()->{//setting the continuation once we have all the signitures
         List<Action<Boolean>> actions1 = new ArrayList<>();
         for (int i=0;i<Students.length;i++){//creating the signitures back to the students
-            actions1.add(i,new SetSigniture(signitures.get(i)));
+            actions1.add(i,new SetSignature(signitures.get(i)));
         }//for saving the siginatures in the students privateState
         then(actions1,()->complete(true));//setting the final continuation- completing.
         for(int i=0;i<Students.length;i++){
@@ -64,6 +64,7 @@ public class AdministrativeCheck extends Action<Boolean> {
         studentsGrades = new ArrayList<HashMap<String, Integer>>();
         this.signitures = new  ArrayList<Long>();
         actions = new ArrayList<>();
+        setActionName("Administrative Check");
 
     }
     @Override
