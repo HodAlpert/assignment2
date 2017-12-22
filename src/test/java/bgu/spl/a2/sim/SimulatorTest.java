@@ -96,11 +96,11 @@ public class SimulatorTest  {
                         assertTrue("Course "+actor+": should have 2 Participate In Course action in logger", Collections.frequency(((PrivateState)state).getLogger(),"Participate In Course")==2);
                         assertTrue("Course "+actor+": availableSpots should be 198",((CoursePrivateState)state).getAvailableSpots()==198);
                         assertTrue("Course "+actor+": should have 2 registered students",((CoursePrivateState)state).getRegistered()==2);
-                        assertTrue("Course"+actor+": not all students appear in regStudents list "+
+                        assertTrue("Course "+actor+": not all students appear in regStudents list "+
                                         " should have: 123456789, 5959595959",
                                 ((CoursePrivateState)state).getRegStudents().containsAll(new ArrayList<String>(Arrays.asList("123456789","5959595959"))));
-                        assertTrue("Course"+actor+": should have no prerequisites",
-                                ((CoursePrivateState)state).getRegStudents().isEmpty());
+                        assertTrue("Course "+actor+": should have no prerequisites",
+                                ((CoursePrivateState)state).getPrequisites().isEmpty());
                     }
                     else if(actor.equals("SPL")){
                         assertTrue("Course "+actor+": should have 2 Participate In Course action in logger", Collections.frequency(((PrivateState)state).getLogger(),"Participate In Course")==2);
@@ -110,7 +110,17 @@ public class SimulatorTest  {
                                         " should have: 5959595959",
                                 ((CoursePrivateState)state).getRegStudents().contains("5959595959"));
                         assertTrue("Course"+actor+": not all prerequisites appear, should have Intro To CS",
-                                ((CoursePrivateState)state).getRegStudents().contains("Intro To CS"));
+                                ((CoursePrivateState)state).getPrequisites().contains("Intro To CS"));
+                    }
+                    else if(actor.equals("Data Structures")){
+                        assertTrue("Course "+actor+": should have 1 Participate In Course action and" +
+                                " 1 Unregister in logger", ((PrivateState)state).getLogger().containsAll(new ArrayList<String>(Arrays.asList("Participate In Course","Unregister"))));
+                        assertTrue("Course "+actor+": availableSpots should be 100",((CoursePrivateState)state).getAvailableSpots()==100);
+                        assertTrue("Course "+actor+": should have 0 registered students",((CoursePrivateState)state).getRegistered()==0);
+                        assertTrue("Course"+actor+": should have no regStudents",
+                                ((CoursePrivateState)state).getRegStudents().isEmpty());
+                        assertTrue("Course"+actor+": not all prerequisites appear, should have Intro To CS",
+                                ((CoursePrivateState)state).getPrequisites().contains("Intro To CS"));
                     }
                 }
                 System.out.println("----------------");
