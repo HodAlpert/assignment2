@@ -28,7 +28,7 @@ public abstract class PrivateState implements Serializable {
 	}
 
 	public String toString(){
-		return this.getClass().toString().substring(35)+"\n"+history+"\n";
+		return this.getClass().toString().substring(35)+"\n\t"+history+"\n";
 	}
 	
 }

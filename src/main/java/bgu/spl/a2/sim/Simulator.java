@@ -94,9 +94,9 @@ public class Simulator {
 
 			FileInputStream fin = new FileInputStream("result.ser");
 			ObjectInputStream ois = new ObjectInputStream(fin);
-			System.out.println("/______________________OUTPUT______________________/");
+			System.out.println("/______________________OUTPUT______________________");
 			System.out.println(ois.readObject());
-			System.out.println("/______________________OUTPUT______________________/");
+			System.out.println("______________________OUTPUT______________________/");
 
 		} catch (ParseException e) {
 			e.printStackTrace();
