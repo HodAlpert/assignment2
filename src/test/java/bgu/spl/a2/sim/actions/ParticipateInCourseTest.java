@@ -129,6 +129,7 @@ public class ParticipateInCourseTest {
         pool.submit(fail,"course1",new CoursePrivateState());
         try {
             latch3.await();
+            System.out.println(3);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -138,6 +139,8 @@ public class ParticipateInCourseTest {
         pool.submit(sucess2,"course1",new CoursePrivateState());
         try {
             latch4.await();
+            //TODO solve issue here
+            System.out.println(4);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
