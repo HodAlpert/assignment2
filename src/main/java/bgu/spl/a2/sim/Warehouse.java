@@ -18,7 +18,7 @@ public class Warehouse {
     private ConcurrentHashMap<String,Computer> computers;
 
     private Warehouse(){
-        this.computers= new ConcurrentHashMap<String,Computer>();
+        this.computers= new ConcurrentHashMap<>();
     }
 
     public void addComputer(Computer computer){

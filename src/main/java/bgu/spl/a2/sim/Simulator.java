@@ -118,8 +118,7 @@ public class Simulator {
 		for (Object curr : Phase) {
 			JSONObject jsonLineItem = (JSONObject) curr;
 			Action action = getAction(jsonLineItem);
-			action.getResult().subscribe(latch::countDown);
-
+			action.getResult().subscribe(() -> latch.countDown());
 			if(action instanceof OpenCourse)
 				actorThreadPool.submit(action,(String)jsonLineItem.get("Department"),new DepartmentPrivateState());
 			else if(action instanceof AddStudent)
