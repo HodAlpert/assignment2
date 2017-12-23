@@ -61,8 +61,8 @@ public abstract class Action<R> {
      */
     /*package*/ final void handle(ActorThreadPool pool, String actorId, PrivateState actorState) {
 
-        if(actorState==null)
-            System.out.println(actorId);
+        if(actorState==null)//TODO remove
+            throw new NullPointerException("whattt");//TODO remove
         if (!promise.isResolved()){
             if (!hasBeenStartedBefore.get()){
                 hasBeenStartedBefore.set(true);

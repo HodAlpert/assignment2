@@ -91,7 +91,7 @@ public class Promise<T>{
 				callback.call();
 			}
 			catch(NullPointerException ex){
-			System.out.println(ex.getMessage());
+			ex.printStackTrace();
 			}
 		else
 			callbacks.add(callback);
