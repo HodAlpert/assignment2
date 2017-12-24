@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *            the result type, <boolean> resolved - initialized ;
  */
 public class Promise<T>{
-	private ConcurrentLinkedQueue<callback> callbacks=new ConcurrentLinkedQueue<>();
+	public ConcurrentLinkedQueue<callback> callbacks=new ConcurrentLinkedQueue<>();//TODO make private
 	private T result;
 	private AtomicBoolean resolved= new AtomicBoolean(false);
 
@@ -61,7 +61,7 @@ public class Promise<T>{
 	 * @param value
 	 *            - the value to resolve this promise object with
 	 */
-	public void resolve(T value){
+	public synchronized void resolve(T value){
 		if(resolved.get())
 			throw new IllegalStateException("cannot resolve a promise more then once");
 		result=value;
@@ -85,14 +85,15 @@ public class Promise<T>{
 	 * @param callback
 	 *            the callback to be called when the promise object is resolved
 	 */
-	public void subscribe(callback callback) {
-		if(resolved.get())
+	public synchronized void subscribe(callback callback) {
+		if(resolved.get()) {
+			System.out.println("called callback immidietly");
 			try {
 				callback.call();
+			} catch (NullPointerException ex) {
+				ex.printStackTrace();
 			}
-			catch(NullPointerException ex){
-			ex.printStackTrace();
-			}
+		}
 		else
 			callbacks.add(callback);
 	}
