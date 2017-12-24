@@ -7,13 +7,21 @@ import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
+@RunWith(Parameterized.class)
 public class CloseCourseTest {
+    @Parameterized.Parameters
+    public static List<Object[]> data() {
+        return Arrays.asList(new Object[1000][0]);
+    }
     CountDownLatch latch;
     ActorThreadPool pool;
     CountDownLatch latch1;
@@ -26,7 +34,7 @@ public class CloseCourseTest {
         pool = new ActorThreadPool(4);
         latch = new CountDownLatch(1);
         latch1 = new CountDownLatch(14);
-        latch2 = new CountDownLatch(1);
+        latch2 = new CountDownLatch(2);
         latch3 = new CountDownLatch(1);
         pool.start();
     }
@@ -80,6 +88,11 @@ public class CloseCourseTest {
         CloseCourse close = new CloseCourse("dept","course");
         close.getResult().subscribe(latch2::countDown);
         pool.submit(close,"dept",new DepartmentPrivateState());
+
+
+        ParticipateInCourse par=new ParticipateInCourse("student6","course",grade);
+        par.getResult().subscribe(latch2::countDown);
+        pool.submit(par,"course",course1);
         try {
             latch2.await();
         } catch (InterruptedException e) {
@@ -90,14 +103,6 @@ public class CloseCourseTest {
         assertTrue("registered should be 0",course1.getRegistered()==0);
         for (int i=0;i<students.length;i++){
             assertFalse("student "+i+" is still registered to course",students[i].getGrades().containsKey("course"));
-        }
-        ParticipateInCourse par=new ParticipateInCourse("student6","course",grade);
-        par.getResult().subscribe(latch3::countDown);
-        pool.submit(par,"course",course1);
-        try {
-            latch3.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
         assertFalse("student was able to register after course was closed",par.getResult().get()[0].equals("course"));
 

@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.*;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
@@ -84,11 +85,12 @@ public class SimulatorTest {
                 assertTrue("Course " + actor + ": should have 2 Participate In Course action in logger", Collections.frequency(state.getLogger(), "Participate In Course") == 2);
                 assertTrue("Course " + actor + ": availableSpots should be 0", state.getAvailableSpots() == 0);
                 assertTrue("Course " + actor + ": should have 1 registered students", state.getRegistered() == 1);
-//                assertTrue("Course" + actor + ": not all students appear in regStudents list " +
-//                                " should have: 5959595959",
-//                        state.getRegStudents().contains("5959595959"));
                 assertTrue("Course" + actor + ": not all prerequisites appear, should have Intro To CS",
                         state.getPrequisites().contains("Intro To CS"));
+                assertFalse("both students have been registered to SPL- only one of them should",
+                        state.getRegStudents().containsAll(new ArrayList<>(Arrays.asList("123456789", "5959595959"))));
+                assertFalse("both students have not been registered to SPL one of them should",
+                        (!state.getRegStudents().contains("123456789"))&(!state.getRegStudents().contains("123456789")));
                 break;
             }case "Data Structures": {
                 assertTrue("Course " + actor + ": should have 1 Participate In Course action and" +
@@ -120,19 +122,25 @@ public class SimulatorTest {
     }
 
     private void testStudent(String actor, StudentPrivateState state) {
+        boolean registered5959595959 = false;
+
         switch (actor) {
             case "123456789": {
                 assertTrue("student " + actor + ": should be registered to Intro To CS with grade 77",
                         state.getGrades().containsKey("Intro To CS") && state.getGrades().get("Intro To CS") == 77);
-//              assertTrue("student " + actor + ": signature should be 999283", state.getSignature() == 999283);
+              assertTrue("student " + actor + ": signature should be 999283 or 1234666",
+                      state.getSignature() == 999283||state.getSignature()==1234666);
                 break;
             }
             case "5959595959": {
                 assertTrue("student " + actor + ": should be registered to Intro To CS with grade 94",
                         state.getGrades().containsKey("Intro To CS") && state.getGrades().get("Intro To CS") == 94);
-//              assertTrue("student " + actor + ": should be registered to SPL with grade 100",
-//                      state.getGrades().containsKey("SPL") && state.getGrades().get("SPL") == 100);
-//              assertTrue("student " + actor + ": signature should be 999283", state.getSignature() == 999283);
+                registered5959595959 = state.getGrades().containsKey("SPL");
+                if (registered5959595959)
+              assertTrue("student " + actor + ": should be registered to SPL with grade 100",
+                      state.getGrades().get("SPL") == 100);
+                assertTrue("student " + actor + ": signature should be 999283 or 1234666",
+                        state.getSignature() == 999283||state.getSignature()==1234666);
                 break;
             }
             case "132424353": {
