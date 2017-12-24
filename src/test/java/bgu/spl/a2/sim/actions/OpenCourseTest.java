@@ -25,7 +25,7 @@ public class OpenCourseTest {
     }
     @Test
     public void positiveTest() {
-        pool = new ActorThreadPool(4);
+        pool = new ActorThreadPool(6);
         pool.start();
         count=new CountDownLatch(2);
         String[] prerequisits={"Course1","Course2"};

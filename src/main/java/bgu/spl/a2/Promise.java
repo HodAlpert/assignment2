@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *            the result type, <boolean> resolved - initialized ;
  */
 public class Promise<T>{
-	public ConcurrentLinkedQueue<callback> callbacks=new ConcurrentLinkedQueue<>();//TODO make private
+	private ConcurrentLinkedQueue<callback> callbacks=new ConcurrentLinkedQueue<>();//TODO make private
 	private T result;
 	private AtomicBoolean resolved= new AtomicBoolean(false);
 
@@ -87,7 +87,6 @@ public class Promise<T>{
 	 */
 	public synchronized void subscribe(callback callback) {
 		if(resolved.get()) {
-			System.out.println("called callback immidietly");
 			try {
 				callback.call();
 			} catch (NullPointerException ex) {
