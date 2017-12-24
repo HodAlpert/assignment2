@@ -64,9 +64,10 @@ public class Simulator {
 
 
 	public static void main(String [] args){
-		JSONParser parser = new JSONParser();
+		JSONParser parser = new JSONParser(); // parse the input JSON file
 		Warehouse warehouse = Warehouse.getInstance();
 
+		//get all the data from the input file
 		try {
 			Object obj = parser.parse(new FileReader(args[0]));
 
@@ -80,13 +81,16 @@ public class Simulator {
 			JSONArray Phase2 = (JSONArray) input.get("Phase 2");
 			JSONArray Phase3 = (JSONArray) input.get("Phase 3");
 
+			// setup the warehouse
 			createComputers(warehouse,Computers);
 
+			// start the threads and submit all phases to the pool, one by one.
 			actorThreadPool.start();
 			submitPhase(Phase1);
 			submitPhase(Phase2);
 			submitPhase(Phase3);
 
+			// shutdown the pool and generate output file "result.ser"
 			HashMap<String,PrivateState> output = end();
 			FileOutputStream out = new FileOutputStream("result.ser");
 			ObjectOutputStream oos = new ObjectOutputStream(out);
@@ -102,6 +106,12 @@ public class Simulator {
 
 	}
 
+	/**
+	 * create and add all computers to the werehouse
+	 *
+	 * @param werehouse contains all of the computers
+	 * @param Computers the {@link JSONArray} of {@link Computer} from the input file
+	 */
 	private static void createComputers(Warehouse werehouse, JSONArray Computers){
 		for (Object curr : Computers) {
 			JSONObject jsonLineItem = (JSONObject) curr;
@@ -113,6 +123,12 @@ public class Simulator {
 		}
 	}
 
+	/**
+	 * creates a phase by submitting the actions, given by the input file,
+	 * and using {@link CountDownLatch} to make sure the main program won't
+	 * continue before all actions resolve
+	 * @param Phase a {@link JSONArray} of {@link Action} from the input file
+	 */
 	private static void submitPhase(JSONArray Phase){
 		CountDownLatch latch = new CountDownLatch(Phase.size());
 		for (Object curr : Phase) {
@@ -138,13 +154,18 @@ public class Simulator {
 				actorThreadPool.submit(action,(String)jsonLineItem.get("Department"),new DepartmentPrivateState());
 		}
 		try {
-			latch.await();
+			latch.await(); // wait until all actions are resolved before returning
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
 	}
 
+	/**
+	 * translate a {@link JSONObject} into an {@link Action}
+	 * @param jsonLineItem the {@link JSONObject} to be translated
+	 * @return an {@link Action} that was described in the input file
+	 */
 	private static Action getAction(JSONObject jsonLineItem){
 		if(jsonLineItem.get("Action").equals("Open Course"))
 			return new OpenCourse((String) jsonLineItem.get("Department"),(String)jsonLineItem.get("Course"),(String)jsonLineItem.get("Space"),toArray((JSONArray)jsonLineItem.get("Prerequisites")));
@@ -166,18 +187,33 @@ public class Simulator {
 		return null; // if input is incorrect
 	}
 
+	/**
+	 * translate {@link JSONArray} to String[]
+	 * @param jsonArray {@link JSONArray} from the input file
+	 * @return String[] that represent the given {@link JSONArray}
+	 */
 	private static String[] toArray(JSONArray jsonArray){
 		String[] output = new String[jsonArray.size()];
 		for(int i=0;i<output.length;i++)
 			output[i] = jsonArray.get(i).toString();
 		return output;
 	}
+
+	/**
+	 * translate {@link JSONArray} to ArrayList<String>
+	 * @param jsonArray {@link JSONArray} from the input file
+	 * @return ArrayList<String> that represent the given {@link JSONArray}
+	 */
 	private static ArrayList<String> toArrayList(JSONArray jsonArray){
 		ArrayList<String> output = new ArrayList<>();
 		for(int i=0;i<jsonArray.size();i++)
 			output.add(jsonArray.get(i).toString());
 		return output;
 	}
+
+	/**
+	 *  translate ConcurrentHashMap<String, PrivateState> to HashMap<String, PrivateState>
+	 */
 	private static HashMap<String, PrivateState> toHashmap(ConcurrentHashMap<String, PrivateState> actors){
         HashMap<String, PrivateState> output = new HashMap<>();
         output.putAll(actors);

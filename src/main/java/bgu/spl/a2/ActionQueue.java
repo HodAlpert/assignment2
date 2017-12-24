@@ -1,13 +1,21 @@
 package bgu.spl.a2;
 
-import sun.misc.Queue;
-
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ActionQueue extends ConcurrentLinkedQueue<Action> {
 
+
+    /**
+     * A Queue that contains the Actions of an Actor
+     * it uses @{@link ReentrantLock} to maintain a thread-safe environment
+     *
+     * @param lock
+     *          lock the queue once a thread is iterating through the queue
+     * @param actorId
+     *          represent the id of the actor that owns this queue
+     */
     private Lock lock;
     private String actorId;
 

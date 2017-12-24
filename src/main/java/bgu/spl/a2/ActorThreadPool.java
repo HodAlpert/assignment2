@@ -57,12 +57,12 @@ public class ActorThreadPool {
 	private VersionMonitor monitor;
 
 	public ActorThreadPool(int nthreads) {
-		privateStates = new ConcurrentHashMap<String,PrivateState>();
-		queues = new ConcurrentHashMap<String,ActionQueue>();
+		privateStates = new ConcurrentHashMap<>();
+		queues = new ConcurrentHashMap<>();
 		monitor = new VersionMonitor();
 		startLatch = new CountDownLatch(nthreads);
 		ShutDownLatch = new CountDownLatch(nthreads);
-		threads = new LinkedList<Thread>();
+		threads = new LinkedList<>();
 		initializeThreads(nthreads);
 	}
 
@@ -97,7 +97,7 @@ public class ActorThreadPool {
 	 */
 	public void submit(Action<?> action, String actorId, PrivateState actorState) {
         synchronized ( this ) {
-			if (!queues.containsKey(actorId)) {
+			if (!queues.containsKey(actorId)) { // first create the actor if it doesn't exist
                 privateStates.putIfAbsent(actorId, actorState);
                 queues.putIfAbsent(actorId, new ActionQueue(actorId));
 				queues.get(actorId).add(action);
@@ -146,18 +146,25 @@ public class ActorThreadPool {
 			System.out.println("Error while starting threads, start failed");
 		}
 	}
+
+	/**
+	 * creates and add all the pool's threads to {@link #threads}
+	 *
+	 * @param nthreads
+	 * 			how many threads are initialized
+	 */
 	private void initializeThreads(int nthreads){
 		for(int i=0;i<nthreads;i++){
 			threads.add(new Thread(() -> {
-				startLatch.countDown();
+				startLatch.countDown(); // for the start method
 				while (!Thread.currentThread().isInterrupted()){
 					int version = monitor.getVersion();
-					for(ActionQueue currQueue : queues.values()){
+					for(ActionQueue currQueue : queues.values()){ //search for an Action in queues
 						if(Thread.currentThread().isInterrupted())
 							break;
 						if (!currQueue.isEmpty() && currQueue.getLock().tryLock()) {
 							try {
-								if (!currQueue.isEmpty()) { // get an Action from @currQueue if not empty
+								if (!currQueue.isEmpty()) { // get an Action from currQueue if not empty
 									currQueue.remove().handle(this, currQueue.getActorId(), privateStates.get(currQueue.getActorId()));
 									if(!currQueue.isEmpty())
 										monitor.inc();
@@ -167,7 +174,7 @@ public class ActorThreadPool {
 								e.printStackTrace();
 							}
 							finally{
-								currQueue.getLock().unlock();
+								currQueue.getLock().unlock(); //release the queue so others could take actions from it
 							}
 						}//if
 					}//for
@@ -175,7 +182,7 @@ public class ActorThreadPool {
 						if (monitor.getVersion()==version)
 						monitor.await(version);
 					} catch (InterruptedException e) {
-						Thread.currentThread().interrupt(); // if thread is blocked
+						Thread.currentThread().interrupt(); // if thread is blocked interrupt again
 					}
 				}//while
 				ShutDownLatch.countDown();

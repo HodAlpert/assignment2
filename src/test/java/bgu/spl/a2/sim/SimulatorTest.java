@@ -16,9 +16,6 @@ import java.util.*;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author nadav.
- */
 @RunWith(Parameterized.class)
 public class SimulatorTest {
 //    @Rule
@@ -26,7 +23,7 @@ public class SimulatorTest {
 
     @Parameterized.Parameters
     public static List<Object[]> data() {
-        return Arrays.asList(new Object[1000][0]);
+        return Arrays.asList(new Object[2000][0]);
     }
 
     @Test

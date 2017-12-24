@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParticipateInCourse extends Action<String[]> {
-
+    /**
+     * an action that register a given student to the course
+     * if there is available space and the student meets all the course's prerequisites
+     */
     private String[] Grade;
     private String Course;
     private String Student;
-
 
     public ParticipateInCourse(String Student, String Course, String[] Grade){
         this.Grade=Grade;
@@ -38,6 +40,7 @@ public class ParticipateInCourse extends Action<String[]> {
                         this.complete(acceptToCourse.getResult().get());
                     }
                     else if (state.getAvailableSpots() <1 && !acceptToCourse.getResult().get()[0].equals("-")) {
+                        //if there are no Available Spots, remove the student
                         SelfUnregisterStudent unregister = new SelfUnregisterStudent(Course);
                         List<Action<Boolean>> actions1 = new ArrayList<>();
                         actions1.add(unregister);
@@ -45,7 +48,7 @@ public class ParticipateInCourse extends Action<String[]> {
                         sendMessage(unregister,Student,new StudentPrivateState());
                         state.getRegStudents().remove(Student);
                     }
-                    else {
+                    else {// if the student doesn't meet the prerequisites, remove from list
                         state.getRegStudents().remove(Student);
                         this.complete(acceptToCourse.getResult().get());
                     }

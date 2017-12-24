@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddStudent extends Action<Boolean> {
-
+    /**
+     * An action that adds a given student to the department
+     */
     private String Department;
     private String Student;
 
@@ -23,7 +25,7 @@ public class AddStudent extends Action<Boolean> {
         DepartmentPrivateState state = (DepartmentPrivateState) getState();
         if (!state.getStudentList().contains(Student)){
             state.getStudentList().add(Student);//to reject future requests
-            Action<Boolean> selfAddStudent = new SelfAddStudent(Student);
+            Action<Boolean> selfAddStudent = new SelfAddStudent(Student); // create and add the student (if he doesn't exist)
             List<Action<Boolean>> actions = new ArrayList<>();
             actions.add(selfAddStudent);
             then(actions, ()-> complete(true));

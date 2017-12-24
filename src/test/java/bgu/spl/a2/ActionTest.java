@@ -12,7 +12,7 @@ import org.junit.runners.Parameterized;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
-import static org.junit.Assert.assertTrue;
+import static junit.framework.TestCase.assertTrue;
 
 @RunWith(Parameterized.class)
 public class ActionTest {
@@ -119,13 +119,14 @@ public class ActionTest {
                 latch1.countDown();
             });
             Participate2.getResult().subscribe(() -> {
-                System.out.println("Participate2 done");
+                System.out.println("Participate3 done");
                 latch1.countDown();
             });
             Participate3.getResult().subscribe(() -> {
                 System.out.println("Participate3 done");
                 latch1.countDown();
             });
+
             threadPool.submit(addStudent1,"dept1",new DepartmentPrivateState());
             threadPool.submit(addStudent2,"dept1",new DepartmentPrivateState());
             threadPool.submit(addStudent3,"dept2",new DepartmentPrivateState());
@@ -134,8 +135,6 @@ public class ActionTest {
             threadPool.submit(Participate3,"course2",new StudentPrivateState());
 
             latch1.await();
-
-
 
             assertTrue("not all courses are in dept1",
                     ((DepartmentPrivateState)threadPool.getPrivateState("dept1")).getCourseList().containsAll(Arrays.asList(new String[]{"course1","course2"})));
@@ -200,6 +199,7 @@ public class ActionTest {
             threadPool.submit(addSpace3,"course1",new CoursePrivateState());
             threadPool.submit(addSpace4,"course1",new CoursePrivateState());
             latch2.await();
+
             assertTrue("added "+(((CoursePrivateState)threadPool.getPrivateState("course1")).getAvailableSpots()-9)+ " available spots instead of 4 to course1",
                     ((CoursePrivateState)threadPool.getPrivateState("course1")).getAvailableSpots()==13);
 
@@ -281,30 +281,30 @@ public class ActionTest {
 
     }
 
-//    @Test
-//    public void transactionTest() {
-//        Transaction transaction = new Transaction(100, "A", "B", "Bank2");
-//        threadPool.start();
-//        threadPool.submit(new AddClient("A", 100, "Bank1"), "Bank1", new BankState());
-//        threadPool.submit(new AddClient("B", 0, "Bank2"), "Bank2", new BankState());
-//        try {
-//            Thread.sleep(50);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        threadPool.submit(transaction, "Bank1", new BankState());
-//        try {
-//            CountDownLatch latch = new CountDownLatch(1);
-//            transaction.getResult().subscribe(() -> {
-//                System.out.println("callback");
-//                latch.countDown();
-//            });
-//            latch.await();
-//            threadPool.shutdown();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    @Test
+    public void transactionTest() {
+        Transaction transaction = new Transaction(100, "A", "B", "Bank2");
+        threadPool.start();
+        threadPool.submit(new AddClient("A", 100, "Bank1"), "Bank1", new BankState());
+        threadPool.submit(new AddClient("B", 0, "Bank2"), "Bank2", new BankState());
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        threadPool.submit(transaction, "Bank1", new BankState());
+        try {
+            CountDownLatch latch = new CountDownLatch(1);
+            transaction.getResult().subscribe(() -> {
+                System.out.println("callback");
+                latch.countDown();
+            });
+            latch.await();
+            threadPool.shutdown();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     private class AddClient extends Action<Boolean> {
         private String name;

@@ -6,7 +6,9 @@ import bgu.spl.a2.sim.privateStates.CoursePrivateState;
 import java.util.Arrays;
 
 public class SelfOpenCourse extends Action<Boolean> {
-
+    /**
+     * an action that sets the courses parameters after it was created
+     */
     private String course;
     private Integer availableSpots;
     private String[] prerequisites;

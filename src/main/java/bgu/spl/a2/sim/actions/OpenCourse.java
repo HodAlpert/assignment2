@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OpenCourse extends Action<Boolean>{
-
+    /**
+     * an action that adds a new course to the department
+     */
     private String Department;
     private String Course;
     private String Space;

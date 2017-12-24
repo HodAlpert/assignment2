@@ -6,7 +6,10 @@ import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 import java.util.List;
 
 public class AcceptToCourse extends Action<String[]> {
-
+    /**
+     * An action that adds a given course and it's grade to the student
+     * if he meets all of the course's prerequisites
+     */
     private List<String> prequisites;
     private String Course;
     private String Grade;

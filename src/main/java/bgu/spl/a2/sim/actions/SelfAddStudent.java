@@ -4,7 +4,9 @@ import bgu.spl.a2.Action;
 import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 
 public class SelfAddStudent extends Action<Boolean> {
-
+    /**
+     * an action that sets the student's name
+     */
     private  String student;
 
     public SelfAddStudent(String student){
@@ -15,7 +17,7 @@ public class SelfAddStudent extends Action<Boolean> {
     @Override
     protected void start() {
         StudentPrivateState state = (StudentPrivateState) getState();
-        state.setStudent(this.student);
+        state.setStudent(this.student); // sets the name of the student
         complete(true);
     }
 }
