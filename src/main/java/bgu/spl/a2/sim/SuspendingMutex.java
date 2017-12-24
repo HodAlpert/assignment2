@@ -38,9 +38,9 @@ public class SuspendingMutex {
 	 */
 	public Promise<Computer> down() {
 		Promise<Computer> promise = new Promise<>();
-		if (islocked.compareAndSet(false, true)) {//if the mutex in not locked
+		if (islocked.compareAndSet(false, true))//if the mutex in not locked
 			promise.resolve(computer);//resolving the promise
-		} else
+		else
 			queue.add(promise);
 		return promise;
 	}

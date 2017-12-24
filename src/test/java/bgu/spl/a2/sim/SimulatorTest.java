@@ -31,7 +31,6 @@ public class SimulatorTest {
 
     @Test
     public void main() {
-        //todo change the name of the file in the next line for the name you have
         Simulator.main(new String[]{"input.json"});
         try (InputStream fin = new FileInputStream("result.ser");
              ObjectInputStream ois = new ObjectInputStream(fin)) {
