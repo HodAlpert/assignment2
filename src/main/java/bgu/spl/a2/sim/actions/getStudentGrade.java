@@ -7,11 +7,17 @@ import java.util.HashMap;
 
 public class getStudentGrade extends Action<HashMap<String, Integer>> {
 
+    /**
+     * returning a copy of student's grades list
+     */
     public getStudentGrade(){
         setActionName("get Student Grade");
     }
+
+    /**
+     * should return a copy of it's grade list
+     */
     @Override
-    //should return it's grade list
     protected void start() {
         StudentPrivateState state = (StudentPrivateState) getState();
         HashMap<String, Integer> grades = new HashMap<>();

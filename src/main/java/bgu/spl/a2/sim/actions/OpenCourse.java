@@ -16,6 +16,12 @@ public class OpenCourse extends Action<Boolean>{
     private String Space;
     private String[] Prerequisites;
 
+    /**
+     * @param Department to open the course at
+     * @param Course to open
+     * @param availableSpots of the course
+     * @param Prerequisites list of courses any student who wants to register needs to pass
+     */
     public OpenCourse(String Department, String Course,String availableSpots, String[] Prerequisites) {
         this.setActionName("Open Course");
         this.Department = Department;
@@ -24,6 +30,11 @@ public class OpenCourse extends Action<Boolean>{
         this.Prerequisites=Prerequisites;
     }
 
+    /**
+     * checks if course is already in courses list of the department
+     * if it's not- sends an action for the course to open itself
+     * action is completed when selfopencourse is completed.
+     */
     @Override
     protected void start() {
         DepartmentPrivateState state = (DepartmentPrivateState) getState();

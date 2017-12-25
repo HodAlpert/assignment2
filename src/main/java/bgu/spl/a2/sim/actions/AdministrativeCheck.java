@@ -55,9 +55,12 @@ public class AdministrativeCheck extends Action<Boolean> {
     };//continuation once we have the grades of the students
 
 
-
-
-
+    /**
+     * @param department department who runs the check
+     * @param Students students that needs to pass the obligations
+     * @param Computer computer to run CheckAndSign with
+     * @param Conditions list of courses student needs to pass
+     */
     public AdministrativeCheck(String department, String[] Students, String Computer, ArrayList<String> Conditions){
         setActionName("Administrative Check");
         this.Department = department;
@@ -76,7 +79,7 @@ public class AdministrativeCheck extends Action<Boolean> {
         }//for creating actions
         then(actions,ContinuationAfterGettingTheGradesMaps);//setting the continuation once we have the grades of the students
         for (int i=0;i<Students.length;i++){
-            sendMessage(actions.get(i),Students[i],new StudentPrivateState());
+            sendMessage(actions.get(i),Students[i],new StudentPrivateState());//sending request for a copy of all the students grades list
         }//for sending messages
     }//start
 }

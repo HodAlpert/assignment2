@@ -13,6 +13,11 @@ public class SelfOpenCourse extends Action<Boolean> {
     private Integer availableSpots;
     private String[] prerequisites;
 
+    /**
+     * @param course course name
+     * @param availableSpots number of available Spots on innitiation
+     * @param prerequisites list of courses any student who wants to register to current course should have
+     */
     public SelfOpenCourse(String course,Integer availableSpots, String[] prerequisites){
         this.course=course;
         this.availableSpots=availableSpots;
@@ -20,6 +25,9 @@ public class SelfOpenCourse extends Action<Boolean> {
         this.setActionName("Self Open Course");
     }
 
+    /**
+     * setting data members with their values
+     */
     @Override
     protected void start() {
         CoursePrivateState state = (CoursePrivateState) getState();

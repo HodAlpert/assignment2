@@ -14,6 +14,11 @@ public class AcceptToCourse extends Action<String[]> {
     private String Course;
     private String Grade;
 
+    /**
+     * @param Course to be accepted to
+     * @param Grade to save as course grade
+     * @param prequisites that the student needs to have in his grade's list in order to be worthy for the course
+     */
     public AcceptToCourse(String Course, String Grade, List<String> prequisites){
         this.prequisites=prequisites;
         this.Course=Course;

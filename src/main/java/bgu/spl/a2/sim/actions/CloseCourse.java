@@ -23,7 +23,7 @@ public class CloseCourse extends Action<Boolean> {
     @Override
     protected void start() {
         DepartmentPrivateState state = (DepartmentPrivateState) getState();
-        if (state.getCourseList().contains(Course)){
+        if (state.getCourseList().contains(Course)){//if course is in course list
             state.getCourseList().remove(Course);
             Action<Boolean> action = new SelfCloseCourse(Course);
             List<Action<Boolean>> actions = new ArrayList<>();
@@ -31,7 +31,7 @@ public class CloseCourse extends Action<Boolean> {
             then(actions, ()-> complete(true));
             sendMessage(action,Course,new CoursePrivateState());
         }
-        else
+        else//if course was not in department course list
             complete(true);
     }
 }

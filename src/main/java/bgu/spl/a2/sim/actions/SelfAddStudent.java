@@ -9,6 +9,9 @@ public class SelfAddStudent extends Action<Boolean> {
      */
     private  String student;
 
+    /**
+     * @param student name that should be given to the student
+     */
     public SelfAddStudent(String student){
         this.student=student;
         this.setActionName("Self Add Student");

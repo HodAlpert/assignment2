@@ -9,7 +9,12 @@ public class Computer {
 	private long failSig;
 	private long successSig;
 	private SuspendingMutex mutex;
-	
+
+	/**
+	 * @param computerType type of the computer
+	 * @param successSig signature that should be given if student pass the check
+	 * @param failSig signature that should be given if student fail the check
+	 */
 	public Computer(String computerType, long successSig, long failSig) {
 
 		this.computerType = computerType;

@@ -11,16 +11,24 @@ public class SelfCloseCourse extends Action<Boolean> {
 
     private String Course;
 
+    /**
+     * @param Course to be closed
+     */
     public SelfCloseCourse(String Course){
         setActionName("Self Close Course");
         this.Course=Course;
     }
 
+    /**
+     * first: we will set fet availableSpots to be -1
+     * then we will send all students that are already registered to the course
+     * a request to unregister themselfs, and when they will all finish- we will return true.
+     */
     @Override
     protected void start() {
         CoursePrivateState state = (CoursePrivateState) getState();
+        state.setAvailableSpots(-1);//rejecting future registration requests
         if(state.getRegistered()>0) {
-            state.setAvailableSpots(-1);//rejecting future registration requests
             state.setRegistered(0);
             List<Action<Boolean>> actions = new ArrayList<>();
             for (String student : state.getRegStudents()) {//asking all students to remove themselves from course
@@ -35,7 +43,6 @@ public class SelfCloseCourse extends Action<Boolean> {
             state.setPrerequisites(new ArrayList<String>());//erasing prerequisites
         }
         else {
-            state.setAvailableSpots(-1);//rejecting future registration requests
             complete(true);
 
         }

@@ -4,6 +4,10 @@ import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 
 public class SetSignature extends Action<Boolean> {
     private Long Signature;
+
+    /**
+     * @param Signature to set studentSignature
+     */
     public SetSignature(Long Signature){
         setActionName("Set Signature");
         this.Signature = Signature;

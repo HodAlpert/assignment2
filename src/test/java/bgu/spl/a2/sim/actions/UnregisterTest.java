@@ -7,11 +7,16 @@ import bgu.spl.a2.sim.privateStates.StudentPrivateState;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+@RunWith(Parameterized.class)
 
 public class UnregisterTest {
     private ActorThreadPool pool;
@@ -19,6 +24,10 @@ public class UnregisterTest {
     private StudentPrivateState student;
     private CoursePrivateState course;
     private CoursePrivateState course1;
+    @Parameterized.Parameters
+    public static List<Object[]> data() {
+        return Arrays.asList(new Object[2000][0]);
+    }
 
     @Before
     public void setup(){
@@ -78,27 +87,30 @@ public class UnregisterTest {
      */
     @Test
     public void positiveTest(){
-        CountDownLatch latch2 = new CountDownLatch(1);
+        CountDownLatch latch2 = new CountDownLatch(3);
         String[] pre = {"-"};
         ParticipateInCourse parInc1 = new ParticipateInCourse("student","course1",pre);
-        parInc1.getResult().subscribe(latch1::countDown);
-        pool.submit(parInc1,"course1",new CoursePrivateState());
-        try {
-            latch1.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        parInc1.getResult().subscribe(latch2::countDown);
         Unregister unregister = new Unregister("student","course1");
         unregister.getResult().subscribe(latch2::countDown);
+        ParticipateInCourse parInc2 = new ParticipateInCourse("student","course1",pre);
+        parInc2.getResult().subscribe(latch2::countDown);
+
+
+
+        pool.submit(parInc1,"course1",new CoursePrivateState());
+
         pool.submit(unregister,"course1", new CoursePrivateState());
+        pool.submit(parInc2,"course1",new CoursePrivateState());
+
         try {
             latch2.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         assertTrue("should return true",unregister.getResult().get());
-        assertTrue("registered number should not be changed",course1.getRegistered()==0);
-        assertTrue("availableSpots number should not be changed",course1.getAvailableSpots()==5);
+        assertTrue("registered number should not be changed",course1.getRegistered()==1);
+        assertTrue("availableSpots number should not be changed",course1.getAvailableSpots()==4);
 
     }
 

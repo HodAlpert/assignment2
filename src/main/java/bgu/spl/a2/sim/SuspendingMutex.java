@@ -22,7 +22,7 @@ public class SuspendingMutex {
 	/**
 	 * Constructor
 	 *
-	 * @param computer
+	 * @param computer in which the mutex keep thread safe
 	 */
 	public SuspendingMutex(Computer computer) {
 		this.computer = computer;

@@ -16,6 +16,11 @@ public class RegisterWithPreferences extends Action<String[]> {
     private callback call;
     private ParticipateInCourse currentRequest;
 
+    /**
+     * @param Student who wants to register to the courses
+     * @param Preferences list of courses that the student wants to register to
+     * @param Grade list of grades for the courses
+     */
     public RegisterWithPreferences(String Student, String[] Preferences, String[] Grade) {
         setActionName("Register With Preferences");
         this.Student = Student;
@@ -33,7 +38,7 @@ public class RegisterWithPreferences extends Action<String[]> {
                     List<Action<String[]>> actions1 = new ArrayList<>();
                     currentRequest.getResult().subscribe(()->index.getAndIncrement());
                     actions1.add(currentRequest);
-                    then(actions1, call);
+                    then(actions1, call);//calling the call again
                     sendMessage(currentRequest, Preferences[index.get()], new CoursePrivateState());
                 }
                 else{//if there is no more courses to register to
@@ -45,15 +50,19 @@ public class RegisterWithPreferences extends Action<String[]> {
         };//new callback
     }//RegisterWithPreferences
 
+    /**
+     * we will try in recursion to register to the courses until we have tried the shole list ot until we have a
+     * success registration.
+     */
     @Override
     protected void start() {
         if (index.get() < Preferences.length) {//if there is a course in current index
             String[] grade = {Grade[index.get()]};
-            currentRequest = new ParticipateInCourse(Student, Preferences[index.get()], grade);
+            currentRequest = new ParticipateInCourse(Student, Preferences[index.get()], grade);//creating a new registration action
             List<Action<String[]>> actions = new ArrayList<>();
             actions.add(currentRequest);
             currentRequest.getResult().subscribe(()->index.getAndIncrement());
-            then(actions, call);
+            then(actions, call);//calling the call for the first time
             sendMessage(currentRequest, Preferences[index.get()], new CoursePrivateState());
         } else {
             String[] result = {"-", "-"};

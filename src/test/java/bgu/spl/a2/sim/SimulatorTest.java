@@ -90,7 +90,7 @@ public class SimulatorTest {
                 assertFalse("both students have been registered to SPL- only one of them should",
                         state.getRegStudents().containsAll(new ArrayList<>(Arrays.asList("123456789", "5959595959"))));
                 assertFalse("both students have not been registered to SPL one of them should",
-                        (!state.getRegStudents().contains("123456789"))&(!state.getRegStudents().contains("123456789")));
+                        (!state.getRegStudents().contains("123456789"))&(!state.getRegStudents().contains("5959595959")));
                 break;
             }case "Data Structures": {
                 assertTrue("Course " + actor + ": should have 1 Participate In Course action and" +

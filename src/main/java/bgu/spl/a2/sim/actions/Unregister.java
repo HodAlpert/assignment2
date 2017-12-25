@@ -11,12 +11,25 @@ public class Unregister extends Action<Boolean> {
     private String Student;
     private String Course;
 
+    /**
+     * @param Student to unregister
+     * @param Course to unregister the student from
+     */
     public Unregister(String Student, String Course){
         setActionName("Unregister");
         this.Course=Course;
         this.Student=Student;
 
     }
+
+    /**
+     * if student is registered to course:
+     * remove it and do:
+     *      getAvailableSpots++
+     *      getRegistered--
+     *      send the student a self unregister action
+     *
+     */
     @Override
     protected void start() {
         CoursePrivateState state = (CoursePrivateState) getState();
