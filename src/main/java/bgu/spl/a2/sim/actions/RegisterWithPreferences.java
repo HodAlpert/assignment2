@@ -68,8 +68,5 @@ public class RegisterWithPreferences extends Action<String[]> {
             String[] result = {"-", "-"};
             complete(result);//completing with empty String
         }
-//    private List<Action<Boolean>> actions(int index){
-//
-//    }
     }
 }

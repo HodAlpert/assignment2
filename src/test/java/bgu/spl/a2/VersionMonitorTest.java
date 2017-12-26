@@ -2,8 +2,6 @@ package bgu.spl.a2;
 
 import org.junit.*;
 
-import java.util.concurrent.CountDownLatch;
-
 import static org.junit.Assert.*;
 
 public class VersionMonitorTest {
@@ -12,21 +10,21 @@ public class VersionMonitorTest {
     private boolean flag = false;
 
     @BeforeClass
-    public static void BeforeClass() throws Exception {
+    public static void BeforeClass() {
         System.out.println("Start testing VersionMonitor");
     }
     @AfterClass
-    public static void AfterClass() throws Exception {
+    public static void AfterClass() {
         System.out.println("Finish testing VersionMonitor");
     }
     @Before
     /**version==0
      * */
-    public void setUp() throws Exception {
+    public void setUp() {
         tester = new VersionMonitor();
     }
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
     }
 /**getVersion()==version;
  * */

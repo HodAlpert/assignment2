@@ -1,7 +1,6 @@
 package bgu.spl.a2;
 
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Describes a monitor that supports the concept of versioning - its idea is
@@ -21,7 +20,6 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class VersionMonitor {
     private AtomicInteger versionNumber=new AtomicInteger(0);
-    final private Object lock=new Object();
     public int getVersion() {
         return versionNumber.get();
     }
@@ -30,16 +28,12 @@ public class VersionMonitor {
         versionNumber.getAndIncrement();
         synchronized (this){
             this.notifyAll();
-//            System.out.println( Thread.currentThread().getName()+": wake uppppppppppp!!!!");
-
-
         }
     }
 
     public void await(int version) throws InterruptedException {
         synchronized (this) {
             while (version==this.versionNumber.get()){
-//                System.out.println( Thread.currentThread().getName()+": going to sleep!!!!");
                 this.wait();
             }//while
         }//synchronized

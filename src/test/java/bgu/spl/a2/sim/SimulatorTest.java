@@ -19,9 +19,6 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class SimulatorTest {
-//    @Rule
-//    public Timeout globalTimeout = Timeout.seconds(10); // 10 seconds max per method tested
-
     @Parameterized.Parameters
     public static List<Object[]> data() {
         return Arrays.asList(new Object[2000][0]);

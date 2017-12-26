@@ -13,7 +13,7 @@ public class PromiseTest {
     private boolean afterResolving;
     @Before
     public void setup(){
-        promise=new Promise<Integer>();
+        promise=new Promise<>();
     }
     @Test
     /**
