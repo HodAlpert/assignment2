@@ -36,9 +36,7 @@ public class SimulatorTest {
             data.forEach((String actor, PrivateState state) -> {
                 System.out.println(actor + ": ");
                 System.out.print("History: ");
-                state.getLogger().forEach((String s) -> {
-                    System.out.print(s + ", ");
-                });
+                state.getLogger().forEach((String s) -> System.out.print(s + ", "));
                 System.out.println("");
                 if (state instanceof DepartmentPrivateState) {
                     printDepartment((DepartmentPrivateState) state);
@@ -108,13 +106,9 @@ public class SimulatorTest {
 
     private void printCourse(CoursePrivateState state) {
         System.out.print("prequisites: ");
-        state.getPrequisites().forEach((String s) -> {
-            System.out.print(s + ", ");
-        });
+        state.getPrequisites().forEach((String s) -> System.out.print(s + ", "));
         System.out.print('\n' + "students: ");
-        state.getRegStudents().forEach((String s) -> {
-            System.out.print(s + ", ");
-        });
+        state.getRegStudents().forEach((String s) -> System.out.print(s + ", "));
         System.out.print('\n' + "Registered: ");
         System.out.println(state.getRegistered());
         System.out.print("available spaces: ");
@@ -122,8 +116,7 @@ public class SimulatorTest {
     }
 
     private void testStudent(String actor, StudentPrivateState state) {
-        boolean registered5959595959 = false;
-
+        boolean registered5959595959=false;
         switch (actor) {
             case "123456789": {
                 assertTrue("student " + actor + ": should be registered to Intro To CS with grade 77",
@@ -154,9 +147,7 @@ public class SimulatorTest {
 
     private void printStudent(StudentPrivateState state) {
         System.out.print("Grades: ");
-        state.getGrades().forEach((String s, Integer grade) -> {
-            System.out.print(s + ": " + grade + ", ");
-        });
+        state.getGrades().forEach((String s, Integer grade) -> System.out.print(s + ": " + grade + ", "));
         System.out.print('\n' + "Signature: ");
         System.out.println(state.getSignature());
     }
@@ -167,7 +158,7 @@ public class SimulatorTest {
                 ((DepartmentPrivateState) state).getCourseList().isEmpty());
         assertTrue("Department" + actor + ": not all students appear in studentslist " +
                         " should have: 132424353",
-                ((DepartmentPrivateState) state).getStudentList().containsAll(new ArrayList<String>(Arrays.asList("132424353"))));
+                ((DepartmentPrivateState) state).getStudentList().containsAll(new ArrayList<>(Arrays.asList("132424353"))));
     }
 
     private void testCS(Object actor, DepartmentPrivateState state) {
@@ -184,13 +175,9 @@ public class SimulatorTest {
 
     private void printDepartment(DepartmentPrivateState state) {
         System.out.print("Courses: ");
-        state.getCourseList().forEach((String s) -> {
-            System.out.print(s + ", ");
-        });
+        state.getCourseList().forEach((String s) -> System.out.print(s + ", "));
         System.out.print('\n' + "Students: ");
-        state.getStudentList().forEach((String s) -> {
-            System.out.print(s + ", ");
-        });
+        state.getStudentList().forEach((String s) -> System.out.print(s + ", "));
         System.out.println("");
     }
 }
