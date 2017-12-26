@@ -46,8 +46,10 @@ public class Unregister extends Action<Boolean> {
             sendMessage(action,Student,new StudentPrivateState());//sending the action to the pool
 
         }//if
-        else if(state.getLogger().contains(Student)) // if the student is in the middle of registration
+        else if(state.getLogger().contains(Student)) { // if the student is in the middle of registration
             state.getLogger().remove(Student);
+            complete(false);
+        }
         else // if student is not registered to Course
             complete(false);
     }

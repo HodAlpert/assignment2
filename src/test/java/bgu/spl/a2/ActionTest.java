@@ -114,20 +114,21 @@ public class ActionTest {
             });
 
             // register and then unregister to course when student doesn't meet prerequisites
-            threadPool.submit(Participate1,"course1",new StudentPrivateState());
-            threadPool.submit(unregister1,"course1",new CoursePrivateState());
+            threadPool.submit(Participate1,"course3",new StudentPrivateState());
+            threadPool.submit(unregister1,"course3",new CoursePrivateState());
             // register -> unregister -> register
             threadPool.submit(Participate2,"course2",new StudentPrivateState());
-            threadPool.submit(unregister1,"course2",new CoursePrivateState());
+            threadPool.submit(unregister2,"course2",new CoursePrivateState());
             threadPool.submit(Participate3,"course2",new StudentPrivateState());
             latch1.await();
 
-            assertFalse("student1 was added to course1 when he shouldn't",
-                    ((CoursePrivateState)threadPool.getPrivateState("course1")).getRegStudents().contains("student1") ||
-                            ((CoursePrivateState)threadPool.getPrivateState("course1")).getRegistered()==1
+            assertFalse("student1 was added to course3 when he shouldn't",
+                    ((CoursePrivateState)threadPool.getPrivateState("course3")).getRegStudents().contains("student1") ||
+                            ((CoursePrivateState)threadPool.getPrivateState("course3")).getRegistered()==1 ||
+                            ((CoursePrivateState)threadPool.getPrivateState("course3")).getAvailableSpots()!=10
             );
-            assertFalse("student1 has a grade for course1 when he shouldn't",
-                    ((StudentPrivateState)threadPool.getPrivateState("student1")).getGrades().containsKey("course1"));
+            assertFalse("student1 has a grade for course3 when he shouldn't",
+                    ((StudentPrivateState)threadPool.getPrivateState("student1")).getGrades().containsKey("course3"));
             assertTrue("student2 isn't in course2 when he should",
                     ((CoursePrivateState)threadPool.getPrivateState("course2")).getRegStudents().contains("student2") ||
                             ((CoursePrivateState)threadPool.getPrivateState("course2")).getRegistered()==1
