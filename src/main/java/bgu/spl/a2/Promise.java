@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *            the result type, <boolean> resolved - initialized ;
  */
 public class Promise<T>{
-	private ConcurrentLinkedQueue<callback> callbacks=new ConcurrentLinkedQueue<>();//TODO make private
+	private ConcurrentLinkedQueue<callback> callbacks=new ConcurrentLinkedQueue<>();
 	private T result;
 	private AtomicBoolean resolved= new AtomicBoolean(false);
 

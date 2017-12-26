@@ -48,26 +48,22 @@ public class ParticipateInCourse extends Action<String[]> {
             Action<String[]> acceptToCourse = new AcceptToCourse(this.Course, this.Grade[0], state.getPrequisites());
             List<Action<String[]>> actions = new ArrayList<>();
             actions.add(acceptToCourse);
-            state.getRegStudents().add(Student);
+            state.getLogger().add(Student);
             then(actions, () ->{
-                    if (!acceptToCourse.getResult().get()[0].equals("-") && state.getAvailableSpots() >0) {
+                    if (!acceptToCourse.getResult().get()[0].equals("-") && state.getAvailableSpots() >0&&state.getLogger().contains(Student)) {
                         //if student should be registered
                         state.setRegistered(state.getRegistered() + 1);
                         state.setAvailableSpots(state.getAvailableSpots()-1);
+                        state.getRegStudents().add(Student);
                         this.complete(acceptToCourse.getResult().get());
                     }
-                    else if (state.getAvailableSpots() <1 && !acceptToCourse.getResult().get()[0].equals("-")) {
-                        //if there are no Available Spots, remove the student
+                    else {// if the student doesn't meet the prerequisites, remove from list
+                        state.getLogger().remove(Student);
                         SelfUnregisterStudent unregister = new SelfUnregisterStudent(Course);
                         List<Action<Boolean>> actions1 = new ArrayList<>();
                         actions1.add(unregister);
                         then(actions1,()-> this.complete(result));
                         sendMessage(unregister,Student,new StudentPrivateState());
-                        state.getRegStudents().remove(Student);
-                    }
-                    else {// if the student doesn't meet the prerequisites, remove from list
-                        state.getRegStudents().remove(Student);
-                        this.complete(acceptToCourse.getResult().get());
                     }
 
             });

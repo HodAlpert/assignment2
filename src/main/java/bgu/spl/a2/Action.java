@@ -22,8 +22,8 @@ public abstract class Action<R> {
     private AtomicInteger actionsCompletedCounter;
     protected String Action;
     private ActorThreadPool pool;
-    protected PrivateState state; //TODO change back to private
-    protected callback continuation; //TODO change back to private
+    protected PrivateState state;
+    protected callback continuation;
     protected String actorid;
 /**
  * initializing the fiels.
@@ -60,9 +60,6 @@ public abstract class Action<R> {
      *
      */
     /*package*/ final void handle(ActorThreadPool pool, String actorId, PrivateState actorState) {
-
-        if(actorState==null)//TODO remove
-            throw new NullPointerException("whattt");//TODO remove
         if (!promise.isResolved()){
             if (!hasBeenStartedBefore.get()){
                 hasBeenStartedBefore.set(true);
