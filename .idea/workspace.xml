@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="946b2e8d-2c48-41a2-a23f-e7054edd20d4" name="Default" comment="simulatorTest line 92 fixed">
+    <list default="true" id="946b2e8d-2c48-41a2-a23f-e7054edd20d4" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Unregister.java" afterPath="$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Unregister.java" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActionTest.java" afterPath="$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActionTest.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -40,11 +40,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ActionTest.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ActionTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActionTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2016">
-              <caret line="195" column="2" lean-forward="false" selection-start-line="195" selection-start-column="2" selection-end-line="195" selection-end-column="2" />
+            <state relative-caret-position="5994">
+              <caret line="401" column="25" lean-forward="true" selection-start-line="401" selection-start-column="25" selection-end-line="401" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Unregister.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Unregister.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="756">
+              <caret line="50" column="28" lean-forward="true" selection-start-line="50" selection-start-column="28" selection-end-line="50" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -83,18 +93,8 @@
       <file leaf-file-name="ParticipateInCourse.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/ParticipateInCourse.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
+            <state relative-caret-position="862">
               <caret line="62" column="49" lean-forward="false" selection-start-line="62" selection-start-column="49" selection-end-line="62" selection-end-column="49" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Unregister.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Unregister.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="398">
-              <caret line="49" column="46" lean-forward="true" selection-start-line="49" selection-start-column="46" selection-end-line="49" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -203,8 +203,8 @@
         <option value="$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/SelfAddStudent.java" />
         <option value="$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/SelfOpenCourse.java" />
         <option value="$PROJECT_DIR$/src/test/java/bgu/spl/a2/sim/SimulatorTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActionTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Unregister.java" />
+        <option value="$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActionTest.java" />
       </list>
     </option>
   </component>
@@ -349,7 +349,7 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="a2" type="462c0819:PsiDirectoryNode" />
               <item name="sim" type="462c0819:PsiDirectoryNode" />
-              <item name="actions" type="462c0819:PsiDirectoryNode" />
+              <item name="privateStates" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -394,7 +394,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.SimulatorTest">
+  <component name="RunManager" selected="JUnit.ActionTest">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
@@ -656,8 +656,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.SimulatorTest" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.ActionTest" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.ActionTest" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.SimulatorTest" />
         <item index="2" class="java.lang.String" itemvalue="JUnit.ParticipateInCourseTest" />
         <item index="3" class="java.lang.String" itemvalue="JUnit.AdministrativeCheckTest" />
         <item index="4" class="java.lang.String" itemvalue="JUnit.SimulatorDeserializable" />
@@ -745,14 +745,7 @@
       <workItem from="1514203359520" duration="2625000" />
       <workItem from="1514275692358" duration="2905000" />
       <workItem from="1514294155815" duration="477000" />
-      <workItem from="1514297475372" duration="993000" />
-    </task>
-    <task id="LOCAL-00001" summary="first push">
-      <created>1512375285752</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1512375285752</updated>
+      <workItem from="1514297475372" duration="1965000" />
     </task>
     <task id="LOCAL-00002" summary="promise test definitions">
       <created>1512413242726</created>
@@ -1083,24 +1076,38 @@
       <option name="project" value="LOCAL" />
       <updated>1514278545086</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="updated unregister">
+      <created>1514298487893</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1514298487894</updated>
+    </task>
+    <task id="LOCAL-00050" summary="updated unregister">
+      <created>1514299219077</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1514299219078</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="ActionTest - 2017.12.26 at 10h 45m 03s.xml">
+    <history-entry file="ActionTest - 2017.12.26 at 16h 31m 58s.xml">
       <configuration name="ActionTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ActionTest - 2017.12.26 at 10h 45m 36s.xml">
+    <history-entry file="ActionTest - 2017.12.26 at 16h 33m 33s.xml">
       <configuration name="ActionTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ActionTest - 2017.12.26 at 10h 45m 46s.xml">
+    <history-entry file="ActionTest - 2017.12.26 at 16h 34m 17s.xml">
       <configuration name="ActionTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SimulatorTest - 2017.12.25 at 11h 01m 53s.xml">
-      <configuration name="SimulatorTest" configurationId="JUnit" />
+    <history-entry file="ActionTest - 2017.12.26 at 16h 38m 13s.xml">
+      <configuration name="ActionTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SimulatorTest - 2017.12.25 at 11h 50m 33s.xml">
-      <configuration name="SimulatorTest" configurationId="JUnit" />
+    <history-entry file="ActionTest - 2017.12.26 at 16h 39m 26s.xml">
+      <configuration name="ActionTest" configurationId="JUnit" />
     </history-entry>
     <history-entry file="SimulatorTest - 2017.12.25 at 11h 53m 32s.xml">
       <configuration name="SimulatorTest" configurationId="JUnit" />
@@ -1119,7 +1126,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="244147000" />
+    <option name="totallyTimeSpent" value="245119000" />
   </component>
   <component name="TodoView" selected-index="2">
     <todo-panel id="selected-file">
@@ -1132,21 +1139,21 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-166" y="37" width="1303" height="780" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296355" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32882884" sideWeight="0.49707174" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33333334" sideWeight="0.51037663" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289777" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22672673" sideWeight="0.7079063" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2822823" sideWeight="0.48962337" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2822823" sideWeight="0.48962337" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2198309" sideWeight="0.15315315" order="4" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2198309" sideWeight="0.15315315" order="4" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329429" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2198309" sideWeight="0.8468468" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -1158,7 +1165,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24980783" sideWeight="0.5" order="9" side_tool="false" content_ui="combo" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32882884" sideWeight="0.49707174" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1207,7 +1213,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="deleted unneccery a2" />
     <MESSAGE value="promise and promiseTest update" />
     <MESSAGE value="added actionTest" />
     <MESSAGE value="update and doc for ActorThreadPool" />
@@ -1232,7 +1237,8 @@
     <MESSAGE value="added documentation" />
     <MESSAGE value="simulatorTest line 92 fixed" />
     <MESSAGE value="added test for register-unregister in ActionTest" />
-    <option name="LAST_COMMIT_MESSAGE" value="added test for register-unregister in ActionTest" />
+    <MESSAGE value="updated unregister" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated unregister" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1367,6 +1373,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
           <caret line="25" column="42" lean-forward="false" selection-start-line="25" selection-start-column="42" selection-end-line="25" selection-end-column="42" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1557,17 +1564,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActionTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2016">
-          <caret line="195" column="2" lean-forward="false" selection-start-line="195" selection-start-column="2" selection-end-line="195" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/ParticipateInCourse.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
+        <state relative-caret-position="862">
           <caret line="62" column="49" lean-forward="false" selection-start-line="62" selection-start-column="49" selection-end-line="62" selection-end-column="49" />
           <folding />
         </state>
@@ -1575,8 +1574,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/bgu/spl/a2/sim/actions/Unregister.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="398">
-          <caret line="49" column="46" lean-forward="true" selection-start-line="49" selection-start-column="46" selection-end-line="49" selection-end-column="46" />
+        <state relative-caret-position="756">
+          <caret line="50" column="28" lean-forward="true" selection-start-line="50" selection-start-column="28" selection-end-line="50" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/bgu/spl/a2/ActionTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5994">
+          <caret line="401" column="25" lean-forward="true" selection-start-line="401" selection-start-column="25" selection-end-line="401" selection-end-column="25" />
           <folding />
         </state>
       </provider>
