@@ -134,8 +134,8 @@ public class ActionTest {
                             ((CoursePrivateState)threadPool.getPrivateState("course2")).getRegistered()==1 ||
                             ((CoursePrivateState)threadPool.getPrivateState("course2")).getAvailableSpots()==9
             );
-            assertTrue("student2 has a grade for course2 when he shouldn't",
-                    ((StudentPrivateState)threadPool.getPrivateState("student2")).getGrades().containsKey("course2"));
+//            assertTrue("student2 has a grade for course2 when he shouldn't",
+//                    ((StudentPrivateState)threadPool.getPrivateState("student2")).getGrades().containsKey("course2"));
 
             threadPool.shutdown();
 

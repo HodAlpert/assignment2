@@ -32,6 +32,7 @@ public class Unregister extends Action<Boolean> {
      */
     @Override
     protected void start() {
+        System.out.println("sterted unregiste");
         CoursePrivateState state = (CoursePrivateState) getState();
         if (state.getRegStudents().contains(Student)){//if student is registered to course
             state.setAvailableSpots(state.getAvailableSpots()+1);//inc AvailableSpots
@@ -48,7 +49,11 @@ public class Unregister extends Action<Boolean> {
         }//if
         else if(state.getLogger().contains(Student)) { // if the student is in the middle of registration
             state.getLogger().remove(Student);
-            complete(false);
+            SelfUnregisterStudent unregister = new SelfUnregisterStudent(Course);
+            List<Action<Boolean>> actions1 = new ArrayList<>();
+            actions1.add(unregister);
+            then(actions1,()-> this.complete(true));
+            sendMessage(unregister,Student,new StudentPrivateState());
         }
         else // if student is not registered to Course
             complete(false);

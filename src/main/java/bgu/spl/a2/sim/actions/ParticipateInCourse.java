@@ -50,14 +50,18 @@ public class ParticipateInCourse extends Action<String[]> {
             actions.add(acceptToCourse);
             state.getLogger().add(Student);
             then(actions, () ->{
-                    if (!acceptToCourse.getResult().get()[0].equals("-") && state.getAvailableSpots() >0&&state.getLogger().contains(Student)) {
-                        //if student should be registered
+                    if (!acceptToCourse.getResult().get()[0].equals("-") && state.getAvailableSpots() >0&&
+                            state.getLogger().contains(Student)&&!state.getRegStudents().contains(Student)) {
+                        //if student should be registered, or has already been registered
                         state.setRegistered(state.getRegistered() + 1);
                         state.setAvailableSpots(state.getAvailableSpots()-1);
                         state.getRegStudents().add(Student);
                         this.complete(acceptToCourse.getResult().get());
                     }
-                    else {// if the student doesn't meet the prerequisites, remove from list
+                    else if (!state.getLogger().contains(Student)) {
+                        complete(result);
+                    }
+                    else{// if the student doesn't meet the prerequisites or there is not enougf room, remove from list
                         state.getLogger().remove(Student);
                         SelfUnregisterStudent unregister = new SelfUnregisterStudent(Course);
                         List<Action<Boolean>> actions1 = new ArrayList<>();
