@@ -32,7 +32,6 @@ public class Unregister extends Action<Boolean> {
      */
     @Override
     protected void start() {
-        System.out.println("sterted unregiste");
         CoursePrivateState state = (CoursePrivateState) getState();
         if (state.getRegStudents().contains(Student)){//if student is registered to course
             state.setAvailableSpots(state.getAvailableSpots()+1);//inc AvailableSpots
